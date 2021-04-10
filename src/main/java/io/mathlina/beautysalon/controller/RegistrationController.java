@@ -36,6 +36,7 @@ public class RegistrationController {
 
     if (!bindingResult.hasErrors() && !userService.addUser(userRegistrationDto)) {
       //TODO check username and email uniqueness
+      //TODO: message i18n
       bindingResult.rejectValue("username", "Username exists");
     }
 
