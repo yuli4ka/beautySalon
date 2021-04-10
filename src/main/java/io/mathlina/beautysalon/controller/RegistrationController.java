@@ -24,7 +24,8 @@ public class RegistrationController {
   }
 
   @GetMapping()
-  public String registration(@ModelAttribute("userRegistrationDto") UserRegistrationDto userRegistrationDto) {
+  public String registration(@ModelAttribute("userRegistrationDto")
+      UserRegistrationDto userRegistrationDto) {
     return "registration";
   }
 
