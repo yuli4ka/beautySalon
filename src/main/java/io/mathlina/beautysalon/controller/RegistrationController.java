@@ -37,7 +37,8 @@ public class RegistrationController {
     if (!bindingResult.hasErrors() && !userService.addUser(userRegistrationDto)) {
       //TODO check username and email uniqueness
       //TODO: message i18n
-      bindingResult.rejectValue("username", "Username exists");
+      //TODO: fix Caused by: org.springframework.context.NoSuchMessageException: No message found under code '{username.exists}' for locale 'en'.
+      bindingResult.rejectValue("username", "{username.exists}");
     }
 
 

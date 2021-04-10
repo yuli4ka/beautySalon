@@ -31,6 +31,7 @@ public class UserService implements UserDetailsService {
   }
 
   public boolean addUser(UserRegistrationDto userDTO) {
+//    return false;
     User user = User.builder()
         .username(userDTO.getUsername())
         .password(userDTO.getPassword())
@@ -51,6 +52,5 @@ public class UserService implements UserDetailsService {
     //TODO send message for activation
 
     return true;
-
   }
 }
