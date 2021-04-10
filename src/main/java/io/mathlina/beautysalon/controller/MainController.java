@@ -8,12 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class MainController {
 
-//  @GetMapping("/greeting")
-//  public String helloWorld(@RequestParam(name="name", required=false, defaultValue="World")
-//      String name, Model model) {
-//    model.addAttribute("name", name);
-//    return "greeting";
-
+  //TODO: locale picker without url on header.html
   @GetMapping("/")
   public String helloWorld() {
     log.info("Processing GET request to \"/\"");

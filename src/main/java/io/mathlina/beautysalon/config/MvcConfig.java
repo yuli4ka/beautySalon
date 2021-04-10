@@ -22,7 +22,6 @@ public class MvcConfig implements WebMvcConfigurer {
     ResourceBundleMessageSource bundleMessageSource = new ResourceBundleMessageSource();
     bundleMessageSource.setBasename("messages");
     bundleMessageSource.setDefaultEncoding("UTF-8");
-//    bundleMessageSource.setFallbackToSystemLocale(false);
     return bundleMessageSource;
   }
 
