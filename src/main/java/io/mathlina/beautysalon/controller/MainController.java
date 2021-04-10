@@ -10,7 +10,7 @@ public class MainController {
 
   //TODO: locale picker without url on header.html
   @GetMapping("/")
-  public String helloWorld() {
+  public String greeting() {
     log.info("Processing GET request to \"/\"");
     return "greeting";
   }
