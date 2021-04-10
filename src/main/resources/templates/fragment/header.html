@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
@@ -29,7 +29,7 @@
 
 <nav th:fragment="header" class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/">Beauty salon</a>
+    <a class="navbar-brand" href="/" th:text="#{beauty.salon.chamomile}"></a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
             data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -39,18 +39,8 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" href="/">
-            Home page
-          </a>
+          <a class="nav-link" href="/" th:text="#{Home.page}"></a>
         </li>
-        <li>
-          <div class="navbar-text mr-3">
-            <a class="btn btn-primary" href="/registration">
-              Sign in
-            </a>
-          </div>
-        </li>
-
 
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
@@ -65,28 +55,25 @@
           </div>
         </li>
 
+        <li class="nav-item ml-5">
+          <div sec:authentication="name"></div>
+        </li>
 
-              <!--        <li>-->
-<!--          <div class="navbar-text mr-3">-->
-<!--            <form action="/logout" method="post">-->
-<!--              <input type="hidden" name="_csrf" value="${_csrf.token}"/>-->
-<!--              <button class="btn btn-primary" type="submit">-->
-<!--                Sign in-->
-<!--              </button>-->
-<!--            </form>-->
-<!--          </div>-->
-<!--        </li>-->
+        <li class="nav-item ml-5" sec:authorize="isAuthenticated()">
+          <form action="/logout" method="post">
+            <!--    <input type="hidden" name="_csrf" value="${_csrf.token}"/>-->
+            <button class="btn btn-primary" type="submit" th:text="#{Sign.out}"></button>
+          </form>
+        </li>
+
+        <li class="nav-item ml-5" sec:authorize="isAnonymous()">
+          <a class="btn btn-success" th:href="@{/login}" th:text="#{do.login}"></a>
+          <a class="btn btn-primary" th:href="@{/registration}" th:text="#{Sign.in}"></a>
+        </li>
       </ul>
-<!--      <div class="navbar-text mr-3">-->
-<!--        <form action="/logout" method="post">-->
-<!--          <input type="hidden" name="_csrf" value="${_csrf.token}"/>-->
-<!--          <button class="btn btn-primary" type="submit">-->
-<!--            Sign in-->
-<!--          </button>-->
-<!--        </form>-->
-<!--      </div>-->
     </div>
   </div>
+
 </nav>
 
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
