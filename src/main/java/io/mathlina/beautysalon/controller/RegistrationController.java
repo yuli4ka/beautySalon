@@ -1,6 +1,9 @@
 package io.mathlina.beautysalon.controller;
 
 import io.mathlina.beautysalon.dto.UserRegistrationDto;
+import io.mathlina.beautysalon.exeption.CannotSaveUserToDatabase;
+import io.mathlina.beautysalon.exeption.EmailIsAlreadyTaken;
+import io.mathlina.beautysalon.exeption.UsernameIsAlreadyTaken;
 import io.mathlina.beautysalon.service.UserService;
 import io.mathlina.beautysalon.validation.PasswordEqualityValidator;
 import javax.validation.Valid;
@@ -29,12 +32,20 @@ public class RegistrationController {
   public String addUser(@ModelAttribute("userRegistrationDto")
                         @Valid UserRegistrationDto userRegistrationDto,
                         BindingResult bindingResult) {
+
     PasswordEqualityValidator validator = new PasswordEqualityValidator();
     validator.validate(userRegistrationDto, bindingResult);
 
-    if (!bindingResult.hasErrors() && !userService.addUser(userRegistrationDto)) {
-      //TODO check username and email uniqueness
-      bindingResult.rejectValue("username", "username.exists");
+    if (!bindingResult.hasErrors()) {
+      try {
+        userService.addUser(userRegistrationDto);
+      } catch (UsernameIsAlreadyTaken e) {
+        bindingResult.rejectValue("username", "username.is.already.taken");
+      } catch (EmailIsAlreadyTaken e) {
+        bindingResult.rejectValue("email", "email.is.already.taken");
+      } catch (CannotSaveUserToDatabase e) {
+        bindingResult.rejectValue("username", "failed.to.create.user");
+      }
     }
 
     if (bindingResult.hasErrors()) {
