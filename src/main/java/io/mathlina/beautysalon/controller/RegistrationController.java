@@ -37,7 +37,6 @@ public class RegistrationController {
       bindingResult.rejectValue("username", "username.exists");
     }
 
-
     if (bindingResult.hasErrors()) {
       return "registration";
     }
