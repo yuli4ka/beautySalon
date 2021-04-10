@@ -22,13 +22,14 @@ public class MvcConfig implements WebMvcConfigurer {
     ResourceBundleMessageSource bundleMessageSource = new ResourceBundleMessageSource();
     bundleMessageSource.setBasename("messages");
     bundleMessageSource.setDefaultEncoding("UTF-8");
+//    bundleMessageSource.setFallbackToSystemLocale(false);
     return bundleMessageSource;
   }
 
   @Bean
   public SessionLocaleResolver localeResolver() {
     SessionLocaleResolver sessionLocaleResolver = new SessionLocaleResolver();
-    sessionLocaleResolver.setDefaultLocale(Locale.FRANCE);
+    sessionLocaleResolver.setDefaultLocale(Locale.ENGLISH);
     return sessionLocaleResolver;
   }
 
@@ -42,9 +43,7 @@ public class MvcConfig implements WebMvcConfigurer {
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
     registry.addInterceptor(new RedirectInterceptor());
-    LocaleChangeInterceptor interceptor = new LocaleChangeInterceptor();
-    interceptor.setParamName("lang");
-    registry.addInterceptor(interceptor);
+    registry.addInterceptor(localeChangeInterceptor());
   }
 
   @Bean

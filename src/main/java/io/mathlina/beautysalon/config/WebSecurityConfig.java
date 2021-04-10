@@ -37,6 +37,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
+//    CharacterEncodingFilter filter = new CharacterEncodingFilter();
+//    filter.setEncoding("UTF-8");
+//    filter.setForceEncoding(true);
+//    http.addFilterBefore(filter, CsrfFilter.class);
+
     http
         .authorizeRequests()
         .antMatchers("/", "/login", "/registration", "/static/**", "/activate/*").permitAll()
@@ -61,5 +66,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "select u.username, ur.roles from usr u inner join user_role ur "
                 + "on u.id = ur.user_id where u.username=?");
   }
+
 
 }
