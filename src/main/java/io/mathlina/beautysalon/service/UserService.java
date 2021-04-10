@@ -31,26 +31,26 @@ public class UserService implements UserDetailsService {
   }
 
   public boolean addUser(UserRegistrationDto userDTO) {
-//    return false;
-    User user = User.builder()
-        .username(userDTO.getUsername())
-        .password(userDTO.getPassword())
-        .email(userDTO.getEmail())
-        .active(false)
-        .role(Collections.singleton(Role.CLIENT))
-        .activationCode(UUID.randomUUID().toString())
-        .build();
-
-    //TODO password encode
-    try {
-      userRepo.save(user);
-      //TODO: custom exception or optional
-    } catch (Exception e) {
-      return false;
-    }
-
-    //TODO send message for activation
-
-    return true;
+    return false;
+//    User user = User.builder()
+//        .username(userDTO.getUsername())
+//        .password(userDTO.getPassword())
+//        .email(userDTO.getEmail())
+//        .active(false)
+//        .role(Collections.singleton(Role.CLIENT))
+//        .activationCode(UUID.randomUUID().toString())
+//        .build();
+//
+//    //TODO password encode
+//    try {
+//      userRepo.save(user);
+//      //TODO: custom exception or optional
+//    } catch (Exception e) {
+//      return false;
+//    }
+//
+//    //TODO send message for activation
+//
+//    return true;
   }
 }

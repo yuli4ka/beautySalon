@@ -11,13 +11,11 @@ public class PasswordEqualityValidator implements Validator {
     return UserRegistrationDto.class.equals(aClass);
   }
 
-  //TODO: text constant
-  //TODO: visible error on view
   @Override
   public void validate(Object o, Errors errors) {
     UserRegistrationDto userDTO = (UserRegistrationDto) o;
     if (!userDTO.getPassword().equals(userDTO.getPasswordConfirm())) {
-      errors.rejectValue(null, "passwordsError", "Passwords not equal");
+      errors.rejectValue("passwordConfirm", "passwords.not.equal", "Passwords not equal");
     }
   }
 }

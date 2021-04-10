@@ -5,9 +5,7 @@ import io.mathlina.beautysalon.service.UserService;
 import io.mathlina.beautysalon.validation.PasswordEqualityValidator;
 import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,9 +34,7 @@ public class RegistrationController {
 
     if (!bindingResult.hasErrors() && !userService.addUser(userRegistrationDto)) {
       //TODO check username and email uniqueness
-      //TODO: message i18n
-      //TODO: fix Caused by: org.springframework.context.NoSuchMessageException: No message found under code '{username.exists}' for locale 'en'.
-      bindingResult.rejectValue("username", "{username.exists}");
+      bindingResult.rejectValue("username", "username.exists");
     }
 
 
