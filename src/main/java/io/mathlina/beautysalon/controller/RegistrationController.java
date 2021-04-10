@@ -1,9 +1,9 @@
 package io.mathlina.beautysalon.controller;
 
 import io.mathlina.beautysalon.dto.UserRegistrationDto;
-import io.mathlina.beautysalon.exeption.CannotSaveUserToDatabase;
-import io.mathlina.beautysalon.exeption.EmailIsAlreadyTaken;
-import io.mathlina.beautysalon.exeption.UsernameIsAlreadyTaken;
+import io.mathlina.beautysalon.exception.CannotSaveUserToDatabase;
+import io.mathlina.beautysalon.exception.EmailIsAlreadyTaken;
+import io.mathlina.beautysalon.exception.UsernameIsAlreadyTaken;
 import io.mathlina.beautysalon.service.UserService;
 import io.mathlina.beautysalon.validation.PasswordEqualityValidator;
 import javax.validation.Valid;

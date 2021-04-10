@@ -1,4 +1,4 @@
-package io.mathlina.beautysalon.exeption;
+package io.mathlina.beautysalon.exception;
 
 public class UsernameIsAlreadyTaken extends RuntimeException {
 

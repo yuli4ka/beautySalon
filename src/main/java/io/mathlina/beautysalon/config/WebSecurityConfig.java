@@ -12,7 +12,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
@@ -21,9 +23,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   private DataSource dataSource;
 
+  private PasswordEncoder passwordEncoder;
+
   @Autowired
   public void setDataSource(DataSource dataSource) {
     this.dataSource = dataSource;
+  }
+
+  @Autowired
+  public void setPasswordEncoder(
+      PasswordEncoder passwordEncoder) {
+    this.passwordEncoder = passwordEncoder;
+  }
+
+  @Bean
+  public PasswordEncoder getPasswordEncoder() {
+    return new BCryptPasswordEncoder(8);
   }
 
   @Bean
@@ -40,8 +55,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   protected void configure(HttpSecurity http) throws Exception {
     http
         .authorizeRequests()
-        .antMatchers("/", "/login", "/registration", "/static/**", "/activate/*").permitAll()
-        .anyRequest().permitAll()
+        .antMatchers("/", "/login", "/registration",
+            "/static/**", "/activate/*")
+        .permitAll()
+        .anyRequest().authenticated()
         .and()
         .formLogin()
         .loginPage("/login").permitAll()
@@ -57,7 +74,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
     auth.jdbcAuthentication()
         .dataSource(dataSource)
-        .passwordEncoder(NoOpPasswordEncoder.getInstance())
+        .passwordEncoder(passwordEncoder)
         .usersByUsernameQuery("select username, password, active from usr where username=?")
         .authoritiesByUsernameQuery(
             "select u.username, ur.roles from usr u inner join user_role ur "

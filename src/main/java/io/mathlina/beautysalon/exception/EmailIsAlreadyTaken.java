@@ -1,4 +1,4 @@
-package io.mathlina.beautysalon.exeption;
+package io.mathlina.beautysalon.exception;
 
 public class EmailIsAlreadyTaken extends RuntimeException {
 
