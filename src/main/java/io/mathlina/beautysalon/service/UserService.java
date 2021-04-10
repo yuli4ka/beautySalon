@@ -22,12 +22,14 @@ public class UserService implements UserDetailsService {
 
   private final UserRepo userRepo;
   private final PasswordEncoder passwordEncoder;
+  private final MailService mailService;
 
   @Autowired
   public UserService(UserRepo userRepo,
-      PasswordEncoder passwordEncoder) {
+      PasswordEncoder passwordEncoder, MailService mailService) {
     this.userRepo = userRepo;
     this.passwordEncoder = passwordEncoder;
+    this.mailService = mailService;
   }
 
 
@@ -60,7 +62,7 @@ public class UserService implements UserDetailsService {
     }
 
     //TODO send message for activation
-
+    mailService.sendActivationCode(user);
   }
 
 }
