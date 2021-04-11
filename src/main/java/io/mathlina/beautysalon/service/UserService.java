@@ -11,7 +11,6 @@ import io.mathlina.beautysalon.repos.UserRepo;
 import java.util.Collections;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,9 +32,8 @@ public class UserService implements UserDetailsService {
     this.mailService = mailService;
   }
 
-
   @Override
-  public UserDetails loadUserByUsername(String s) {
+  public User loadUserByUsername(String s) {
     return userRepo.findByUsername(s)
         .orElseThrow(() -> new UsernameNotFoundException("User not exist!"));
   }
@@ -74,5 +72,4 @@ public class UserService implements UserDetailsService {
 
     userRepo.save(user);
   }
-
 }
