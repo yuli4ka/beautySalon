@@ -2,11 +2,14 @@ package io.mathlina.beautysalon.service;
 
 import io.mathlina.beautysalon.domain.Role;
 import io.mathlina.beautysalon.domain.User;
+import io.mathlina.beautysalon.dto.UserProfileDto;
 import io.mathlina.beautysalon.dto.UserRegistrationDto;
 import io.mathlina.beautysalon.exception.CannotSaveUserToDatabase;
 import io.mathlina.beautysalon.exception.EmailIsAlreadyTaken;
+import io.mathlina.beautysalon.exception.UserNotFound;
 import io.mathlina.beautysalon.exception.UserNotFoundByActivationCode;
 import io.mathlina.beautysalon.exception.UsernameIsAlreadyTaken;
+import io.mathlina.beautysalon.exception.WrongPassword;
 import io.mathlina.beautysalon.repos.UserRepo;
 import java.util.Collections;
 import java.util.UUID;
@@ -61,6 +64,39 @@ public class UserService implements UserDetailsService {
     }
 
     mailService.sendActivationCode(user);
+  }
+
+  public void updateUser(UserProfileDto userDTO, String oldPassword) {
+    User user = userRepo.findByUsername(userDTO.getUsername())
+        .orElseThrow(() -> new UserNotFound("User not found"));
+
+    boolean changed = false;
+
+    if (!oldPassword.isEmpty()) {
+      if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+        throw new WrongPassword("Wrong old password");
+      }
+      user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+      changed = true;
+    }
+
+    if (!user.getEmail().equals(userDTO.getEmail())) {
+      userRepo.findByEmail(userDTO.getEmail())
+          .ifPresent(s -> {throw new EmailIsAlreadyTaken("Email is already taken");});
+      user.setEmail(userDTO.getEmail());
+      user.setActive(false);
+      user.setActivationCode(UUID.randomUUID().toString());
+      mailService.sendActivationCode(user);
+      changed = true;
+    }
+
+    if (changed) {
+      try {
+        userRepo.save(user);
+      } catch (Exception e) {
+        throw new CannotSaveUserToDatabase("Cannot save user to database");
+      }
+    }
   }
 
   public void activateUser(String code) {

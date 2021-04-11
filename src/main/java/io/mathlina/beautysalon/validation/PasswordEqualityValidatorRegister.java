@@ -4,7 +4,7 @@ import io.mathlina.beautysalon.dto.UserRegistrationDto;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-public class PasswordEqualityValidator implements Validator {
+public class PasswordEqualityValidatorRegister implements Validator {
 
   @Override
   public boolean supports(Class<?> aClass) {

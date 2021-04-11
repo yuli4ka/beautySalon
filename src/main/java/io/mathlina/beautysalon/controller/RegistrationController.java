@@ -6,7 +6,7 @@ import io.mathlina.beautysalon.exception.EmailIsAlreadyTaken;
 import io.mathlina.beautysalon.exception.UserNotFoundByActivationCode;
 import io.mathlina.beautysalon.exception.UsernameIsAlreadyTaken;
 import io.mathlina.beautysalon.service.UserService;
-import io.mathlina.beautysalon.validation.PasswordEqualityValidator;
+import io.mathlina.beautysalon.validation.PasswordEqualityValidatorRegister;
 import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,7 +37,7 @@ public class RegistrationController {
                         @Valid UserRegistrationDto userRegistrationDto,
                         BindingResult bindingResult) {
 
-    PasswordEqualityValidator validator = new PasswordEqualityValidator();
+    PasswordEqualityValidatorRegister validator = new PasswordEqualityValidatorRegister();
     validator.validate(userRegistrationDto, bindingResult);
 
     if (!bindingResult.hasErrors()) {
