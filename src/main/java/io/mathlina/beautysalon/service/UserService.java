@@ -5,6 +5,7 @@ import io.mathlina.beautysalon.domain.User;
 import io.mathlina.beautysalon.dto.UserRegistrationDto;
 import io.mathlina.beautysalon.exception.CannotSaveUserToDatabase;
 import io.mathlina.beautysalon.exception.EmailIsAlreadyTaken;
+import io.mathlina.beautysalon.exception.UserNotFoundByActivationCode;
 import io.mathlina.beautysalon.exception.UsernameIsAlreadyTaken;
 import io.mathlina.beautysalon.repos.UserRepo;
 import java.util.Collections;
@@ -61,8 +62,17 @@ public class UserService implements UserDetailsService {
       throw new CannotSaveUserToDatabase("Cannot save user to database");
     }
 
-    //TODO send message for activation
     mailService.sendActivationCode(user);
+  }
+
+  public void activateUser(String code) {
+    User user = userRepo.findByActivationCode(code)
+        .orElseThrow(() -> new UserNotFoundByActivationCode("User not found by activation code"));
+
+    user.setActivationCode(null);
+    user.setActive(true);
+
+    userRepo.save(user);
   }
 
 }

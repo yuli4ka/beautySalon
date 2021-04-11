@@ -3,19 +3,22 @@ package io.mathlina.beautysalon.controller;
 import io.mathlina.beautysalon.dto.UserRegistrationDto;
 import io.mathlina.beautysalon.exception.CannotSaveUserToDatabase;
 import io.mathlina.beautysalon.exception.EmailIsAlreadyTaken;
+import io.mathlina.beautysalon.exception.UserNotFoundByActivationCode;
 import io.mathlina.beautysalon.exception.UsernameIsAlreadyTaken;
 import io.mathlina.beautysalon.service.UserService;
 import io.mathlina.beautysalon.validation.PasswordEqualityValidator;
 import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/registration")
+@RequestMapping()
 public class RegistrationController {
   private final UserService userService;
 
@@ -23,13 +26,13 @@ public class RegistrationController {
     this.userService = userService;
   }
 
-  @GetMapping()
+  @GetMapping("/registration")
   public String registration(@ModelAttribute("userRegistrationDto")
       UserRegistrationDto userRegistrationDto) {
     return "registration";
   }
 
-  @PostMapping()
+  @PostMapping("/registration")
   public String addUser(@ModelAttribute("userRegistrationDto")
                         @Valid UserRegistrationDto userRegistrationDto,
                         BindingResult bindingResult) {
@@ -54,6 +57,20 @@ public class RegistrationController {
     }
 
     return "redirect:/login";
+  }
+
+  @GetMapping("/activate/{code}")
+  public String activate(Model model, @PathVariable String code) {
+    try {
+      userService.activateUser(code);
+      model.addAttribute("messageType", "success");
+      model.addAttribute("message", "user.is.activated");
+    } catch (UserNotFoundByActivationCode e) {
+      model.addAttribute("messageType", "danger");
+      model.addAttribute("message", "activation.code.not.found");
+    }
+
+    return "login";
   }
 
 }

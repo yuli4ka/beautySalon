@@ -12,6 +12,12 @@ public class MailService {
   @Value("${spring.mail.username}")
   private String username;
 
+  @Value("${server.port}")
+  private String port;
+
+  //TODO: get @Value host from application.properties
+  //TODO: get @Value salon name from application.properties
+
   private final JavaMailSender mailSender;
 
   public MailService(JavaMailSender mailSender) {
@@ -29,16 +35,20 @@ public class MailService {
     mailSender.send(mailMessage);
   }
 
+  //TODO: send thymeleaf template
   public void sendActivationCode(User user) {
-    String message = String.format(
-        "Hello, %s \n" + "Welcome to my beauty salon Chamomile!. "
-            + "Please, visit next link to activate your profile: "
-            + "http://localhost:8090/activate/%s",
-        user.getUsername(),
-        user.getActivationCode()
-    );
+    StringBuilder builder = new StringBuilder();
+    builder
+        .append("Hello, ")
+        .append(user.getUsername())
+        .append("!\n. Welcome to my beauty salon Chamomile! ")
+        .append("Please, visit next link to activate your profile:\n")
+        .append("http://localhost:")
+        .append(port)
+        .append("/activate/")
+        .append(user.getActivationCode());
 
-    send(user.getEmail(), "activation.code", message);
+    send(user.getEmail(), "activation.code", builder.toString());
   }
 
 }
