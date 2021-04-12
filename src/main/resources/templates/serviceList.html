@@ -20,9 +20,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="service, iStat : ${myServicePage.content}"
-        th:style="${iStat.odd}? 'font-weight: bold;'"
-        th:alt-title="${iStat.even}? 'even' : 'odd'">
+    <tr th:each="service, iStat : ${myServicePage.content}">
       <td th:text="${service.nameEn}" />
       <td th:text="${service.nameUa}" />
       <td th:text="${service.price}" />
@@ -42,7 +40,7 @@
 
   <div class="pagination"
        th:if="${myServicePage.totalPages > 0}"
-       th:each="pageNumber : ${pageNumbers}">
+       th:each="pageNumber : ${#numbers.sequence(1, myServicePage.totalPages)}">
     <a th:href="@{'/serviceList' + '?size=' + ${myServicePage.size} + '&page=' + ${pageNumber}}"
        th:text="${pageNumber}"
        th:class="${pageNumber==myServicePage.number + 1} ? active"></a>
