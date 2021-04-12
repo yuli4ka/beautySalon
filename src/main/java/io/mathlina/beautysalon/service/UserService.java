@@ -4,7 +4,6 @@ import io.mathlina.beautysalon.domain.User;
 import io.mathlina.beautysalon.dto.UserProfileDto;
 import io.mathlina.beautysalon.dto.UserRegistrationDto;
 import java.util.List;
-import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface UserService {
 

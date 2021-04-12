@@ -49,8 +49,11 @@ public class UserServiceImpl implements UserService {
     userRepo.findByEmail(userDTO.getEmail())
         .ifPresent(s -> {throw new EmailIsAlreadyTaken("Email is already taken");});
 
+//    TODO: mapper
     User user = User.builder()
         .username(userDTO.getUsername())
+        .name(userDTO.getName())
+        .surname(userDTO.getSurname())
         .password(passwordEncoder.encode(userDTO.getPassword()))
         .email(userDTO.getEmail())
         .active(false)
@@ -71,7 +74,18 @@ public class UserServiceImpl implements UserService {
     User user = userRepo.findByUsername(userDTO.getUsername())
         .orElseThrow(() -> new UserNotFound("User not found"));
 
+    //TODO: refactor (or delete ifs except email)
     boolean changed = false;
+
+    if (!user.getName().equals(userDTO.getName())) {
+      user.setName(userDTO.getName());
+      changed = true;
+    }
+
+    if (!user.getSurname().equals(userDTO.getSurname())) {
+      user.setSurname(userDTO.getSurname());
+      changed = true;
+    }
 
     if (!oldPassword.isEmpty()) {
       if (!passwordEncoder.matches(oldPassword, user.getPassword())) {

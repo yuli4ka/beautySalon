@@ -52,6 +52,28 @@
   </div>
 
   <div class="form-group mb-3 row">
+    <label class="col-sm-3 col-form-label" th:text="#{Name}">
+    </label>
+    <div class="col-sm-8">
+      <input class="form-control" type="text" name="name" th:value="*{name}"/>
+      <div style="color: red" th:if="${#fields.hasErrors('name')}"
+           th:errors="*{name}">
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group mb-3 row">
+    <label class="col-sm-3 col-form-label" th:text="#{Surname}">
+    </label>
+    <div class="col-sm-8">
+      <input class="form-control" type="text" name="surname" th:value="*{surname}"/>
+      <div style="color: red" th:if="${#fields.hasErrors('surname')}"
+           th:errors="*{surname}">
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group mb-3 row">
 <!--    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>-->
     <button class="btn btn-primary" type="submit" th:text="#{Sign.up}"></button>
   </div>

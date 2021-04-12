@@ -12,6 +12,12 @@ public class UserRegistrationDto {
   @Pattern(regexp = "^[A-Za-z0-9_]{6,30}$", message = "{username.error}")
   String username;
 
+  @Pattern(regexp = "^\\p{L}{0,30}$", message = "{name.error}")
+  private String name;
+
+  @Pattern(regexp = "^\\p{L}{0,30}$", message = "{surname.error}")
+  private String surname;
+
   @NotBlank(message = "{this.field.is.mandatory}")
   @Size(max=255, message = "{the.maximum.length.of.the.field.is.255.characters}")
   String password;
