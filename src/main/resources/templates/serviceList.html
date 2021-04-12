@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Beauty salon "MathLina"</title>
+</head>
+<body>
+
+<div th:replace="fragment/header.html"></div>
+
+<table border="1">
+  <thead>
+  <tr>
+    <th th:text="#{name.en}" />
+    <th th:text="#{name.ua}" />
+    <th th:text="#{price}" />
+    <th th:text="#{duration}" />
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="service, iStat : ${myServicePage.content}"
+      th:style="${iStat.odd}? 'font-weight: bold;'"
+      th:alt-title="${iStat.even}? 'even' : 'odd'">
+    <td th:text="${service.nameEn}" />
+    <td th:text="${service.nameUa}" />
+    <td th:text="${service.price}" />
+    <td th:text="${service.duration}" />
+  </tr>
+  </tbody>
+</table>
+
+
+<div th:if="${myServicePage.totalPages > 0}" class="pagination"
+     th:each="pageNumber : ${pageNumbers}">
+  <a th:href="@{/serviceList(size=${myServicePage.size}, page=${pageNumber})}"
+     th:text="${pageNumber}"
+     th:class="${pageNumber==myServicePage.number + 1} ? active"></a>
+</div>
+
+</body>
+</html>
