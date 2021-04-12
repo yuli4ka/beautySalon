@@ -22,6 +22,8 @@ public class MyServiceController {
     this.myServiceService = myServiceService;
   }
 
+  //TODO: deal with '?' in url on pagination and local change
+  //TODO: add size picker
   @GetMapping("/serviceList")
   public String ServiceList(Model model,
       @RequestParam("page") Optional<Integer> page,
