@@ -34,6 +34,10 @@ public class User implements UserDetails {
 
   private String username;
 
+  private String name;
+
+  private String surname;
+
   private String password;
 
   private boolean active;
