@@ -82,7 +82,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .usersByUsernameQuery("select username, password, active from usr where username=?")
         .authoritiesByUsernameQuery(
             "select u.username, ur.roles from usr u inner join user_role ur "
-                + "on u.id = ur.user_id where u.username=?");
+                + "on u.user_id = ur.user_id where u.username=?");
   }
 
 }
