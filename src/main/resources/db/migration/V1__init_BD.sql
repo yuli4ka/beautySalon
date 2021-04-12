@@ -2,7 +2,7 @@ create table hibernate_sequence
 (
     next_val bigint
 );
-insert into hibernate_sequence values (24);
+insert into hibernate_sequence values (26);
 
 create table user_role (
     user_id bigint not null,

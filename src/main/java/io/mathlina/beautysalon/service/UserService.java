@@ -12,6 +12,7 @@ import io.mathlina.beautysalon.exception.UsernameIsAlreadyTaken;
 import io.mathlina.beautysalon.exception.WrongPassword;
 import io.mathlina.beautysalon.repos.UserRepo;
 import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -108,4 +109,9 @@ public class UserService implements UserDetailsService {
 
     userRepo.save(user);
   }
+
+  public List<User> findAllMasters() {
+    return userRepo.findAllByRoleContaining(Role.MASTER);
+  }
+
 }
