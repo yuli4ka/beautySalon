@@ -9,26 +9,41 @@
 <div th:replace="fragment/header.html"></div>
 
 <div class="container">
-  <h3 class="text-info text-center mt-20" th:text="#{beauty.salon.services}"></h3>
+  <h3 class="text-info text-center mt-20" th:text="#{beauty.salon.masters}"></h3>
   <table  class="table table-striped table-alignment mt-20 text-center">
     <thead>
     <tr>
-      <th th:text="#{name.en}" />
-      <th th:text="#{name.ua}" />
       <th>
-        <a th:text="#{price}"
-           th:href="@{'/serviceList' + '?sort=price,' +
-           ${myServicePage.sort.getOrderFor('price')?.isAscending() ? 'desc' : 'asc'}}"></a>
+        <a th:text="#{Name}"
+           th:href="@{'/allMasters' + '?sort=name,' +
+           ${mastersPage.getSort().getOrderFor('name') != null ?
+           (mastersPage.getSort().getOrderFor('name').isAscending() ? 'desc' : 'asc')
+           : 'asc'}
+         }"></a>
       </th>
-      <th th:text="#{duration}" />
+      <th>
+        <a th:text="#{Surname}"
+           th:href="@{'/allMasters' + '?sort=surname,' +
+           ${mastersPage.getSort().getOrderFor('surname') != null ?
+           (mastersPage.getSort().getOrderFor('surname').isAscending() ? 'desc' : 'asc')
+           : 'asc'}
+         }"></a>
+      </th>
+      <th>
+        <a th:text="#{Grade}"
+           th:href="@{'/allMasters' + '?sort=grade,' +
+           ${mastersPage.getSort().getOrderFor('grade') != null ?
+           (mastersPage.getSort().getOrderFor('grade').isAscending() ? 'desc' : 'asc')
+           : 'asc'}
+         }"></a>
+      </th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="service, iStat : ${myServicePage.content}">
-      <td th:text="${service.nameEn}" />
-      <td th:text="${service.nameUa}" />
-      <td th:text="${service.price}" />
-      <td th:text="${service.duration}" />
+    <tr th:each="master, iStat : ${mastersPage.content}">
+      <td th:text="${master.name}" />
+      <td th:text="${master.surname}" />
+      <td th:text="${master.grade}" />
     </tr>
     </tbody>
   </table>
@@ -43,11 +58,11 @@
   <!--  </select>-->
 
   <div class="pagination"
-       th:if="${myServicePage.totalPages > 0}"
-       th:each="pageNumber : ${#numbers.sequence(1, myServicePage.totalPages)}">
-    <a th:href="@{'/serviceList' + '?size=' + ${myServicePage.size} + '&page=' + ${pageNumber - 1}}"
+       th:if="${mastersPage.totalPages > 0}"
+       th:each="pageNumber : ${#numbers.sequence(1, mastersPage.totalPages)}">
+    <a th:href="@{'/allMasters' + '?size=' + ${mastersPage.size} + '&page=' + ${pageNumber - 1}}"
        th:text="${pageNumber}"
-       th:class="${pageNumber==myServicePage.number + 1} ? active"></a>
+       th:class="${pageNumber==mastersPage.number + 1} ? active"></a>
   </div>
 </div>
 
