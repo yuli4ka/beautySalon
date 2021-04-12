@@ -30,7 +30,7 @@ public class MyServiceController {
       @RequestParam("size") Optional<Integer> size) {
 
     int currentPage = page.orElse(1);
-    int pageSize = size.orElse(1);
+    int pageSize = size.orElse(5);
 
     Page<Service> myServicePage = myServiceService
         .findAllPaginated(PageRequest.of(currentPage - 1, pageSize));
