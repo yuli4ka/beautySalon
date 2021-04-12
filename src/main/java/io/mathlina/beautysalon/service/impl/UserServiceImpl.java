@@ -2,6 +2,7 @@ package io.mathlina.beautysalon.service.impl;
 
 import io.mathlina.beautysalon.domain.Role;
 import io.mathlina.beautysalon.domain.User;
+import io.mathlina.beautysalon.dto.MasterDto;
 import io.mathlina.beautysalon.dto.UserProfileDto;
 import io.mathlina.beautysalon.dto.UserRegistrationDto;
 import io.mathlina.beautysalon.exception.CannotSaveUserToDatabase;
@@ -13,10 +14,14 @@ import io.mathlina.beautysalon.exception.WrongPassword;
 import io.mathlina.beautysalon.repos.UserRepo;
 import io.mathlina.beautysalon.service.MailService;
 import io.mathlina.beautysalon.service.UserService;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -124,8 +129,23 @@ public class UserServiceImpl implements UserService {
     userRepo.save(user);
   }
 
-  public List<User> findAllMasters() {
-    return userRepo.findAllByRoleContaining(Role.MASTER);
-  }
+//  @Override
+//  public Page<MasterDto> findPaginatedMasters(Pageable pageable) {
+//    List<User> masters = userRepo.findAllByRoleContaining(Role.MASTER, pageable);
+//
+//    List<MasterDto> masterDtoList = new ArrayList<>();
+//
+//
+//
+//    return masterDtoPage;
+//  }
+//
+//  public MasterDto convertUserToMasterDto(User user) {
+//    MasterDto dto = new MasterDto();
+//
+//
+//
+//    return dto;
+//  }
 
 }

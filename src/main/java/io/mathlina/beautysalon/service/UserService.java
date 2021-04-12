@@ -1,9 +1,11 @@
 package io.mathlina.beautysalon.service;
 
 import io.mathlina.beautysalon.domain.User;
+import io.mathlina.beautysalon.dto.MasterDto;
 import io.mathlina.beautysalon.dto.UserProfileDto;
 import io.mathlina.beautysalon.dto.UserRegistrationDto;
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface UserService {
 
@@ -15,6 +17,5 @@ public interface UserService {
 
   void activateUser(String code);
 
-  List<User> findAllMasters();
-
+//  Page<MasterDto> findPaginatedMasters(Pageable pageable);
 }

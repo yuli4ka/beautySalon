@@ -17,10 +17,13 @@ public class Timetable {
   private Long id;
 
   @ManyToOne
-  private MasterOnService masterOnService;
+  private User client;
 
   @ManyToOne
-  private User client;
+  private Master master;
+
+  @ManyToOne
+  private Service service;
 
   private LocalDateTime dateTime;
 

@@ -16,6 +16,6 @@ public interface UserRepo extends JpaRepository<User, Long> {
 
   Optional<User> findByActivationCode(String code);
 
-  List<User> findAllByRoleContaining(Role role);
+  List<User> findAllByRoleContaining(Role role, Pageable pageable);
 
 }
