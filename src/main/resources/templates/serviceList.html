@@ -15,7 +15,11 @@
     <tr>
       <th th:text="#{name.en}" />
       <th th:text="#{name.ua}" />
-      <th th:text="#{price}" />
+      <th>
+        <a th:text="#{price}"
+           th:href="@{'/serviceList' + '?sort=price,' +
+           ${myServicePage.sort.getOrderFor('price')?.isAscending() ? 'desc' : 'asc'}}"></a>
+      </th>
       <th th:text="#{duration}" />
     </tr>
     </thead>

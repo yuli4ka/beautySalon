@@ -49,7 +49,8 @@ public class MvcConfig implements WebMvcConfigurer {
 
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
-    registry.addInterceptor(new RedirectInterceptor());
+    //TODO: configure interceptor
+//    registry.addInterceptor(new RedirectInterceptor());
     registry.addInterceptor(localeChangeInterceptor());
   }
 
