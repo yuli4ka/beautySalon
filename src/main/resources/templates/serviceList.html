@@ -41,7 +41,7 @@
   <div class="pagination"
        th:if="${myServicePage.totalPages > 0}"
        th:each="pageNumber : ${#numbers.sequence(1, myServicePage.totalPages)}">
-    <a th:href="@{'/serviceList' + '?size=' + ${myServicePage.size} + '&page=' + ${pageNumber}}"
+    <a th:href="@{'/serviceList' + '?size=' + ${myServicePage.size} + '&page=' + ${pageNumber - 1}}"
        th:text="${pageNumber}"
        th:class="${pageNumber==myServicePage.number + 1} ? active"></a>
   </div>
