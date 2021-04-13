@@ -70,10 +70,16 @@
              th:text="${#strings.toUpperCase(#locale)}">
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-<!--            <a class="dropdown-item" th:href="@{/(lang=en)}" th:text="#{lang.en}"></a>-->
-<!--            <a class="dropdown-item" th:href="@{/(lang=ua)}" th:text="#{lang.ua}"></a>-->
-            <a class="dropdown-item" th:href="@{''(lang=en)}" th:text="#{lang.en}"></a>
-            <a class="dropdown-item" th:href="@{''(lang=uk_UA)}" th:text="#{lang.ua}"></a>
+            <a class="dropdown-item"
+               th:with="urlBuilder=${T(org.springframework.web.servlet.support.ServletUriComponentsBuilder).fromCurrentRequest()}"
+               th:href="${urlBuilder.replaceQueryParam('lang', 'en').toUriString()}"
+               th:text="#{lang.en}">
+            </a>
+            <a class="dropdown-item"
+               th:with="urlBuilder=${T(org.springframework.web.servlet.support.ServletUriComponentsBuilder).fromCurrentRequest()}"
+               th:href="${urlBuilder.replaceQueryParam('lang', 'uk_UA').toUriString()}"
+               th:text="#{lang.ua}">
+            </a>
           </div>
         </li>
 
