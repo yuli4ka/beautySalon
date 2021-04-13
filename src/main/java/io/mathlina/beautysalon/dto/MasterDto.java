@@ -1,16 +1,24 @@
 package io.mathlina.beautysalon.dto;
 
-import lombok.Builder;
-import lombok.Data;
+import io.mathlina.beautysalon.domain.Master;
+import lombok.Value;
 
-@Data
-@Builder
+@Value
 public class MasterDto {
 
-  private String name;
+  public MasterDto(Master master) {
+    this.id = master.getId();
+    this.name = master.getName();
+    this.surname = master.getSurname();
+    this.grade = master.getGrade();
+  }
 
-  private String surname;
+  Long id;
 
-  private Float grade;
+  String name;
+
+  String surname;
+
+  Float grade;
 
 }

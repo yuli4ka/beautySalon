@@ -1,6 +1,6 @@
 package io.mathlina.beautysalon.controller;
 
-import io.mathlina.beautysalon.domain.Service;
+import io.mathlina.beautysalon.dto.ServiceDto;
 import io.mathlina.beautysalon.service.MyServiceService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,12 +18,11 @@ public class MyServiceController {
     this.myServiceService = myServiceService;
   }
 
-  //TODO: deal with '?' in url on pagination and local change
   //TODO: add size picker
   @GetMapping("/serviceList")
   public String ServiceList(Model model, @PageableDefault(size = 6) Pageable pageable) {
-    Page<Service> myServicePage = myServiceService.findAllPaginated(pageable);
-    model.addAttribute("myServicePage", myServicePage);
+    Page<ServiceDto> myServicePage = myServiceService.findAll(pageable);
+    model.addAttribute("services", myServicePage);
 
     return "serviceList";
   }

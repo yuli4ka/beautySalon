@@ -8,22 +8,21 @@
 
 <div th:replace="fragment/header.html"></div>
 
-<div th:if="${myServicePage.isEmpty()}" class="container"
+<div th:if="${services.isEmpty()}" class="container"
 th:text="#{services.empty}">
 </div>
 
-<div th:if="${!myServicePage.isEmpty()}" class="container">
+<div th:if="${!services.isEmpty()}" class="container">
   <h3 class="text-info text-center mt-20" th:text="#{beauty.salon.services}"></h3>
   <table  class="table table-striped table-alignment mt-20 text-center">
     <thead>
     <tr>
-      <th th:text="#{name.en}" />
-      <th th:text="#{name.ua}" />
+      <th th:text="#{name}" />
       <th>
         <a th:text="#{price}"
            th:href="@{'/serviceList' + '?sort=price,' +
-           ${myServicePage.getSort().getOrderFor('price') != null ?
-           (myServicePage.getSort().getOrderFor('price').isAscending() ? 'desc' : 'asc')
+           ${services.getSort().getOrderFor('price') != null ?
+           (services.getSort().getOrderFor('price').isAscending() ? 'desc' : 'asc')
            : 'asc'}
          }"></a>
       </th>
@@ -31,9 +30,8 @@ th:text="#{services.empty}">
     </tr>
     </thead>
     <tbody>
-    <tr th:each="service, iStat : ${myServicePage.content}">
-      <td th:text="${service.nameEn}" />
-      <td th:text="${service.nameUa}" />
+    <tr th:each="service, iStat : ${services.content}">
+      <td th:text="${service.name}" />
       <td th:text="${service.price}" />
       <td th:text="${service.duration}" />
     </tr>
@@ -50,11 +48,11 @@ th:text="#{services.empty}">
 <!--  </select>-->
 
   <div class="pagination"
-       th:if="${myServicePage.totalPages > 0}"
-       th:each="pageNumber : ${#numbers.sequence(1, myServicePage.totalPages)}">
-    <a th:href="@{'/serviceList' + '?size=' + ${myServicePage.size} + '&page=' + ${pageNumber - 1}}"
+       th:if="${services.totalPages > 0}"
+       th:each="pageNumber : ${#numbers.sequence(1, services.totalPages)}">
+    <a th:href="@{'/serviceList' + '?size=' + ${services.size} + '&page=' + ${pageNumber - 1}}"
        th:text="${pageNumber}"
-       th:class="${pageNumber==myServicePage.number + 1} ? active"></a>
+       th:class="${pageNumber==services.number + 1} ? active"></a>
   </div>
 </div>
 

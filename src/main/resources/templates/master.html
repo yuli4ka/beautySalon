@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Beauty salon "MathLina"</title>
+</head>
+<body>
+
+<div th:replace="fragment/header.html"></div>
+
+<div class="container">
+  <h1 th:value="${master.name}"></h1>
+</div>
+
+<div th:if="${services.isEmpty()}" class="container"
+     th:text="#{services.empty}">
+</div>
+
+<div th:if="${!services.isEmpty()}" class="container">
+  <h3 class="text-info text-center mt-20" th:text="#{beauty.salon.services}"></h3>
+  <table  class="table table-striped table-alignment mt-20 text-center">
+    <thead>
+    <tr>
+      <th th:text="#{name}" />
+      <th th:text="#{price}" />
+      <th th:text="#{duration}" />
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="service, iStat : ${services}">
+      <td th:text="${service.name}" />
+      <td th:text="${service.price}" />
+      <td th:text="${service.duration}" />
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+</body>
+</html>
