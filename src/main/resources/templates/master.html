@@ -9,6 +9,7 @@
 <div th:replace="fragment/header.html"></div>
 
 <div class="container">
+  <h3 class="text-info text-center mt-20" th:text="#{master}"></h3>
   <div class="form-group mb-3 row">
     <label class="col-sm-5 col-form-label" th:text="#{Name} + ': ' + ${master.name}"></label>
   </div>
@@ -41,13 +42,21 @@
       <th th:text="#{name}"/>
       <th th:text="#{price}"/>
       <th th:text="#{duration}"/>
+      <th/>
     </tr>
     </thead>
     <tbody>
     <tr th:each="service, iStat : ${services}">
-      <td th:text="${service.name}"/>
+      <td/>
+        <a th:text="${service.name}" th:href="@{/service/{id}(id=${service.id})}"/>
+      </td>
       <td th:text="${service.price}"/>
       <td th:text="${service.duration}"/>
+      <td>
+        <a class="btn btn-primary"
+           th:href="@{/appoint(master_id=${master.id}, service_id=${service.id})}"
+           th:text="#{service.appoint}"/>
+      </td>
     </tr>
     </tbody>
   </table>
