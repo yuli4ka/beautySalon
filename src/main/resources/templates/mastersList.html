@@ -41,9 +41,17 @@
     </thead>
     <tbody>
     <tr th:each="master, iStat : ${mastersPage.content}">
-      <td th:text="${master.name}" />
-      <td th:text="${master.surname}" />
-      <td th:text="${master.grade}" />
+      <td>
+        <a th:text="${master.name}"
+           th:href="@{'/master/' + ${master.id}}">
+        </a>
+      </td>
+      <td>
+        <a th:text="${master.surname}"
+           th:href="@{'/master/' + ${master.id}}">
+        </a>
+      </td>
+      <td th:text="${master.grade}"></td>
     </tr>
     </tbody>
   </table>
