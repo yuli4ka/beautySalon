@@ -33,13 +33,10 @@ public class UserController {
   }
 
   @GetMapping("/profile")
-  public String getProfile(@AuthenticationPrincipal UserDetails userDetails,
-      @ModelAttribute("userProfileDto") UserProfileDto userProfileDto) {
-
+  public String getProfile(@AuthenticationPrincipal UserDetails userDetails, Model model) {
     User user = userService.loadUserByUsername(userDetails.getUsername());
-
-    userProfileDto.setUsername(user.getUsername());
-    userProfileDto.setEmail(user.getEmail());
+    UserProfileDto userProfileDto = new UserProfileDto(user);
+    model.addAttribute("userProfileDto", userProfileDto);
 
     return "profile";
   }

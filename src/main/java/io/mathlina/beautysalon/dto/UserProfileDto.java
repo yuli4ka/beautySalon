@@ -1,13 +1,23 @@
 package io.mathlina.beautysalon.dto;
 
+import io.mathlina.beautysalon.domain.User;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class UserProfileDto {
+
+  public UserProfileDto(User user) {
+    this.username = user.getUsername();
+    this.email = user.getEmail();
+    this.name = user.getName();
+    this.surname = user.getSurname();
+  }
 
   String username;
 
@@ -17,10 +27,10 @@ public class UserProfileDto {
   @Pattern(regexp = "^\\p{L}{0,30}$", message = "{surname.error}")
   private String surname;
 
-  @Size(max=255, message = "{the.maximum.length.of.the.field.is.255.characters}")
+  @Size(max = 255, message = "{the.maximum.length.of.the.field.is.255.characters}")
   String password;
 
-  @Size(max=255, message = "{the.maximum.length.of.the.field.is.255.characters}")
+  @Size(max = 255, message = "{the.maximum.length.of.the.field.is.255.characters}")
   String passwordConfirm;
 
   @NotBlank(message = "{this.field.is.mandatory}")
