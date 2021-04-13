@@ -20,7 +20,7 @@ th:text="#{services.empty}">
       <th th:text="#{name}" />
       <th>
         <a th:text="#{price}"
-           th:href="@{'/serviceList' + '?sort=price,' +
+           th:href="@{'/services' + '?sort=price,' +
            ${services.getSort().getOrderFor('price') != null ?
            (services.getSort().getOrderFor('price').isAscending() ? 'desc' : 'asc')
            : 'asc'}
@@ -50,7 +50,7 @@ th:text="#{services.empty}">
   <div class="pagination"
        th:if="${services.totalPages > 0}"
        th:each="pageNumber : ${#numbers.sequence(1, services.totalPages)}">
-    <a th:href="@{'/serviceList' + '?size=' + ${services.size} + '&page=' + ${pageNumber - 1}}"
+    <a th:href="@{'/services' + '?size=' + ${services.size} + '&page=' + ${pageNumber - 1}}"
        th:text="${pageNumber}"
        th:class="${pageNumber==services.number + 1} ? active"></a>
   </div>

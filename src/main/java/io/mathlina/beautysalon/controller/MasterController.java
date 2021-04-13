@@ -34,7 +34,7 @@ public class MasterController {
   }
 
   //TODO: add size picker
-  @GetMapping("/allMasters")
+  @GetMapping("/masters")
   public String mastersList(Model model, @PageableDefault(size = 6) Pageable pageable) {
     Page<MasterDto> mastersPage = masterService.findAllPaginated(pageable);
     model.addAttribute("mastersPage", mastersPage);

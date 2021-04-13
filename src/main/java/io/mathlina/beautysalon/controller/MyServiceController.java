@@ -19,8 +19,8 @@ public class MyServiceController {
   }
 
   //TODO: add size picker
-  @GetMapping("/serviceList")
-  public String ServiceList(Model model, @PageableDefault(size = 6) Pageable pageable) {
+  @GetMapping("/services")
+  public String serviceList(Model model, @PageableDefault(size = 6) Pageable pageable) {
     Page<ServiceDto> myServicePage = myServiceService.findAll(pageable);
     model.addAttribute("services", myServicePage);
 

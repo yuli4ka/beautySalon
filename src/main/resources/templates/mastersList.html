@@ -15,7 +15,7 @@
     <tr>
       <th>
         <a th:text="#{Name}"
-           th:href="@{'/allMasters' + '?sort=name,' +
+           th:href="@{'/masters' + '?sort=name,' +
            ${mastersPage.getSort().getOrderFor('name') != null ?
            (mastersPage.getSort().getOrderFor('name').isAscending() ? 'desc' : 'asc')
            : 'asc'}
@@ -23,7 +23,7 @@
       </th>
       <th>
         <a th:text="#{Surname}"
-           th:href="@{'/allMasters' + '?sort=surname,' +
+           th:href="@{'/masters' + '?sort=surname,' +
            ${mastersPage.getSort().getOrderFor('surname') != null ?
            (mastersPage.getSort().getOrderFor('surname').isAscending() ? 'desc' : 'asc')
            : 'asc'}
@@ -31,7 +31,7 @@
       </th>
       <th>
         <a th:text="#{Grade}"
-           th:href="@{'/allMasters' + '?sort=grade,' +
+           th:href="@{'/masters' + '?sort=grade,' +
            ${mastersPage.getSort().getOrderFor('grade') != null ?
            (mastersPage.getSort().getOrderFor('grade').isAscending() ? 'desc' : 'asc')
            : 'asc'}
@@ -68,7 +68,7 @@
   <div class="pagination"
        th:if="${mastersPage.totalPages > 0}"
        th:each="pageNumber : ${#numbers.sequence(1, mastersPage.totalPages)}">
-    <a th:href="@{'/allMasters' + '?size=' + ${mastersPage.size} + '&page=' + ${pageNumber - 1}}"
+    <a th:href="@{'/masters' + '?size=' + ${mastersPage.size} + '&page=' + ${pageNumber - 1}}"
        th:text="${pageNumber}"
        th:class="${pageNumber==mastersPage.number + 1} ? active"></a>
   </div>
