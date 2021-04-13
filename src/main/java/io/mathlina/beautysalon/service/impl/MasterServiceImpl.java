@@ -6,6 +6,7 @@ import io.mathlina.beautysalon.dto.MasterDto;
 import io.mathlina.beautysalon.dto.ServiceDto;
 import io.mathlina.beautysalon.repos.CommentRepo;
 import io.mathlina.beautysalon.repos.MasterRepo;
+import io.mathlina.beautysalon.repos.MyServiceRepo;
 import io.mathlina.beautysalon.service.MasterService;
 import java.text.Collator;
 import java.util.List;
@@ -21,11 +22,14 @@ public class MasterServiceImpl implements MasterService {
 
   private final MasterRepo masterRepo;
   private final CommentRepo commentRepo;
+  private final MyServiceRepo serviceRepo;
 
   @Autowired
-  public MasterServiceImpl(MasterRepo masterRepo, CommentRepo commentRepo) {
+  public MasterServiceImpl(MasterRepo masterRepo, CommentRepo commentRepo,
+      MyServiceRepo serviceRepo) {
     this.masterRepo = masterRepo;
     this.commentRepo = commentRepo;
+    this.serviceRepo = serviceRepo;
   }
 
   public Page<MasterDto> findAllPaginated(Pageable pageable) {
@@ -35,6 +39,7 @@ public class MasterServiceImpl implements MasterService {
   public List<ServiceDto> findMasterServices(Master master) {
     Locale currentLocale = LocaleContextHolder.getLocale();
     Collator collator = Collator.getInstance(currentLocale);
+
     return master.getServices().stream()
         .map(service -> new ServiceDto(service, currentLocale.toString()))
         .sorted((s1, s2) -> collator.compare(s1.getName(), s2.getName()))
@@ -57,6 +62,19 @@ public class MasterServiceImpl implements MasterService {
   @Override
   public void updateAverageGrades() {
     masterRepo.findAll().forEach(this::updateAverageGrade);
+  }
+
+  @Override
+  public List<ServiceDto> findMasterServicesLike(Master master, String filter) {
+    Locale currentLocale = LocaleContextHolder.getLocale();
+    Collator collator = Collator.getInstance(currentLocale);
+
+    return master.getServices().stream()
+        .map(service -> new ServiceDto(service, currentLocale.toString()))
+        .filter(serviceDto -> serviceDto.getName()
+            .toLowerCase(currentLocale).contains(filter.toLowerCase(currentLocale)))
+        .sorted((s1, s2) -> collator.compare(s1.getName(), s2.getName()))
+        .collect(Collectors.toList());
   }
 
 }

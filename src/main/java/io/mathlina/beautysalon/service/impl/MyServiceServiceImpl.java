@@ -34,4 +34,14 @@ public class MyServiceServiceImpl implements MyServiceService {
         .collect(Collectors.toList());
   }
 
+  @Override
+  public List<MasterDto> findServiceMastersLike(Service service, String filter) {
+    return service.getMasters().stream()
+        .map(MasterDto::new)
+        .filter(masterDto ->
+            masterDto.getName().toLowerCase().contains(filter.toLowerCase())
+            || masterDto.getSurname().toLowerCase().contains(filter.toLowerCase()))
+        .collect(Collectors.toList());
+  }
+
 }

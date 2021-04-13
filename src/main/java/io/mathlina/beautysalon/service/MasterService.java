@@ -16,4 +16,6 @@ public interface MasterService {
   void updateAverageGrade(Master master);
 
   void updateAverageGrades();
+
+  List<ServiceDto> findMasterServicesLike(Master master, String filter);
 }

@@ -12,4 +12,6 @@ public interface MyServiceService {
   Page<ServiceDto> findAll(Pageable pageable);
 
   List<MasterDto> findServiceMasters(Service service);
+
+  List<MasterDto> findServiceMastersLike(Service service, String filter);
 }

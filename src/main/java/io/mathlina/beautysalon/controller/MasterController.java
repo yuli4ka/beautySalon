@@ -43,10 +43,19 @@ public class MasterController {
 
   //TODO: uuid
   @GetMapping("/master/{master}")
-  public String getMaster(Model model, @PathVariable Master master) {
-    List<ServiceDto> serviceDTOs = masterService.findMasterServices(master);
+  public String getMaster(Model model, @PathVariable Master master,
+      @RequestParam(required = false) String filter) {
+
+    List<ServiceDto> serviceDTOs;
+    if (Objects.isNull(filter) || filter.equals("")) {
+      serviceDTOs = masterService.findMasterServices(master);
+    } else {
+      serviceDTOs = masterService.findMasterServicesLike(master, filter);
+    }
+
     model.addAttribute("services", serviceDTOs);
     model.addAttribute("master", new MasterDto(master));
+    model.addAttribute("filter", filter);
 
     return "master";
   }
