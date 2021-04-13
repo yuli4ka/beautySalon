@@ -34,9 +34,18 @@ public class MasterController {
   }
 
   @GetMapping("/masters")
-  public String mastersList(Model model, @PageableDefault(size = 6) Pageable pageable) {
-    Page<MasterDto> mastersPage = masterService.findAllPaginated(pageable);
+  public String mastersList(Model model, @PageableDefault(size = 6) Pageable pageable,
+      @RequestParam(required = false) String filter) {
+
+    Page<MasterDto> mastersPage;
+    if (Objects.isNull(filter) || filter.equals("")) {
+      mastersPage = masterService.findAll(pageable);
+    } else {
+      mastersPage = masterService.findAllLike(filter, pageable);
+    }
+
     model.addAttribute("mastersPage", mastersPage);
+    model.addAttribute("filter", filter);
 
     return "mastersList";
   }

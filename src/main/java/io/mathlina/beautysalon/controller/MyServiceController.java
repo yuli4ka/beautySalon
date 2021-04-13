@@ -26,9 +26,18 @@ public class MyServiceController {
   }
 
   @GetMapping("/services")
-  public String serviceList(Model model, @PageableDefault(size = 6) Pageable pageable) {
-    Page<ServiceDto> myServicePage = myServiceService.findAll(pageable);
+  public String serviceList(Model model, @PageableDefault(size = 6) Pageable pageable,
+      @RequestParam(required = false) String filter) {
+
+    Page<ServiceDto> myServicePage;
+    if (Objects.isNull(filter) || filter.equals("")) {
+      myServicePage = myServiceService.findAll(pageable);
+    } else {
+      myServicePage = myServiceService.findAll(filter, pageable);
+    }
+
     model.addAttribute("services", myServicePage);
+    model.addAttribute("filter", filter);
 
     return "serviceList";
   }

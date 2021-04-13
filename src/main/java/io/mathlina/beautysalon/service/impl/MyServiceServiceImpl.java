@@ -8,8 +8,10 @@ import io.mathlina.beautysalon.service.MyServiceService;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.support.PagedListHolder;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 @org.springframework.stereotype.Service
@@ -42,6 +44,20 @@ public class MyServiceServiceImpl implements MyServiceService {
             masterDto.getName().toLowerCase().contains(filter.toLowerCase())
             || masterDto.getSurname().toLowerCase().contains(filter.toLowerCase()))
         .collect(Collectors.toList());
+  }
+
+  @Override
+  public Page<ServiceDto> findAll(String filter, Pageable pageable) {
+    List<ServiceDto> serviceDTOs = myServiceRepo.findAll().stream()
+        .map(service -> new ServiceDto(service, LocaleContextHolder.getLocale().toString()))
+        .filter(serviceDto -> serviceDto.getName().toLowerCase().contains(filter.toLowerCase()))
+        .collect(Collectors.toList());
+
+    int pageSize = pageable.getPageSize();
+    int page = pageable.getPageNumber();
+    int last = Math.min(pageSize * (page + 1), serviceDTOs.size());
+
+    return new PageImpl<>(serviceDTOs.subList(page * pageSize, last), pageable, serviceDTOs.size());
   }
 
 }

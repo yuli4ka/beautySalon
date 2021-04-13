@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface MasterService {
 
-  Page<MasterDto> findAllPaginated(Pageable pageable);
+  Page<MasterDto> findAll(Pageable pageable);
 
   List<ServiceDto> findMasterServices(Master master);
 
@@ -18,4 +18,6 @@ public interface MasterService {
   void updateAverageGrades();
 
   List<ServiceDto> findMasterServicesLike(Master master, String filter);
+
+  Page<MasterDto> findAllLike(String filter, Pageable pageable);
 }

@@ -14,6 +14,17 @@
 
 <div th:if="${!services.isEmpty()}" class="container">
   <h3 class="text-info text-center mt-20" th:text="#{beauty.salon.services}"></h3>
+
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <form class="form-inline" method="get" th:action="@{''}">
+        <input class="form-control" type="text" name="filter" th:value="${filter}"
+               placeholder="search"/>
+        <button class="btn btn-primary ml-2" type="submit" th:text="#{Search}"></button>
+      </form>
+    </div>
+  </div>
+
   <table class="table table-striped table-alignment mt-20 text-center">
     <thead>
     <tr>
@@ -21,7 +32,8 @@
       <th>
         <a th:text="#{price}"
            th:href="@{/services(sort = 'price,' +
-           ${services.sort.getOrderFor('price')?.getDirection()?.toString() == 'ASC' ? 'desc' : 'asc'})}">
+           ${services.sort.getOrderFor('price')?.getDirection()?.toString() == 'ASC' ? 'desc' : 'asc'},
+           filter=${filter})}">
         </a>
       </th>
       <th th:text="#{duration}"/>
@@ -42,14 +54,14 @@
   <div id="sizeList"
        th:with="sizeList = ${ {5, 10, 20, 50} }">
     <a th:each="size: ${sizeList}" th:text="${size} + ' '"
-       th:href="@{/services(size=${size}, page=0)}">
+       th:href="@{/services(size=${size}, page=0, filter=${filter})}">
     </a>
   </div>
 
   <div class="pagination"
        th:if="${services.totalPages > 1}"
        th:each="pageNumber : ${#numbers.sequence(1, services.totalPages)}">
-    <a th:href="@{/services(size=${services.size}, page=${pageNumber - 1})}"
+    <a th:href="@{/services(size=${services.size}, page=${pageNumber - 1}, filter=${filter})}"
        th:text="${pageNumber}"
        th:class="${pageNumber==services.number + 1} ? active"></a>
   </div>

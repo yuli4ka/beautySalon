@@ -32,7 +32,7 @@ public class MasterServiceImpl implements MasterService {
     this.serviceRepo = serviceRepo;
   }
 
-  public Page<MasterDto> findAllPaginated(Pageable pageable) {
+  public Page<MasterDto> findAll(Pageable pageable) {
     return masterRepo.findAll(pageable).map(MasterDto::new);
   }
 
@@ -75,6 +75,12 @@ public class MasterServiceImpl implements MasterService {
             .toLowerCase(currentLocale).contains(filter.toLowerCase(currentLocale)))
         .sorted((s1, s2) -> collator.compare(s1.getName(), s2.getName()))
         .collect(Collectors.toList());
+  }
+
+  @Override
+  public Page<MasterDto> findAllLike(String filter, Pageable pageable) {
+    return masterRepo.findAllByNameContainingOrSurnameContaining(filter, filter, pageable)
+        .map(MasterDto::new);
   }
 
 }
