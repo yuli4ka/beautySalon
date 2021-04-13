@@ -1,13 +1,18 @@
 package io.mathlina.beautysalon.controller;
 
+import io.mathlina.beautysalon.domain.Comment;
 import io.mathlina.beautysalon.domain.Master;
 import io.mathlina.beautysalon.dto.MasterDto;
 import io.mathlina.beautysalon.dto.ServiceDto;
+import io.mathlina.beautysalon.service.CommentService;
 import io.mathlina.beautysalon.service.MasterService;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,9 +22,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class MasterController {
 
   private final MasterService masterService;
+  private final CommentService commentService;
 
-  public MasterController(MasterService masterService) {
+  public MasterController(MasterService masterService,
+      CommentService commentService) {
     this.masterService = masterService;
+    this.commentService = commentService;
   }
 
   //TODO: add size picker
@@ -39,6 +47,21 @@ public class MasterController {
     model.addAttribute("master", new MasterDto(master));
 
     return "master";
+  }
+
+  @PreAuthorize("hasAuthority('CLIENT')")
+  @GetMapping("/master/{master}/comments")
+  public String getMasterComments(@AuthenticationPrincipal UserDetails userDetails,
+      @PathVariable Master master, Model model, Pageable pageable) {
+
+    Comment userComment = commentService.getComment(master, userDetails);
+    Page<Comment> comments = commentService.getComments(master, pageable);
+
+    model.addAttribute("comments", comments);
+    model.addAttribute("master", new MasterDto(master));
+    model.addAttribute("userComment", userComment);
+
+    return "masterComments";
   }
 
 }

@@ -6,7 +6,6 @@ import io.mathlina.beautysalon.dto.ServiceDto;
 import io.mathlina.beautysalon.repos.MasterRepo;
 import io.mathlina.beautysalon.service.MasterService;
 import java.text.Collator;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;

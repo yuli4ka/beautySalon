@@ -16,7 +16,7 @@ public class Comment {
   private Long id;
 
   @ManyToOne
-  private User master;
+  private Master master;
 
   @ManyToOne
   private User client;
