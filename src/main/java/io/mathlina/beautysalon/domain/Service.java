@@ -27,7 +27,8 @@ public class Service {
 
   private String nameUa;
 
-  private Duration duration;
+//  duration in minutes
+  private Integer duration;
 
   private Integer price;
 

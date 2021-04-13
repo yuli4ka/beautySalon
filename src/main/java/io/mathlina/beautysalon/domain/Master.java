@@ -1,6 +1,5 @@
 package io.mathlina.beautysalon.domain;
 
-import io.mathlina.beautysalon.dto.ServiceDto;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,8 +10,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.ToString.Exclude;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
