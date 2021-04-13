@@ -33,7 +33,6 @@ public class MasterController {
     this.commentService = commentService;
   }
 
-  //TODO: add size picker
   @GetMapping("/masters")
   public String mastersList(Model model, @PageableDefault(size = 6) Pageable pageable) {
     Page<MasterDto> mastersPage = masterService.findAllPaginated(pageable);
@@ -52,7 +51,6 @@ public class MasterController {
     return "master";
   }
 
-  //TODO: hide pagination if pageNum==1
   @GetMapping("/master/{master}/comments")
   public String getMasterComments(@AuthenticationPrincipal UserDetails userDetails,
       @PathVariable Master master, Model model, Pageable pageable) {

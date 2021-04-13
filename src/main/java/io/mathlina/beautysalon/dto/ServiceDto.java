@@ -10,7 +10,6 @@ public class ServiceDto {
 
   public ServiceDto(Service service, String localeCode) {
     this.id = service.getId();
-    //TODO: get name by current locale
     this.name = service.getNameByLocale(localeCode);
     this.duration = service.getDuration();
     this.price = service.getPrice();

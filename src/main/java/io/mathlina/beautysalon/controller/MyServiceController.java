@@ -1,6 +1,5 @@
 package io.mathlina.beautysalon.controller;
 
-import io.mathlina.beautysalon.domain.Master;
 import io.mathlina.beautysalon.domain.Service;
 import io.mathlina.beautysalon.dto.MasterDto;
 import io.mathlina.beautysalon.dto.ServiceDto;
@@ -24,7 +23,6 @@ public class MyServiceController {
     this.myServiceService = myServiceService;
   }
 
-  //TODO: add size picker
   @GetMapping("/services")
   public String serviceList(Model model, @PageableDefault(size = 6) Pageable pageable) {
     Page<ServiceDto> myServicePage = myServiceService.findAll(pageable);
@@ -33,10 +31,8 @@ public class MyServiceController {
     return "serviceList";
   }
 
-  //TODO: add size picker
   @GetMapping("/service/{service}")
-  public String serviceList(Model model, @PathVariable Service service,
-      @PageableDefault(size = 6) Pageable pageable) {
+  public String serviceList(Model model, @PathVariable Service service) {
     List<MasterDto> masterDTOs = myServiceService.findServiceMasters(service);
     model.addAttribute("masters", masterDTOs);
     model.addAttribute("service",
