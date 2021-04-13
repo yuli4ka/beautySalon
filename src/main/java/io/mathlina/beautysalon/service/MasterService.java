@@ -12,4 +12,8 @@ public interface MasterService {
   Page<MasterDto> findAllPaginated(Pageable pageable);
 
   List<ServiceDto> findMasterServices(Master master);
+
+  void updateAverageGrade(Master master);
+
+  void updateAverageGrades();
 }

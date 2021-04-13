@@ -64,10 +64,8 @@ public class RegistrationController {
     try {
       userService.activateUser(code);
       model.addAttribute("messageType", "success");
-      model.addAttribute("message", "user.is.activated");
     } catch (UserNotFoundByActivationCode e) {
       model.addAttribute("messageType", "danger");
-      model.addAttribute("message", "activation.code.not.found");
     }
 
     return "login";

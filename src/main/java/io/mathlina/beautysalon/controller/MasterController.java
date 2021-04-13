@@ -79,6 +79,7 @@ public class MasterController {
       @PathVariable Master master) {
 
     commentService.updateComment(userDetails, master, grade, commentText);
+    masterService.updateAverageGrade(master); //TODO: move to quartz with additional conditions
 
     return "redirect:/master/{master}/comments";
   }

@@ -20,7 +20,7 @@ import org.springframework.data.domain.Pageable;
 @Entity
 public class Master extends User {
 
-  private Float grade;
+  private double grade;
 
   @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(

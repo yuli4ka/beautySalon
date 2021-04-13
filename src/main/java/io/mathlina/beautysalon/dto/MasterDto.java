@@ -19,6 +19,6 @@ public class MasterDto {
 
   String surname;
 
-  Float grade;
+  double grade;
 
 }

@@ -34,7 +34,11 @@ public class CommentServiceImpl implements CommentService {
     User user = userRepo.findByUsername(userDetails.getUsername())
         .orElseThrow(() -> new UserNotFound("User not found"));
 
-    return commentRepo.findByMasterAndClient(master, user);
+    return commentRepo.findByMasterAndClient(master, user)
+        .orElse(Comment.builder()
+            .grade((byte) 5)
+            .build()
+        );
   }
 
   @Override
@@ -42,7 +46,12 @@ public class CommentServiceImpl implements CommentService {
       Byte grade, String commentText) {
     User user = userRepo.findByUsername(userDetails.getUsername())
         .orElseThrow(() -> new UserNotFound("User not found"));
-    Comment comment = commentRepo.findByMasterAndClient(master, user);
+    Comment comment = commentRepo.findByMasterAndClient(master, user)
+        .orElse(Comment.builder()
+            .client(user)
+            .master(master)
+            .build()
+        );
 
     if (!grade.equals(comment.getGrade()) || !commentText.equals(comment.getText())) {
       comment.setGrade(grade);

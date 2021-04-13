@@ -7,12 +7,12 @@
 
 <div th:replace="fragment/header.html"></div>
 
-<div class="container my-3" th:if="${message}">
+<div class="container my-3" th:if="${messageType}">
   <div class="alert alert-danger" role="alert"
-       th:if="${messageType} == 'danger'" th:text="${message}">
+       th:if="${messageType} == 'danger'" th:text="#{activation.code.notfound}">
   </div>
   <div class="alert alert-success" role="alert"
-       th:if="${messageType} == 'success'" th:text="${message}">
+       th:if="${messageType} == 'success'" th:text="#{user.is.activated}">
   </div>
 </div>
 
