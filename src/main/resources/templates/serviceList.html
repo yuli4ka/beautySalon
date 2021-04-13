@@ -29,7 +29,9 @@ th:text="#{services.empty}">
     </thead>
     <tbody>
     <tr th:each="service, iStat : ${services.content}">
-      <td th:text="${service.name}" />
+      <td/>
+      <a th:text="${service.name}" th:href="@{/service/{id}(id=${service.id})}"/>
+      </td>
       <td th:text="${service.price}" />
       <td th:text="${service.duration}" />
     </tr>

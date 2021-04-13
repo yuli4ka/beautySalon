@@ -23,5 +23,4 @@ public class ServiceDto {
   Duration duration;
 
   Integer price;
-
 }

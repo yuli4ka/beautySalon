@@ -1,6 +1,10 @@
 package io.mathlina.beautysalon.service.impl;
 
+import io.mathlina.beautysalon.domain.Master;
+import io.mathlina.beautysalon.domain.Service;
+import io.mathlina.beautysalon.dto.MasterDto;
 import io.mathlina.beautysalon.dto.ServiceDto;
+import io.mathlina.beautysalon.repos.MasterRepo;
 import io.mathlina.beautysalon.repos.MyServiceRepo;
 import io.mathlina.beautysalon.service.MyServiceService;
 import java.util.List;
@@ -27,6 +31,13 @@ public class MyServiceServiceImpl implements MyServiceService {
         .collect(Collectors.toList());
 
     return new PageImpl<>(serviceDTOs, pageable, serviceDTOs.size());
+  }
+
+  @Override
+  public List<MasterDto> findServiceMasters(Service service) {
+    return service.getMasters().stream()
+        .map(MasterDto::new)
+        .collect(Collectors.toList());
   }
 
 }
