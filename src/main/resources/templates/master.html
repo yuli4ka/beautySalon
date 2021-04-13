@@ -21,9 +21,11 @@
     <label class="col-sm-5 col-form-label" th:text="#{Grade} + ': ' + ${master.grade}"></label>
   </div>
 
-  <a th:href="@{'/master/' + ${master.id} + '/comments'}"
-     class="btn btn-primary" th:text="#{go.to.comments}">
-  </a>
+  <div class="form-group mb-3 row">
+    <a th:href="@{'/master/' + ${master.id} + '/comments'}"
+       class="btn btn-primary" th:text="#{go.to.comments}">
+    </a>
+  </div>
 </div>
 
 <div th:if="${services.isEmpty()}" class="container"

@@ -7,6 +7,7 @@ import io.mathlina.beautysalon.dto.ServiceDto;
 import io.mathlina.beautysalon.service.CommentService;
 import io.mathlina.beautysalon.service.MasterService;
 import java.util.List;
+import java.util.Objects;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -49,17 +50,19 @@ public class MasterController {
     return "master";
   }
 
-  @PreAuthorize("hasAuthority('CLIENT')")
+  //TODO: hide pagination if pageNum==1
   @GetMapping("/master/{master}/comments")
   public String getMasterComments(@AuthenticationPrincipal UserDetails userDetails,
       @PathVariable Master master, Model model, Pageable pageable) {
 
-    Comment userComment = commentService.getComment(master, userDetails);
     Page<Comment> comments = commentService.getComments(master, pageable);
-
     model.addAttribute("comments", comments);
     model.addAttribute("master", new MasterDto(master));
-    model.addAttribute("userComment", userComment);
+
+    if (Objects.nonNull(userDetails)) {
+      Comment userComment = commentService.getComment(master, userDetails);
+      model.addAttribute("userComment", userComment);
+    }
 
     return "masterComments";
   }
