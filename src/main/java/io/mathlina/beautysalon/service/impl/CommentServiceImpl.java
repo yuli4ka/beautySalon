@@ -36,4 +36,18 @@ public class CommentServiceImpl implements CommentService {
 
     return commentRepo.findByMasterAndClient(master, user);
   }
+
+  @Override
+  public void updateComment(UserDetails userDetails, Master master,
+      Byte grade, String commentText) {
+    User user = userRepo.findByUsername(userDetails.getUsername())
+        .orElseThrow(() -> new UserNotFound("User not found"));
+    Comment comment = commentRepo.findByMasterAndClient(master, user);
+
+    if (!grade.equals(comment.getGrade()) || !commentText.equals(comment.getText())) {
+      comment.setGrade(grade);
+      comment.setText(commentText);
+      commentRepo.save(comment);
+    }
+  }
 }

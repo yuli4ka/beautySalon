@@ -18,6 +18,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class MasterController {
@@ -59,12 +61,26 @@ public class MasterController {
     model.addAttribute("comments", comments);
     model.addAttribute("master", new MasterDto(master));
 
+    Comment userComment;
     if (Objects.nonNull(userDetails)) {
-      Comment userComment = commentService.getComment(master, userDetails);
-      model.addAttribute("userComment", userComment);
+      userComment = commentService.getComment(master, userDetails);
+    } else {
+      userComment = Comment.builder().grade((byte) 1).text("").build();
     }
+    model.addAttribute("userComment", userComment);
 
     return "masterComments";
+  }
+
+  @PreAuthorize("hasAuthority('CLIENT')")
+  @PostMapping("/master/{master}/comments")
+  public String doComment(@AuthenticationPrincipal UserDetails userDetails,
+      @RequestParam("grade") Byte grade, @RequestParam("commentText") String commentText,
+      @PathVariable Master master) {
+
+    commentService.updateComment(userDetails, master, grade, commentText);
+
+    return "redirect:/master/{master}/comments";
   }
 
 }

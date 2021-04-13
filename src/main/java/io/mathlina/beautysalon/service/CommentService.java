@@ -11,4 +11,6 @@ public interface CommentService {
   Page<Comment> getComments(Master master, Pageable pageable);
 
   Comment getComment(Master master, UserDetails userDetails);
+
+  void updateComment(UserDetails userDetails, Master master, Byte grade, String commentText);
 }
