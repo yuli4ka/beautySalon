@@ -24,7 +24,7 @@
   </div>
 
   <div class="form-group mb-3 row">
-    <a th:href="@{'/master/' + ${master.id} + '/comments'}"
+    <a th:href="@{/master/{id}/comments(id=${master.id})}"
        class="btn btn-primary" th:text="#{go.to.comments}">
     </a>
   </div>

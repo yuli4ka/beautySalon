@@ -15,27 +15,21 @@
     <tr>
       <th>
         <a th:text="#{Name}"
-           th:href="@{'/masters' + '?sort=name,' +
-           ${mastersPage.getSort().getOrderFor('name') != null ?
-           (mastersPage.getSort().getOrderFor('name').isAscending() ? 'desc' : 'asc')
-           : 'asc'}
-         }"></a>
+           th:href="@{/masters(sort = 'name,' +
+           ${mastersPage.sort.getOrderFor('name')?.getDirection()?.toString() == 'ASC' ? 'desc' : 'asc'})}">
+        </a>
       </th>
       <th>
         <a th:text="#{Surname}"
-           th:href="@{'/masters' + '?sort=surname,' +
-           ${mastersPage.getSort().getOrderFor('surname') != null ?
-           (mastersPage.getSort().getOrderFor('surname').isAscending() ? 'desc' : 'asc')
-           : 'asc'}
-         }"></a>
+           th:href="@{/masters(sort = 'surname,' +
+           ${mastersPage.sort.getOrderFor('surname')?.getDirection()?.toString() == 'ASC' ? 'desc' : 'asc'})}">
+        </a>
       </th>
       <th>
         <a th:text="#{Grade}"
-           th:href="@{'/masters' + '?sort=grade,' +
-           ${mastersPage.getSort().getOrderFor('grade') != null ?
-           (mastersPage.getSort().getOrderFor('grade').isAscending() ? 'desc' : 'asc')
-           : 'asc'}
-         }"></a>
+           th:href="@{/masters(sort = 'grade,' +
+           ${mastersPage.sort.getOrderFor('grade')?.getDirection()?.toString() == 'ASC' ? 'desc' : 'asc'})}">
+        </a>
       </th>
     </tr>
     </thead>
@@ -43,12 +37,12 @@
     <tr th:each="master, iStat : ${mastersPage.content}">
       <td>
         <a th:text="${master.name}"
-           th:href="@{'/master/' + ${master.id}}">
+           th:href="@{/master/{id}(id=${master.id})}">
         </a>
       </td>
       <td>
         <a th:text="${master.surname}"
-           th:href="@{'/master/' + ${master.id}}">
+           th:href="@{/master/{id}(id=${master.id})}">
         </a>
       </td>
       <td th:text="${master.grade}"></td>
@@ -68,7 +62,7 @@
   <div class="pagination"
        th:if="${mastersPage.totalPages > 0}"
        th:each="pageNumber : ${#numbers.sequence(1, mastersPage.totalPages)}">
-    <a th:href="@{'/masters' + '?size=' + ${mastersPage.size} + '&page=' + ${pageNumber - 1}}"
+    <a th:href="@{/masters(size=${mastersPage.size},page=${pageNumber - 1})}"
        th:text="${pageNumber}"
        th:class="${pageNumber==mastersPage.number + 1} ? active"></a>
   </div>

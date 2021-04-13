@@ -55,11 +55,10 @@
     <tr>
       <th>
         <a th:text="#{Grade}"
-          th:href="@{'/master/' + ${master.id} + '/comments?sort=grade,' +
-           ${comments.getSort().getOrderFor('grade') != null ?
-           (comments.getSort().getOrderFor('grade').isAscending() ? 'desc' : 'asc')
-           : 'asc'}
-        }"></a>
+           th:href="@{/master/{id}/comments(id=${master.id}, sort = 'grade,' +
+           ${comments.sort.getOrderFor('grade')?.getDirection()?.toString() == 'ASC' ? 'desc' : 'asc'})}">
+        </a>
+
       </th>
       <th th:text="#{Comment.text}"/>
     </tr>
@@ -75,7 +74,7 @@
   <div class="pagination"
        th:if="${comments.totalPages > 0}"
        th:each="pageNumber : ${#numbers.sequence(1, comments.totalPages)}">
-    <a th:href="@{'/master/' + ${master.id} + '/comments?size=' + ${comments.size} + '&page=' + ${pageNumber - 1}}"
+    <a th:href="@{/master/{id}/comments(id=${master.id}, size=${comments.size}, page=${pageNumber - 1})}"
        th:text="${pageNumber}"
        th:class="${pageNumber==comments.number + 1} ? active"></a>
   </div>
