@@ -3,7 +3,7 @@ create table hibernate_sequence
     next_val bigint
 );
 insert into hibernate_sequence
-values (36);
+values (37);
 
 create table comment
 (
@@ -53,7 +53,7 @@ create table timetable
 create table user_role
 (
     user_id bigint not null,
-    roles   varchar(255)
+    role    varchar(255)
 );
 
 create table usr
