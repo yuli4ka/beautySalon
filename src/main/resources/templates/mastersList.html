@@ -50,17 +50,16 @@
     </tbody>
   </table>
 
-  <!--  <select id="size" name="size">-->
-  <!--    <option value="5">5</option>-->
-  <!--    <option value="10">10</option>-->
-  <!--    <option value="15">15</option>-->
-  <!--    <option value="20">20</option>-->
-  <!--    <option value="20">30</option>-->
-  <!--    <option value="20">50</option>-->
-  <!--  </select>-->
+  <label for="sizeList" th:text="#{page.size.select}"></label>
+  <div id="sizeList"
+       th:with="sizeList = ${ {5, 10, 20, 50} }">
+    <a th:each="size: ${sizeList}" th:text="${size} + ' '"
+       th:href="@{/masters(size=${size}, page=0)}">
+    </a>
+  </div>
 
   <div class="pagination"
-       th:if="${mastersPage.totalPages > 0}"
+       th:if="${mastersPage.totalPages > 1}"
        th:each="pageNumber : ${#numbers.sequence(1, mastersPage.totalPages)}">
     <a th:href="@{/masters(size=${mastersPage.size},page=${pageNumber - 1})}"
        th:text="${pageNumber}"

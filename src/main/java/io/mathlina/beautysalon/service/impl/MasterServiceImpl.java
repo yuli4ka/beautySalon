@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 @org.springframework.stereotype.Service
@@ -30,13 +29,7 @@ public class MasterServiceImpl implements MasterService {
   }
 
   public Page<MasterDto> findAllPaginated(Pageable pageable) {
-    Page<Master> masterPage = masterRepo.findAll(pageable);
-
-    List<MasterDto> masterDTOs = masterPage.getContent().stream()
-        .map(MasterDto::new)
-        .collect(Collectors.toList());
-
-    return new PageImpl<>(masterDTOs, pageable, masterPage.getTotalElements());
+    return masterRepo.findAll(pageable).map(MasterDto::new);
   }
 
   public List<ServiceDto> findMasterServices(Master master) {
