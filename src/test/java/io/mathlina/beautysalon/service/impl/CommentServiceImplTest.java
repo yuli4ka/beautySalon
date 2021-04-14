@@ -10,7 +10,6 @@ import io.mathlina.beautysalon.exception.UserNotFound;
 import io.mathlina.beautysalon.repos.CommentRepo;
 import io.mathlina.beautysalon.repos.UserRepo;
 import io.mathlina.beautysalon.service.CommentService;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -22,8 +21,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @SpringBootTest(classes = CommentService.class)

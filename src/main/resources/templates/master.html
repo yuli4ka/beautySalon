@@ -58,7 +58,7 @@
     </thead>
     <tbody>
     <tr th:each="service, iStat : ${services}">
-      <td/>
+      <td>
         <a th:text="${service.name}" th:href="@{/service/{id}(id=${service.id})}"/>
       </td>
       <td th:text="${service.price}"/>

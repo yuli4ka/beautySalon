@@ -82,13 +82,12 @@ class MasterServiceImplTest {
 
   @Test
   void updateAverageGradeShouldUpdateGrade() {
+    double averageGrade = 2;
+    Comment comment1 = Comment.builder().grade((byte) 1).build();
+    Comment comment2 = Comment.builder().grade((byte) 3).build();
+    List<Comment> comments = List.of(comment1, comment2);
     Master oldMaster = new Master();
-    List<Comment> comments = new ArrayList<>();
-    double grade = comments.stream()
-        .mapToInt(Comment::getGrade)
-        .average()
-        .orElse(0);
-    Master newMaster = Master.builder().grade(grade).build();
+    Master newMaster = Master.builder().grade(averageGrade).build();
 
     Mockito.when(commentRepo.findAllByMaster(oldMaster)).thenReturn(comments);
 

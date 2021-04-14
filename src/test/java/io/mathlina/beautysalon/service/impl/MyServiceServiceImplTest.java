@@ -1,15 +1,13 @@
 package io.mathlina.beautysalon.service.impl;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import io.mathlina.beautysalon.domain.Master;
 import io.mathlina.beautysalon.domain.Service;
 import io.mathlina.beautysalon.dto.MasterDto;
 import io.mathlina.beautysalon.dto.ServiceDto;
 import io.mathlina.beautysalon.repos.MyServiceRepo;
-import io.mathlina.beautysalon.service.MasterService;
 import io.mathlina.beautysalon.service.MyServiceService;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -20,7 +18,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -107,7 +104,7 @@ class MyServiceServiceImplTest {
     List<ServiceDto> expected = List.of(serviceDto2);
 
     Mockito.when(myServiceRepo.findAll()).thenReturn(List.of(service1, service2));
-    ;
+
     List<ServiceDto> actual = myServiceService.findAll(FILTER, pageRequest).getContent();
 
     assertEquals(expected, actual);

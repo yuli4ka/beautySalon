@@ -1,9 +1,7 @@
 package io.mathlina.beautysalon.domain;
 
 import io.mathlina.beautysalon.exception.UnsupportedLocale;
-import java.time.Duration;
 import java.util.List;
-import java.util.Locale;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
