@@ -1,11 +1,15 @@
 package io.mathlina.beautysalon.service.impl;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import io.mathlina.beautysalon.domain.User;
+import io.mathlina.beautysalon.dto.UserRegistrationDto;
+import io.mathlina.beautysalon.exception.EmailIsAlreadyTaken;
 import io.mathlina.beautysalon.exception.UserNotFoundByActivationCode;
+import io.mathlina.beautysalon.exception.UsernameIsAlreadyTaken;
 import io.mathlina.beautysalon.repos.UserRepo;
-import io.mathlina.beautysalon.service.CommentService;
+import io.mathlina.beautysalon.service.MailService;
 import io.mathlina.beautysalon.service.UserService;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -15,59 +19,126 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @SpringBootTest(classes = UserService.class)
 @ExtendWith({SpringExtension.class})
 class UserServiceImplTest {
 
+  private static final String USERNAME = "username";
+  private static final String EMAIL = "email";
+  private static final String PASSWORD = "password";
+
   @Mock
   UserRepo userRepo;
+
+  @Mock
+  PasswordEncoder passwordEncoder;
+
+  @Mock
+  MailService mailService;
 
   @InjectMocks
   UserServiceImpl userService;
 
   @Test
   void loadUserByUsernameShouldReturnExistingUser() {
-    String username = "username";
-    User expected = User.builder().username(username).build();
+    User expected = User.builder().username(USERNAME).build();
 
-    Mockito.when(userRepo.findByUsername(username)).thenReturn(Optional.of(expected));
+    Mockito.when(userRepo.findByUsername(USERNAME)).thenReturn(Optional.of(expected));
 
-    User actual = userService.loadUserByUsername(username);
+    User actual = userService.loadUserByUsername(USERNAME);
 
     assertEquals(expected, actual);
 
-    Mockito.verify(userRepo).findByUsername(username);
+    Mockito.verify(userRepo).findByUsername(USERNAME);
     Mockito.verifyNoMoreInteractions(userRepo);
   }
 
   @Test
   void loadUserByUsernameShouldThrowExceptionIfUserNotFound() {
-    String username = "username";
+    Mockito.when(userRepo.findByUsername(USERNAME)).thenReturn(Optional.empty());
 
-    Mockito.when(userRepo.findByUsername(username)).thenReturn(Optional.empty());
+    assertThrows(UsernameNotFoundException.class, () -> userService.loadUserByUsername(USERNAME));
 
-    assertThrows(UsernameNotFoundException.class, () -> userService.loadUserByUsername(username));
-
-    Mockito.verify(userRepo).findByUsername(username);
+    Mockito.verify(userRepo).findByUsername(USERNAME);
     Mockito.verifyNoMoreInteractions(userRepo);
   }
 
   @Test
-  void addUser() {
+  void addUserShouldThrowExceptionWhenUserFoundByUsername() {
+    UserRegistrationDto registrationDto = UserRegistrationDto.builder().username(USERNAME).build();
+    User user = User.builder().username(USERNAME).build();
+
+    Mockito.when(userRepo.findByUsername(USERNAME)).thenReturn(Optional.of(user));
+
+    assertThrows(UsernameIsAlreadyTaken.class, () -> userService.addUser(registrationDto));
+
+    Mockito.verify(userRepo).findByUsername(USERNAME);
+    Mockito.verifyNoMoreInteractions(userRepo);
   }
 
   @Test
-  void updateUser() {
+  void addUserShouldThrowExceptionWhenUserFoundByEmail() {
+    UserRegistrationDto registrationDto = UserRegistrationDto.builder()
+        .username(USERNAME)
+        .email(EMAIL)
+        .password(PASSWORD)
+        .build();
+    User user = User.builder().email(EMAIL).build();
+
+    Mockito.when(userRepo.findByUsername(USERNAME)).thenReturn(Optional.empty());
+    Mockito.when(userRepo.findByEmail(EMAIL)).thenReturn(Optional.of(user));
+
+    assertThrows(EmailIsAlreadyTaken.class, () -> userService.addUser(registrationDto));
+
+    Mockito.verify(userRepo).findByUsername(USERNAME);
+    Mockito.verify(userRepo).findByEmail(EMAIL);
+    Mockito.verifyNoMoreInteractions(userRepo);
   }
+
+//  //TODO replace UUID with using interface to test
+//  @Test
+//  void addUserShouldThrowExceptionWhenUserNotFoundByUsernameAndEmailButErrorInDatabase() {
+//    UUID uuid = UUID.randomUUID();
+//    UserRegistrationDto registrationDto = UserRegistrationDto.builder()
+//        .username(USERNAME)
+//        .email(EMAIL)
+//        .password(PASSWORD)
+//        .build();
+//    User user = User.builder()
+//        .username(USERNAME)
+//        .email(EMAIL)
+//        .active(false)
+//        .password(PASSWORD)
+//        .role(Collections.singleton(Role.CLIENT))
+//        .activationCode(uuid.toString())
+//        .build();
+//
+//    Mockito.when(userRepo.findByUsername(USERNAME)).thenReturn(Optional.empty());
+//    Mockito.when(userRepo.findByEmail(EMAIL)).thenReturn(Optional.empty());
+//    Mockito.when(passwordEncoder.encode(PASSWORD)).thenReturn(PASSWORD);
+//    Mockito.when(UUID.randomUUID()).thenReturn(uuid);
+//    Mockito.when(userRepo.save(user)).thenThrow(CannotSaveUserToDatabase.class);
+//
+//    assertThrows(CannotSaveUserToDatabase.class, () -> userService.addUser(registrationDto));
+//
+//    Mockito.verify(userRepo).findByUsername(USERNAME);
+//    Mockito.verify(userRepo).findByEmail(EMAIL);
+//    Mockito.verify(userRepo).save(user);
+//    Mockito.verifyNoMoreInteractions(userRepo);
+//  }
+//
+//  @Test
+//  void updateUser() {
+//  }
 
   @Test
   void activateUserShouldUpdateUserActiveStatus() {
-    String username = "username";
     String activationCode = "activationCode";
-    User user = User.builder().username(username).activationCode(activationCode).build();
-    User activeUser = User.builder().username(username).activationCode(null).active(true).build();
+    User user = User.builder().username(USERNAME).activationCode(activationCode).build();
+    User activeUser = User.builder().username(USERNAME).activationCode(null).active(true).build();
 
     Mockito.when(userRepo.findByActivationCode(activationCode)).thenReturn(Optional.of(user));
 
