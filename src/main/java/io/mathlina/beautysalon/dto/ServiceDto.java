@@ -1,8 +1,6 @@
 package io.mathlina.beautysalon.dto;
 
 import io.mathlina.beautysalon.domain.Service;
-import java.time.Duration;
-import java.util.Locale;
 import lombok.Value;
 
 @Value
@@ -19,7 +17,7 @@ public class ServiceDto {
 
   String name;
 
-  Duration duration;
+  Integer duration;
 
   Integer price;
 }

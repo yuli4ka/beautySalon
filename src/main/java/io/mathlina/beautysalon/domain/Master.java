@@ -8,13 +8,17 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.ToString.Exclude;
+import lombok.experimental.SuperBuilder;
 
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @Data
 @Entity
+@SuperBuilder
+@NoArgsConstructor
 public class Master extends User {
 
   private double grade;

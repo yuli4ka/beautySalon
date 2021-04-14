@@ -44,8 +44,10 @@ public class CommentServiceImpl implements CommentService {
   @Override
   public void updateComment(UserDetails userDetails, Master master,
       Byte grade, String commentText) {
+
     User user = userRepo.findByUsername(userDetails.getUsername())
         .orElseThrow(() -> new UserNotFound("User not found"));
+
     Comment comment = commentRepo.findByMasterAndClient(master, user)
         .orElse(Comment.builder()
             .client(user)
