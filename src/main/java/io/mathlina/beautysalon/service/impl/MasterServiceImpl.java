@@ -6,7 +6,6 @@ import io.mathlina.beautysalon.dto.MasterDto;
 import io.mathlina.beautysalon.dto.ServiceDto;
 import io.mathlina.beautysalon.repos.CommentRepo;
 import io.mathlina.beautysalon.repos.MasterRepo;
-import io.mathlina.beautysalon.repos.MyServiceRepo;
 import io.mathlina.beautysalon.service.MasterService;
 import java.text.Collator;
 import java.util.List;
@@ -22,14 +21,11 @@ public class MasterServiceImpl implements MasterService {
 
   private final MasterRepo masterRepo;
   private final CommentRepo commentRepo;
-  private final MyServiceRepo serviceRepo;
 
   @Autowired
-  public MasterServiceImpl(MasterRepo masterRepo, CommentRepo commentRepo,
-      MyServiceRepo serviceRepo) {
+  public MasterServiceImpl(MasterRepo masterRepo, CommentRepo commentRepo) {
     this.masterRepo = masterRepo;
     this.commentRepo = commentRepo;
-    this.serviceRepo = serviceRepo;
   }
 
   public Page<MasterDto> findAll(Pageable pageable) {
