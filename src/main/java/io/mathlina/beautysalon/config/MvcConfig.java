@@ -1,6 +1,5 @@
 package io.mathlina.beautysalon.config;
 
-import io.mathlina.beautysalon.config.util.RedirectInterceptor;
 import java.util.Locale;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -49,8 +48,6 @@ public class MvcConfig implements WebMvcConfigurer {
 
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
-    //TODO: configure interceptor
-//    registry.addInterceptor(new RedirectInterceptor());
     registry.addInterceptor(localeChangeInterceptor());
   }
 
