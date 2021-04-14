@@ -9,7 +9,6 @@ import io.mathlina.beautysalon.exception.EmailIsAlreadyTaken;
 import io.mathlina.beautysalon.exception.UserNotFoundByActivationCode;
 import io.mathlina.beautysalon.exception.UsernameIsAlreadyTaken;
 import io.mathlina.beautysalon.repos.UserRepo;
-import io.mathlina.beautysalon.service.MailService;
 import io.mathlina.beautysalon.service.UserService;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -19,7 +18,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @SpringBootTest(classes = UserService.class)
@@ -32,12 +30,6 @@ class UserServiceImplTest {
 
   @Mock
   UserRepo userRepo;
-
-  @Mock
-  PasswordEncoder passwordEncoder;
-
-  @Mock
-  MailService mailService;
 
   @InjectMocks
   UserServiceImpl userService;
@@ -98,41 +90,7 @@ class UserServiceImplTest {
     Mockito.verifyNoMoreInteractions(userRepo);
   }
 
-//  //TODO replace UUID with using interface to test
-//  @Test
-//  void addUserShouldThrowExceptionWhenUserNotFoundByUsernameAndEmailButErrorInDatabase() {
-//    UUID uuid = UUID.randomUUID();
-//    UserRegistrationDto registrationDto = UserRegistrationDto.builder()
-//        .username(USERNAME)
-//        .email(EMAIL)
-//        .password(PASSWORD)
-//        .build();
-//    User user = User.builder()
-//        .username(USERNAME)
-//        .email(EMAIL)
-//        .active(false)
-//        .password(PASSWORD)
-//        .role(Collections.singleton(Role.CLIENT))
-//        .activationCode(uuid.toString())
-//        .build();
-//
-//    Mockito.when(userRepo.findByUsername(USERNAME)).thenReturn(Optional.empty());
-//    Mockito.when(userRepo.findByEmail(EMAIL)).thenReturn(Optional.empty());
-//    Mockito.when(passwordEncoder.encode(PASSWORD)).thenReturn(PASSWORD);
-//    Mockito.when(UUID.randomUUID()).thenReturn(uuid);
-//    Mockito.when(userRepo.save(user)).thenThrow(CannotSaveUserToDatabase.class);
-//
-//    assertThrows(CannotSaveUserToDatabase.class, () -> userService.addUser(registrationDto));
-//
-//    Mockito.verify(userRepo).findByUsername(USERNAME);
-//    Mockito.verify(userRepo).findByEmail(EMAIL);
-//    Mockito.verify(userRepo).save(user);
-//    Mockito.verifyNoMoreInteractions(userRepo);
-//  }
-//
-//  @Test
-//  void updateUser() {
-//  }
+  //TODO replace UUID with using interface to test
 
   @Test
   void activateUserShouldUpdateUserActiveStatus() {
