@@ -10,11 +10,9 @@ import io.mathlina.beautysalon.dto.ServiceDto;
 import io.mathlina.beautysalon.repos.CommentRepo;
 import io.mathlina.beautysalon.repos.MasterRepo;
 import io.mathlina.beautysalon.service.MasterService;
-import java.text.Collator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,6 +28,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @SpringBootTest(classes = MasterService.class)
 @ExtendWith({SpringExtension.class})
 class MasterServiceImplTest {
+
+  private static final String FILTER = "filter";
 
   @Mock
   CommentRepo commentRepo;
@@ -51,8 +51,9 @@ class MasterServiceImplTest {
     Master master = new Master();
     Page<Master> masters = new PageImpl<>(List.of(master));
 
-    Mockito.when(masterRepo.findAll(Pageable.unpaged())).thenReturn(masters);
     Page<MasterDto> expected = masters.map(MasterDto::new);
+
+    Mockito.when(masterRepo.findAll(Pageable.unpaged())).thenReturn(masters);
 
     Page<MasterDto> actual = masterService.findAll(Pageable.unpaged());
 
@@ -64,14 +65,13 @@ class MasterServiceImplTest {
 
   @Test
   void findMasterServicesShouldReturnServiceDtoList() {
-    List<Service> services = new ArrayList<>();
-    Master master = Master.builder().services(services).build();
-    Collator collator = Collator.getInstance(Locale.getDefault());
+    Service service1 = Service.builder().nameEn("name1").build();
+    Service service2 = Service.builder().nameEn("name2").build();
+    Master master = Master.builder().services(List.of(service1, service2)).build();
+    ServiceDto serviceDto1 = new ServiceDto(service1, Locale.getDefault().toString());
+    ServiceDto serviceDto2 = new ServiceDto(service2, Locale.getDefault().toString());
 
-    List<ServiceDto> expected = services.stream()
-        .map(service -> new ServiceDto(service, Locale.getDefault().toString()))
-        .sorted((s1, s2) -> collator.compare(s1.getName(), s2.getName()))
-        .collect(Collectors.toList());
+    List<ServiceDto> expected = List.of(serviceDto1, serviceDto2);
 
     List<ServiceDto> actual = masterService.findMasterServices(master);
 
@@ -84,15 +84,13 @@ class MasterServiceImplTest {
   void updateAverageGradeShouldUpdateGrade() {
     Master oldMaster = new Master();
     List<Comment> comments = new ArrayList<>();
-
-    Mockito.when(commentRepo.findAllByMaster(oldMaster)).thenReturn(comments);
-
     double grade = comments.stream()
         .mapToInt(Comment::getGrade)
         .average()
         .orElse(0);
-
     Master newMaster = Master.builder().grade(grade).build();
+
+    Mockito.when(commentRepo.findAllByMaster(oldMaster)).thenReturn(comments);
 
     masterService.updateAverageGrade(oldMaster);
 
@@ -103,19 +101,14 @@ class MasterServiceImplTest {
 
   @Test
   void findMasterServicesLikeShouldReturnServiceDtoList() {
-    List<Service> services = new ArrayList<>();
-    Master master = Master.builder().services(services).build();
-    Collator collator = Collator.getInstance(Locale.getDefault());
-    String filter = "filter";
+    Service service1 = Service.builder().nameEn("name1").build();
+    Service service2 = Service.builder().nameEn("name2" + FILTER).build();
+    Master master = Master.builder().services(List.of(service1, service2)).build();
+    ServiceDto serviceDto2 = new ServiceDto(service2, Locale.getDefault().toString());
 
-    List<ServiceDto> expected = services.stream()
-        .map(service -> new ServiceDto(service, Locale.getDefault().toString()))
-        .filter(serviceDto -> serviceDto.getName()
-            .toLowerCase(Locale.getDefault()).contains(filter.toLowerCase(Locale.getDefault())))
-        .sorted((s1, s2) -> collator.compare(s1.getName(), s2.getName()))
-        .collect(Collectors.toList());
+    List<ServiceDto> expected = List.of(serviceDto2);
 
-    List<ServiceDto> actual = masterService.findMasterServicesLike(master, filter);
+    List<ServiceDto> actual = masterService.findMasterServicesLike(master, FILTER);
 
     assertEquals(expected, actual);
 
@@ -124,21 +117,21 @@ class MasterServiceImplTest {
 
   @Test
   void findAllLikeShouldReturnMasterDtoPage() {
-    String filter = "filter";
     Master master = new Master();
     Page<Master> masters = new PageImpl<>(List.of(master));
 
-    Mockito.when(masterRepo
-        .findAllByNameContainingOrSurnameContaining(filter, filter, Pageable.unpaged()))
-        .thenReturn(masters);
     Page<MasterDto> expected = masters.map(MasterDto::new);
 
-    Page<MasterDto> actual = masterService.findAllLike(filter, Pageable.unpaged());
+    Mockito.when(masterRepo
+        .findAllByNameContainingOrSurnameContaining(FILTER, FILTER, Pageable.unpaged()))
+        .thenReturn(masters);
+
+    Page<MasterDto> actual = masterService.findAllLike(FILTER, Pageable.unpaged());
 
     assertEquals(expected, actual);
 
     Mockito.verify(masterRepo)
-        .findAllByNameContainingOrSurnameContaining(filter, filter, Pageable.unpaged());
+        .findAllByNameContainingOrSurnameContaining(FILTER, FILTER, Pageable.unpaged());
     Mockito.verifyNoMoreInteractions(commentRepo, masterRepo);
   }
 
