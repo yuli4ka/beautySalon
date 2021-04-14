@@ -8,6 +8,8 @@ import io.mathlina.beautysalon.service.CommentService;
 import io.mathlina.beautysalon.service.MasterService;
 import java.util.List;
 import java.util.Objects;
+
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -36,7 +38,6 @@ public class MasterController {
   @GetMapping("/masters")
   public String mastersList(Model model, @PageableDefault(size = 6) Pageable pageable,
       @RequestParam(required = false) String filter) {
-
     Page<MasterDto> mastersPage;
     if (Objects.isNull(filter) || filter.equals("")) {
       mastersPage = masterService.findAll(pageable);
