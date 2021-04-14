@@ -6,6 +6,7 @@ import io.mathlina.beautysalon.dto.ServiceDto;
 import io.mathlina.beautysalon.repos.MyServiceRepo;
 import io.mathlina.beautysalon.service.MyServiceService;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -37,26 +38,34 @@ public class MyServiceServiceImpl implements MyServiceService {
 
   @Override
   public List<MasterDto> findServiceMastersLike(Service service, String filter) {
-    return service.getMasters().stream()
-        .map(MasterDto::new)
-        .filter(masterDto ->
-            masterDto.getName().toLowerCase().contains(filter.toLowerCase())
-            || masterDto.getSurname().toLowerCase().contains(filter.toLowerCase()))
-        .collect(Collectors.toList());
+    if (Objects.isNull(filter) || filter.equals("")) {
+      return findServiceMasters(service);
+    } else {
+      return service.getMasters().stream()
+          .map(MasterDto::new)
+          .filter(masterDto ->
+              masterDto.getName().toLowerCase().contains(filter.toLowerCase())
+                  || masterDto.getSurname().toLowerCase().contains(filter.toLowerCase()))
+          .collect(Collectors.toList());
+    }
   }
 
   @Override
   public Page<ServiceDto> findAll(String filter, Pageable pageable) {
-    List<ServiceDto> serviceDTOs = myServiceRepo.findAll().stream()
-        .map(service -> new ServiceDto(service, LocaleContextHolder.getLocale().toString()))
-        .filter(serviceDto -> serviceDto.getName().toLowerCase().contains(filter.toLowerCase()))
-        .collect(Collectors.toList());
+    if (Objects.isNull(filter) || filter.equals("")) {
+      return findAll(pageable);
+    } else {
+      List<ServiceDto> serviceDTOs = myServiceRepo.findAll().stream()
+          .map(service -> new ServiceDto(service, LocaleContextHolder.getLocale().toString()))
+          .filter(serviceDto -> serviceDto.getName().toLowerCase().contains(filter.toLowerCase()))
+          .collect(Collectors.toList());
 
-    int pageSize = pageable.getPageSize();
-    int page = pageable.getPageNumber();
-    int last = Math.min(pageSize * (page + 1), serviceDTOs.size());
+      int pageSize = pageable.getPageSize();
+      int page = pageable.getPageNumber();
+      int last = Math.min(pageSize * (page + 1), serviceDTOs.size());
 
-    return new PageImpl<>(serviceDTOs.subList(page * pageSize, last), pageable, serviceDTOs.size());
+      return new PageImpl<>(serviceDTOs.subList(page * pageSize, last), pageable, serviceDTOs.size());
+    }
   }
 
 }

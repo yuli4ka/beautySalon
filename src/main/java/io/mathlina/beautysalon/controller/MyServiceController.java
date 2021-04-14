@@ -29,12 +29,7 @@ public class MyServiceController {
   public String serviceList(Model model, @PageableDefault(size = 6) Pageable pageable,
       @RequestParam(required = false) String filter) {
 
-    Page<ServiceDto> myServicePage;
-    if (Objects.isNull(filter) || filter.equals("")) {
-      myServicePage = myServiceService.findAll(pageable);
-    } else {
-      myServicePage = myServiceService.findAll(filter, pageable);
-    }
+    Page<ServiceDto> myServicePage = myServiceService.findAll(filter, pageable);
 
     model.addAttribute("services", myServicePage);
     model.addAttribute("filter", filter);
@@ -46,12 +41,7 @@ public class MyServiceController {
   public String serviceList(Model model, @PathVariable Service service,
       @RequestParam(required = false) String filter) {
 
-    List<MasterDto> masterDTOs;
-    if (Objects.isNull(filter) || filter.equals("")) {
-      masterDTOs = myServiceService.findServiceMasters(service);
-    } else {
-      masterDTOs = myServiceService.findServiceMastersLike(service, filter);
-    }
+    List<MasterDto> masterDTOs = myServiceService.findServiceMastersLike(service, filter);
 
     model.addAttribute("masters", masterDTOs);
     model.addAttribute("service",

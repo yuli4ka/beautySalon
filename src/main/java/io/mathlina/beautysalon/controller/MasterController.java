@@ -8,8 +8,6 @@ import io.mathlina.beautysalon.service.CommentService;
 import io.mathlina.beautysalon.service.MasterService;
 import java.util.List;
 import java.util.Objects;
-
-import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -38,14 +36,10 @@ public class MasterController {
   @GetMapping("/masters")
   public String mastersList(Model model, @PageableDefault(size = 6) Pageable pageable,
       @RequestParam(required = false) String filter) {
-    Page<MasterDto> mastersPage;
-    if (Objects.isNull(filter) || filter.equals("")) {
-      mastersPage = masterService.findAll(pageable);
-    } else {
-      mastersPage = masterService.findAllLike(filter, pageable);
-    }
 
-    model.addAttribute("mastersPage", mastersPage);
+    Page<MasterDto> mastersPage = masterService.findAllLike(filter, pageable);
+
+    model.addAttribute("masters", mastersPage);
     model.addAttribute("filter", filter);
 
     return "mastersList";
@@ -56,12 +50,7 @@ public class MasterController {
   public String getMaster(Model model, @PathVariable Master master,
       @RequestParam(required = false) String filter) {
 
-    List<ServiceDto> serviceDTOs;
-    if (Objects.isNull(filter) || filter.equals("")) {
-      serviceDTOs = masterService.findMasterServices(master);
-    } else {
-      serviceDTOs = masterService.findMasterServicesLike(master, filter);
-    }
+    List<ServiceDto> serviceDTOs = masterService.findMasterServicesLike(master, filter);
 
     model.addAttribute("services", serviceDTOs);
     model.addAttribute("master", new MasterDto(master));
@@ -78,6 +67,7 @@ public class MasterController {
     model.addAttribute("comments", comments);
     model.addAttribute("master", new MasterDto(master));
 
+    //TODO: refactor
     Comment userComment;
     if (Objects.nonNull(userDetails)) {
       userComment = commentService.getComment(master, userDetails);

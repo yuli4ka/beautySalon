@@ -10,6 +10,7 @@ import io.mathlina.beautysalon.service.MasterService;
 import java.text.Collator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -62,21 +63,29 @@ public class MasterServiceImpl implements MasterService {
 
   @Override
   public List<ServiceDto> findMasterServicesLike(Master master, String filter) {
-    Locale currentLocale = LocaleContextHolder.getLocale();
-    Collator collator = Collator.getInstance(currentLocale);
+    if (Objects.isNull(filter) || filter.equals("")) {
+      return findMasterServices(master);
+    } else {
+      Locale currentLocale = LocaleContextHolder.getLocale();
+      Collator collator = Collator.getInstance(currentLocale);
 
-    return master.getServices().stream()
-        .map(service -> new ServiceDto(service, currentLocale.toString()))
-        .filter(serviceDto -> serviceDto.getName()
-            .toLowerCase(currentLocale).contains(filter.toLowerCase(currentLocale)))
-        .sorted((s1, s2) -> collator.compare(s1.getName(), s2.getName()))
-        .collect(Collectors.toList());
+      return master.getServices().stream()
+          .map(service -> new ServiceDto(service, currentLocale.toString()))
+          .filter(serviceDto -> serviceDto.getName()
+              .toLowerCase(currentLocale).contains(filter.toLowerCase(currentLocale)))
+          .sorted((s1, s2) -> collator.compare(s1.getName(), s2.getName()))
+          .collect(Collectors.toList());
+    }
   }
 
   @Override
   public Page<MasterDto> findAllLike(String filter, Pageable pageable) {
-    return masterRepo.findAllByNameContainingOrSurnameContaining(filter, filter, pageable)
-        .map(MasterDto::new);
+    if (Objects.isNull(filter) || filter.equals("")) {
+      return findAll(pageable);
+    } else {
+      return masterRepo.findAllByNameContainingOrSurnameContaining(filter, filter, pageable)
+          .map(MasterDto::new);
+    }
   }
 
 }
