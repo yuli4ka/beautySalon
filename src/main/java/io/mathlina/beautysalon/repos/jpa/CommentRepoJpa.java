@@ -4,6 +4,8 @@ import io.mathlina.beautysalon.domain.Comment;
 import io.mathlina.beautysalon.domain.Master;
 import io.mathlina.beautysalon.domain.User;
 import io.mathlina.beautysalon.repos.CommentRepo;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,6 +13,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
+@Qualifier("commentRepoJpa")
+@Primary
 public interface CommentRepoJpa extends JpaRepository<Comment, Long>, CommentRepo {
 
   Optional<Comment> findByMasterAndClient(Master master, User client);
