@@ -1,8 +1,15 @@
 package io.mathlina.beautysalon.repos;
 
 import io.mathlina.beautysalon.domain.Service;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-public interface MyServiceRepo extends JpaRepository<Service, Long> {
+import java.util.List;
+import java.util.Optional;
 
+public interface MyServiceRepo {
+
+    Page<Service> findAll(Pageable pageable);
+
+    List<Service> findAll();
 }
