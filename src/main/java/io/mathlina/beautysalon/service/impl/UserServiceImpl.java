@@ -16,6 +16,7 @@ import io.mathlina.beautysalon.service.UserService;
 import java.util.Collections;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,7 @@ public class UserServiceImpl implements UserService {
   private final MailService mailService;
 
   @Autowired
-  public UserServiceImpl(UserRepo userRepo,
+  public UserServiceImpl(@Qualifier("${userRepo}") UserRepo userRepo,
       PasswordEncoder passwordEncoder, MailService mailService) {
     this.userRepo = userRepo;
     this.passwordEncoder = passwordEncoder;

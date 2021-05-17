@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -20,7 +21,7 @@ public class MyServiceServiceImpl implements MyServiceService {
   private final MyServiceRepo myServiceRepo;
 
   @Autowired
-  public MyServiceServiceImpl(MyServiceRepo myServiceRepo) {
+  public MyServiceServiceImpl(@Qualifier("${myServiceRepo}") MyServiceRepo myServiceRepo) {
     this.myServiceRepo = myServiceRepo;
   }
 

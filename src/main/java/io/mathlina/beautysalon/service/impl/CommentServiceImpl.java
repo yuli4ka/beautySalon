@@ -7,6 +7,7 @@ import io.mathlina.beautysalon.exception.UserNotFound;
 import io.mathlina.beautysalon.repos.CommentRepo;
 import io.mathlina.beautysalon.repos.UserRepo;
 import io.mathlina.beautysalon.service.CommentService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,8 +19,8 @@ public class CommentServiceImpl implements CommentService {
   private final CommentRepo commentRepo;
   private final UserRepo userRepo;
 
-  public CommentServiceImpl(CommentRepo commentRepo,
-      UserRepo userRepo) {
+  public CommentServiceImpl(@Qualifier("${commentRepo}") CommentRepo commentRepo,
+                            @Qualifier("${userRepo}") UserRepo userRepo) {
     this.commentRepo = commentRepo;
     this.userRepo = userRepo;
   }
