@@ -40,6 +40,7 @@ public class Service {
   @ManyToMany(fetch = FetchType.LAZY, mappedBy = "services")
   private List<Master> masters;
 
+  //TODO: delete ASAP
   public String getNameByLocale(String localeCode) {
     switch (localeCode){
       case "uk_UA": return nameUa;
