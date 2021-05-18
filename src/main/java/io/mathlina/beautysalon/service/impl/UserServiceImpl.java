@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
   private final MailService mailService;
 
   @Autowired
-  public UserServiceImpl(@Qualifier("${userRepo}") UserRepo userRepo,
+  public UserServiceImpl(@Qualifier("userRepoJdbc") UserRepo userRepo,
       PasswordEncoder passwordEncoder, MailService mailService) {
     this.userRepo = userRepo;
     this.passwordEncoder = passwordEncoder;

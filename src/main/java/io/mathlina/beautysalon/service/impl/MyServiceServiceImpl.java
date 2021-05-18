@@ -21,7 +21,7 @@ public class MyServiceServiceImpl implements MyServiceService {
   private final MyServiceRepo myServiceRepo;
 
   @Autowired
-  public MyServiceServiceImpl(@Qualifier("${myServiceRepo}") MyServiceRepo myServiceRepo) {
+  public MyServiceServiceImpl(MyServiceRepo myServiceRepo) {
     this.myServiceRepo = myServiceRepo;
   }
 

@@ -12,7 +12,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
   private final TimetableRepo timetableRepo;
 
-  public AppointmentServiceImpl(@Qualifier("${timetableRepo}") TimetableRepo timetableRepo) {
+  public AppointmentServiceImpl(TimetableRepo timetableRepo) {
     this.timetableRepo = timetableRepo;
   }
 

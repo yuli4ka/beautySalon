@@ -25,8 +25,7 @@ public class MasterServiceImpl implements MasterService {
   private final CommentRepo commentRepo;
 
   @Autowired
-  public MasterServiceImpl(@Qualifier("${masterRepo}") MasterRepo masterRepo,
-                           @Qualifier("${commentRepo}") CommentRepo commentRepo) {
+  public MasterServiceImpl(MasterRepo masterRepo, CommentRepo commentRepo) {
     this.masterRepo = masterRepo;
     this.commentRepo = commentRepo;
   }

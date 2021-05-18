@@ -15,7 +15,5 @@ public interface UserRepo {
 
     Optional<User> findByActivationCode(String code);
 
-    List<User> findAllByRoleContaining(Role role, Pageable pageable);
-
     User save(User user);
 }

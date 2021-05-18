@@ -1,25 +1,84 @@
 package io.mathlina.beautysalon.repos.jdbc;
 
-import io.mathlina.beautysalon.domain.Role;
 import io.mathlina.beautysalon.domain.User;
 import io.mathlina.beautysalon.repos.UserRepo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Optional;
 
+// TODO: deal with role and active
+
+@Repository
 @Qualifier("userRepoJdbc")
-public interface UserRepoJdbc extends CrudRepository<User, Long>, UserRepo {
+public class UserRepoJdbc implements UserRepo {
 
-    Optional<User> findByUsername(String username);
+    class UseRowMapper implements RowMapper<User> {
+        @Override
+        public User mapRow(ResultSet rs, int i) throws SQLException {
+            User user = User.builder()
+                    .id(rs.getLong("id"))
+                    .username(rs.getString("username"))
+                    .name(rs.getString("name"))
+                    .surname(rs.getString("surname"))
+                    .password(rs.getString("password"))
+                    .email(rs.getString("email"))
+                    .activationCode(rs.getString("activation_code"))
+                    .build();
 
-    Optional<User> findByEmail(String email);
+            return user;
+        }
+    }
 
-    Optional<User> findByActivationCode(String code);
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
-    List<User> findAllByRoleContaining(Role role, Pageable pageable);
+    @Override
+    public Optional<User> findByUsername(String username) {
+        return Optional.ofNullable(jdbcTemplate.queryForObject(
+                "select * from usr where username = ?",
+                new Object[]{username},
+                new UseRowMapper()
+        ));
+    }
 
-    User save(User user);
+    @Override
+    public Optional<User> findByEmail(String email) {
+        return Optional.ofNullable(jdbcTemplate.queryForObject(
+                "select * from usr where email = ?",
+                new Object[]{email},
+                new UseRowMapper()
+        ));
+    }
+
+    @Override
+    public Optional<User> findByActivationCode(String code) {
+        return Optional.ofNullable(jdbcTemplate.queryForObject(
+                "select * from usr where activation_code = ?",
+                new Object[]{code},
+                new UseRowMapper()
+        ));
+    }
+
+    @Override
+    public User save(User user) {
+        int id = jdbcTemplate.update(
+                "insert into usr (activation_code, email, password, username, name, surname) " +
+                        "values (?, ?, ?, ?, ?, ?)",
+                user.getActivationCode(),
+                user.getEmail(),
+                user.getPassword(),
+                user.getUsername(),
+                user.getName(),
+                user.getSurname()
+        );
+
+        user.setId((long) id);
+        return user;
+    }
 }

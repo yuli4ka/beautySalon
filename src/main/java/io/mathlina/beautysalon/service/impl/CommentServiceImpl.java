@@ -19,8 +19,8 @@ public class CommentServiceImpl implements CommentService {
   private final CommentRepo commentRepo;
   private final UserRepo userRepo;
 
-  public CommentServiceImpl(@Qualifier("${commentRepo}") CommentRepo commentRepo,
-                            @Qualifier("${userRepo}") UserRepo userRepo) {
+  public CommentServiceImpl(CommentRepo commentRepo,
+                            @Qualifier("userRepoJdbc") UserRepo userRepo) {
     this.commentRepo = commentRepo;
     this.userRepo = userRepo;
   }
