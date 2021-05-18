@@ -4,6 +4,7 @@ import io.mathlina.beautysalon.domain.Comment;
 import io.mathlina.beautysalon.domain.Master;
 import io.mathlina.beautysalon.dto.MasterDto;
 import io.mathlina.beautysalon.dto.ServiceDto;
+import io.mathlina.beautysalon.model.CommentModel;
 import io.mathlina.beautysalon.service.CommentService;
 import io.mathlina.beautysalon.service.MasterService;
 import java.util.List;
@@ -63,16 +64,16 @@ public class MasterController {
   public String getMasterComments(@AuthenticationPrincipal UserDetails userDetails,
       @PathVariable Master master, Model model, Pageable pageable) {
 
-    Page<Comment> comments = commentService.getComments(master, pageable);
+    Page<CommentModel> comments = commentService.getComments(master, pageable);
     model.addAttribute("comments", comments);
     model.addAttribute("master", new MasterDto(master));
 
     //TODO: refactor
-    Comment userComment;
+    CommentModel userComment;
     if (Objects.nonNull(userDetails)) {
       userComment = commentService.getComment(master, userDetails);
     } else {
-      userComment = Comment.builder().grade((byte) 1).text("").build();
+      userComment = CommentModel.builder().grade((byte) 1).text("").build();
     }
     model.addAttribute("userComment", userComment);
 

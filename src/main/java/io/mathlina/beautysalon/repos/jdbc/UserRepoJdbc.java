@@ -2,7 +2,6 @@ package io.mathlina.beautysalon.repos.jdbc;
 
 import io.mathlina.beautysalon.domain.User;
 import io.mathlina.beautysalon.repos.UserRepo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -18,10 +17,16 @@ import java.util.Optional;
 @Qualifier("userRepoJdbc")
 public class UserRepoJdbc implements UserRepo {
 
-    class UseRowMapper implements RowMapper<User> {
+    private final JdbcTemplate jdbcTemplate;
+
+    public UserRepoJdbc(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    static class UseRowMapper implements RowMapper<User> {
         @Override
         public User mapRow(ResultSet rs, int i) throws SQLException {
-            User user = User.builder()
+            return User.builder()
                     .id(rs.getLong("id"))
                     .username(rs.getString("username"))
                     .name(rs.getString("name"))
@@ -30,39 +35,31 @@ public class UserRepoJdbc implements UserRepo {
                     .email(rs.getString("email"))
                     .activationCode(rs.getString("activation_code"))
                     .build();
-
-            return user;
         }
     }
-
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
 
     @Override
     public Optional<User> findByUsername(String username) {
         return Optional.ofNullable(jdbcTemplate.queryForObject(
                 "select * from usr where username = ?",
-                new Object[]{username},
-                new UseRowMapper()
-        ));
+                new UseRowMapper(),
+                username));
     }
 
     @Override
     public Optional<User> findByEmail(String email) {
         return Optional.ofNullable(jdbcTemplate.queryForObject(
                 "select * from usr where email = ?",
-                new Object[]{email},
-                new UseRowMapper()
-        ));
+                new UseRowMapper(),
+                email));
     }
 
     @Override
     public Optional<User> findByActivationCode(String code) {
         return Optional.ofNullable(jdbcTemplate.queryForObject(
                 "select * from usr where activation_code = ?",
-                new Object[]{code},
-                new UseRowMapper()
-        ));
+                new UseRowMapper(),
+                code));
     }
 
     @Override

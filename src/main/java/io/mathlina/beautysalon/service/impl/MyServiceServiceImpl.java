@@ -5,15 +5,15 @@ import io.mathlina.beautysalon.dto.MasterDto;
 import io.mathlina.beautysalon.dto.ServiceDto;
 import io.mathlina.beautysalon.repos.MyServiceRepo;
 import io.mathlina.beautysalon.service.MyServiceService;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @org.springframework.stereotype.Service
 public class MyServiceServiceImpl implements MyServiceService {

@@ -1,18 +1,13 @@
 package io.mathlina.beautysalon.service.impl;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import io.mathlina.beautysalon.domain.Comment;
 import io.mathlina.beautysalon.domain.Master;
 import io.mathlina.beautysalon.domain.Service;
 import io.mathlina.beautysalon.dto.MasterDto;
 import io.mathlina.beautysalon.dto.ServiceDto;
-import io.mathlina.beautysalon.repos.CommentRepo;
+import io.mathlina.beautysalon.model.CommentModel;
+import io.mathlina.beautysalon.repos.CommentRepository;
 import io.mathlina.beautysalon.repos.MasterRepo;
 import io.mathlina.beautysalon.service.MasterService;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,6 +20,11 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.List;
+import java.util.Locale;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @SpringBootTest(classes = MasterService.class)
 @ExtendWith({SpringExtension.class})
 class MasterServiceImplTest {
@@ -32,7 +32,7 @@ class MasterServiceImplTest {
   private static final String FILTER = "filter";
 
   @Mock
-  CommentRepo commentRepo;
+  CommentRepository commentRepository;
 
   @Mock
   MasterRepo masterRepo;
@@ -60,7 +60,7 @@ class MasterServiceImplTest {
     assertEquals(expected, actual);
 
     Mockito.verify(masterRepo).findAll(Pageable.unpaged());
-    Mockito.verifyNoMoreInteractions(commentRepo, masterRepo);
+    Mockito.verifyNoMoreInteractions(commentRepository, masterRepo);
   }
 
   @Test
@@ -77,25 +77,25 @@ class MasterServiceImplTest {
 
     assertEquals(expected, actual);
 
-    Mockito.verifyNoMoreInteractions(commentRepo, masterRepo);
+    Mockito.verifyNoMoreInteractions(commentRepository, masterRepo);
   }
 
   @Test
   void updateAverageGradeShouldUpdateGrade() {
     double averageGrade = 2;
-    Comment comment1 = Comment.builder().grade((byte) 1).build();
-    Comment comment2 = Comment.builder().grade((byte) 3).build();
-    List<Comment> comments = List.of(comment1, comment2);
+    CommentModel comment1 = CommentModel.builder().grade((byte) 1).build();
+    CommentModel comment2 = CommentModel.builder().grade((byte) 3).build();
+    List<CommentModel> comments = List.of(comment1, comment2);
     Master oldMaster = new Master();
     Master newMaster = Master.builder().grade(averageGrade).build();
 
-    Mockito.when(commentRepo.findAllByMaster(oldMaster)).thenReturn(comments);
+    Mockito.when(commentRepository.findAllByMaster(oldMaster)).thenReturn(comments);
 
     masterService.updateAverageGrade(oldMaster);
 
-    Mockito.verify(commentRepo).findAllByMaster(oldMaster);
+    Mockito.verify(commentRepository).findAllByMaster(oldMaster);
     Mockito.verify(masterRepo).save(newMaster);
-    Mockito.verifyNoMoreInteractions(commentRepo, masterRepo);
+    Mockito.verifyNoMoreInteractions(commentRepository, masterRepo);
   }
 
   @Test
@@ -111,7 +111,7 @@ class MasterServiceImplTest {
 
     assertEquals(expected, actual);
 
-    Mockito.verifyNoMoreInteractions(commentRepo, masterRepo);
+    Mockito.verifyNoMoreInteractions(commentRepository, masterRepo);
   }
 
   @Test
@@ -131,7 +131,7 @@ class MasterServiceImplTest {
 
     Mockito.verify(masterRepo)
         .findAllByNameContainingOrSurnameContaining(FILTER, FILTER, Pageable.unpaged());
-    Mockito.verifyNoMoreInteractions(commentRepo, masterRepo);
+    Mockito.verifyNoMoreInteractions(commentRepository, masterRepo);
   }
 
 }

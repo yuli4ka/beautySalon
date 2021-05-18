@@ -1,33 +1,33 @@
 package io.mathlina.beautysalon.service.impl;
 
-import io.mathlina.beautysalon.domain.Comment;
 import io.mathlina.beautysalon.domain.Master;
 import io.mathlina.beautysalon.dto.MasterDto;
 import io.mathlina.beautysalon.dto.ServiceDto;
-import io.mathlina.beautysalon.repos.CommentRepo;
+import io.mathlina.beautysalon.model.CommentModel;
+import io.mathlina.beautysalon.repos.CommentRepository;
 import io.mathlina.beautysalon.repos.MasterRepo;
 import io.mathlina.beautysalon.service.MasterService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import java.text.Collator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 @org.springframework.stereotype.Service
 public class MasterServiceImpl implements MasterService {
 
   private final MasterRepo masterRepo;
-  private final CommentRepo commentRepo;
+  private final CommentRepository commentRepository;
 
   @Autowired
-  public MasterServiceImpl(MasterRepo masterRepo, CommentRepo commentRepo) {
+  public MasterServiceImpl(MasterRepo masterRepo, CommentRepository commentRepository) {
     this.masterRepo = masterRepo;
-    this.commentRepo = commentRepo;
+    this.commentRepository = commentRepository;
   }
 
   public Page<MasterDto> findAll(Pageable pageable) {
@@ -46,8 +46,8 @@ public class MasterServiceImpl implements MasterService {
 
   @Override
   public void updateAverageGrade(Master master) {
-    double averageGrade = commentRepo.findAllByMaster(master).stream()
-        .mapToInt(Comment::getGrade)
+    double averageGrade = commentRepository.findAllByMaster(master).stream()
+        .mapToInt(CommentModel::getGrade)
         .average()
         .orElse(0);
 

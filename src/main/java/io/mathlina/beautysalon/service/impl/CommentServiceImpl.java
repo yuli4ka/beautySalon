@@ -1,10 +1,10 @@
 package io.mathlina.beautysalon.service.impl;
 
-import io.mathlina.beautysalon.domain.Comment;
 import io.mathlina.beautysalon.domain.Master;
 import io.mathlina.beautysalon.domain.User;
 import io.mathlina.beautysalon.exception.UserNotFound;
-import io.mathlina.beautysalon.repos.CommentRepo;
+import io.mathlina.beautysalon.model.CommentModel;
+import io.mathlina.beautysalon.repos.CommentRepository;
 import io.mathlina.beautysalon.repos.UserRepo;
 import io.mathlina.beautysalon.service.CommentService;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,27 +16,27 @@ import org.springframework.stereotype.Service;
 @Service
 public class CommentServiceImpl implements CommentService {
 
-  private final CommentRepo commentRepo;
+  private final CommentRepository commentRepository;
   private final UserRepo userRepo;
 
-  public CommentServiceImpl(CommentRepo commentRepo,
+  public CommentServiceImpl(CommentRepository commentRepository,
                             @Qualifier("userRepoJdbc") UserRepo userRepo) {
-    this.commentRepo = commentRepo;
+    this.commentRepository = commentRepository;
     this.userRepo = userRepo;
   }
 
   @Override
-  public Page<Comment> getComments(Master master, Pageable pageable) {
-    return commentRepo.findAllByMaster(master, pageable);
+  public Page<CommentModel> getComments(Master master, Pageable pageable) {
+    return commentRepository.findAllByMaster(master, pageable);
   }
 
   @Override
-  public Comment getComment(Master master, UserDetails userDetails) {
+  public CommentModel getComment(Master master, UserDetails userDetails) {
     User user = userRepo.findByUsername(userDetails.getUsername())
         .orElseThrow(() -> new UserNotFound("User not found"));
 
-    return commentRepo.findByMasterAndClient(master, user)
-        .orElse(Comment.builder()
+    return commentRepository.findByMasterAndClient(master, user)
+        .orElse(CommentModel.builder()
             .grade((byte) 5)
             .build()
         );
@@ -49,17 +49,17 @@ public class CommentServiceImpl implements CommentService {
     User user = userRepo.findByUsername(userDetails.getUsername())
         .orElseThrow(() -> new UserNotFound("User not found"));
 
-    Comment comment = commentRepo.findByMasterAndClient(master, user)
-        .orElse(Comment.builder()
-            .client(user)
-            .master(master)
+    CommentModel comment = commentRepository.findByMasterAndClient(master, user)
+        .orElse(CommentModel.builder()
+            .clientId(user.getId())
+            .masterId(master.getId())
             .build()
         );
 
     if (!grade.equals(comment.getGrade()) || !commentText.equals(comment.getText())) {
       comment.setGrade(grade);
       comment.setText(commentText);
-      commentRepo.save(comment);
+      commentRepository.save(comment);
     }
   }
 }
