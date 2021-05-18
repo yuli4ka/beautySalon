@@ -1,12 +1,13 @@
 package io.mathlina.beautysalon.dto;
 
 import io.mathlina.beautysalon.domain.Service;
+import io.mathlina.beautysalon.model.ServiceModel;
 import lombok.Value;
 
 @Value
 public class ServiceDto {
 
-  public ServiceDto(Service service, String localeCode) {
+  public ServiceDto(ServiceModel service, String localeCode) {
     this.id = service.getId();
     this.name = service.getNameByLocale(localeCode);
     this.duration = service.getDuration();

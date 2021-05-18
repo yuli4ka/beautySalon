@@ -6,6 +6,7 @@ import io.mathlina.beautysalon.dto.MasterDto;
 import io.mathlina.beautysalon.dto.ServiceDto;
 import io.mathlina.beautysalon.model.CommentModel;
 import io.mathlina.beautysalon.model.MasterModel;
+import io.mathlina.beautysalon.model.ServiceModel;
 import io.mathlina.beautysalon.repos.CommentRepository;
 import io.mathlina.beautysalon.repos.MasterRepository;
 import io.mathlina.beautysalon.service.MasterService;
@@ -66,8 +67,8 @@ class MasterServiceImplTest {
 
   @Test
   void findMasterServicesShouldReturnServiceDtoList() {
-    Service service1 = Service.builder().nameEn("name1").build();
-    Service service2 = Service.builder().nameEn("name2").build();
+    ServiceModel service1 = ServiceModel.builder().nameEn("name1").build();
+    ServiceModel service2 = ServiceModel.builder().nameEn("name2").build();
     MasterModel master = MasterModel.builder().serviceIds(List.of(service1.getId(), service2.getId())).build();
     ServiceDto serviceDto1 = new ServiceDto(service1, Locale.getDefault().toString());
     ServiceDto serviceDto2 = new ServiceDto(service2, Locale.getDefault().toString());
@@ -101,8 +102,8 @@ class MasterServiceImplTest {
 
   @Test
   void findMasterServicesLikeShouldReturnServiceDtoList() {
-    Service service1 = Service.builder().nameEn("name1").build();
-    Service service2 = Service.builder().nameEn("name2" + FILTER).build();
+    ServiceModel service1 = ServiceModel.builder().nameEn("name1").build();
+    ServiceModel service2 = ServiceModel.builder().nameEn("name2" + FILTER).build();
     MasterModel master = MasterModel.builder().serviceIds(List.of(service1.getId(), service2.getId())).build();
     ServiceDto serviceDto2 = new ServiceDto(service2, Locale.getDefault().toString());
 

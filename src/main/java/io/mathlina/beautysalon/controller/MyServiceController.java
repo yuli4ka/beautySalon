@@ -3,8 +3,10 @@ package io.mathlina.beautysalon.controller;
 import io.mathlina.beautysalon.domain.Service;
 import io.mathlina.beautysalon.dto.MasterDto;
 import io.mathlina.beautysalon.dto.ServiceDto;
+import io.mathlina.beautysalon.model.ServiceModel;
+import io.mathlina.beautysalon.model.mapper.Mapper;
 import io.mathlina.beautysalon.service.MyServiceService;
-import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,39 +17,48 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 @Controller
 public class MyServiceController {
 
-  private final MyServiceService myServiceService;
+    @Autowired
+    private Mapper mapper;
 
-  public MyServiceController(MyServiceService myServiceService) {
-    this.myServiceService = myServiceService;
-  }
+    private final MyServiceService myServiceService;
 
-  @GetMapping("/services")
-  public String serviceList(Model model, @PageableDefault(size = 6) Pageable pageable,
-      @RequestParam(required = false) String filter) {
+    public MyServiceController(MyServiceService myServiceService) {
+        this.myServiceService = myServiceService;
+    }
 
-    Page<ServiceDto> myServicePage = myServiceService.findAll(filter, pageable);
+    @GetMapping("/services")
+    public String serviceList(Model model, @PageableDefault(size = 6) Pageable pageable,
+                              @RequestParam(required = false) String filter) {
 
-    model.addAttribute("services", myServicePage);
-    model.addAttribute("filter", filter);
+        Page<ServiceDto> myServicePage = myServiceService.findAll(filter, pageable);
 
-    return "serviceList";
-  }
+        model.addAttribute("services", myServicePage);
+        model.addAttribute("filter", filter);
 
-  @GetMapping("/service/{service}")
-  public String serviceList(Model model, @PathVariable Service service,
-      @RequestParam(required = false) String filter) {
+        return "serviceList";
+    }
 
-    List<MasterDto> masterDTOs = myServiceService.findServiceMastersLike(service, filter);
+    //TODO: fix, make work
+    @GetMapping("/service/{service}")
+    public String serviceList(Model model, @PathVariable Service service,
+                              @RequestParam(required = false) String filter) {
 
-    model.addAttribute("masters", masterDTOs);
-    model.addAttribute("service",
-        new ServiceDto(service, LocaleContextHolder.getLocale().toString()));
-    model.addAttribute("filter", filter);
+        ServiceModel serviceModel = mapper.map(service, ServiceModel.class);
 
-    return "service";
-  }
+        List<MasterDto> masterDTOs = myServiceService
+                .findServiceMastersLike(serviceModel, filter);
+
+        model.addAttribute("masters", masterDTOs);
+        model.addAttribute("service",
+                new ServiceDto(serviceModel, LocaleContextHolder.getLocale().toString()));
+        model.addAttribute("filter", filter);
+
+        return "service";
+    }
 
 }

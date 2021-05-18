@@ -1,19 +1,20 @@
 package io.mathlina.beautysalon.service;
 
-import io.mathlina.beautysalon.domain.Service;
 import io.mathlina.beautysalon.dto.MasterDto;
 import io.mathlina.beautysalon.dto.ServiceDto;
-import java.util.List;
+import io.mathlina.beautysalon.model.ServiceModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 public interface MyServiceService {
 
   Page<ServiceDto> findAll(Pageable pageable);
 
-  List<MasterDto> findServiceMasters(Service service);
+  List<MasterDto> findServiceMasters(ServiceModel service);
 
-  List<MasterDto> findServiceMastersLike(Service service, String filter);
+  List<MasterDto> findServiceMastersLike(ServiceModel service, String filter);
 
   Page<ServiceDto> findAll(String filter, Pageable pageable);
 }

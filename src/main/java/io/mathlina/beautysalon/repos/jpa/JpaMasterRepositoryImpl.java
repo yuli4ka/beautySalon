@@ -26,6 +26,17 @@ public class JpaMasterRepositoryImpl implements MasterRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Override
+    public MasterModel findById(Long id) {
+        Query query = this.entityManager.createQuery(
+                "SELECT master FROM Master master " +
+                        "WHERE master.id = :id");
+        query.setParameter("id", id);
+        Master master = (Master) query.getSingleResult();
+
+        return mapper.map(master, MasterModel.class);
+    }
+
     public Page<MasterModel> findAllByNameContainingOrSurnameContaining(String name, String surname,
                                                                         Pageable pageable) {
         Query query = this.entityManager.createQuery(

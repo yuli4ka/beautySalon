@@ -1,15 +1,16 @@
 package io.mathlina.beautysalon.repos;
 
-import io.mathlina.beautysalon.domain.Service;
+import io.mathlina.beautysalon.model.ServiceModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface MyServiceRepository {
 
-    Page<Service> findAll(Pageable pageable);
+    ServiceModel findById(Long id);
 
-    List<Service> findAll();
+    Page<ServiceModel> findAll(Pageable pageable);
+
+    List<ServiceModel> findAll();
 }

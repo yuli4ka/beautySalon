@@ -1,6 +1,5 @@
 package io.mathlina.beautysalon.service.impl;
 
-import io.mathlina.beautysalon.domain.Master;
 import io.mathlina.beautysalon.dto.MasterDto;
 import io.mathlina.beautysalon.dto.ServiceDto;
 import io.mathlina.beautysalon.model.CommentModel;
@@ -8,6 +7,7 @@ import io.mathlina.beautysalon.model.MasterModel;
 import io.mathlina.beautysalon.model.mapper.Mapper;
 import io.mathlina.beautysalon.repos.CommentRepository;
 import io.mathlina.beautysalon.repos.MasterRepository;
+import io.mathlina.beautysalon.repos.MyServiceRepository;
 import io.mathlina.beautysalon.service.MasterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -28,11 +28,13 @@ public class MasterServiceImpl implements MasterService {
 
   private final MasterRepository masterRepository;
   private final CommentRepository commentRepository;
+  private final MyServiceRepository serviceRepository;
 
   @Autowired
-  public MasterServiceImpl(MasterRepository masterRepository, CommentRepository commentRepository) {
+  public MasterServiceImpl(MasterRepository masterRepository, CommentRepository commentRepository, MyServiceRepository serviceRepository) {
     this.masterRepository = masterRepository;
     this.commentRepository = commentRepository;
+    this.serviceRepository = serviceRepository;
   }
 
   public Page<MasterDto> findAll(Pageable pageable) {
@@ -43,11 +45,9 @@ public class MasterServiceImpl implements MasterService {
     Locale currentLocale = LocaleContextHolder.getLocale();
     Collator collator = Collator.getInstance(currentLocale);
 
-    //TODO: remove Master usage
-    Master master = mapper.map(masterModel, Master.class);
-
-    return master.getServices().stream()
-        .map(service -> new ServiceDto(service, currentLocale.toString()))
+    return masterModel.getServiceIds().stream()
+            .map(serviceId ->
+                    new ServiceDto(serviceRepository.findById(serviceId), currentLocale.toString()))
         .sorted((s1, s2) -> collator.compare(s1.getName(), s2.getName()))
         .collect(Collectors.toList());
   }
@@ -78,11 +78,9 @@ public class MasterServiceImpl implements MasterService {
       Locale currentLocale = LocaleContextHolder.getLocale();
       Collator collator = Collator.getInstance(currentLocale);
 
-      //TODO: remove Master usage
-      Master master = mapper.map(masterModel, Master.class);
-
-      return master.getServices().stream()
-          .map(service -> new ServiceDto(service, currentLocale.toString()))
+      return masterModel.getServiceIds().stream()
+          .map(serviceId ->
+                  new ServiceDto(serviceRepository.findById(serviceId), currentLocale.toString()))
           .filter(serviceDto -> serviceDto.getName()
               .toLowerCase(currentLocale).contains(filter.toLowerCase(currentLocale)))
           .sorted((s1, s2) -> collator.compare(s1.getName(), s2.getName()))

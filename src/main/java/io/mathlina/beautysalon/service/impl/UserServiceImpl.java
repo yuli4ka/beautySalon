@@ -1,26 +1,21 @@
 package io.mathlina.beautysalon.service.impl;
 
 import io.mathlina.beautysalon.domain.Role;
-import io.mathlina.beautysalon.domain.User;
 import io.mathlina.beautysalon.dto.UserProfileDto;
 import io.mathlina.beautysalon.dto.UserRegistrationDto;
-import io.mathlina.beautysalon.exception.CannotSaveUserToDatabase;
-import io.mathlina.beautysalon.exception.EmailIsAlreadyTaken;
-import io.mathlina.beautysalon.exception.UserNotFound;
-import io.mathlina.beautysalon.exception.UserNotFoundByActivationCode;
-import io.mathlina.beautysalon.exception.UsernameIsAlreadyTaken;
-import io.mathlina.beautysalon.exception.WrongPassword;
+import io.mathlina.beautysalon.exception.*;
 import io.mathlina.beautysalon.model.UserModel;
 import io.mathlina.beautysalon.repos.UserRepository;
 import io.mathlina.beautysalon.service.MailService;
 import io.mathlina.beautysalon.service.UserService;
-import java.util.Collections;
-import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+import java.util.UUID;
 
 //TODO: log
 @Service

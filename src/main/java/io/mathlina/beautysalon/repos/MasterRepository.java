@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface MasterRepository {
 
+    MasterModel findById(Long id);
+
     Page<MasterModel> findAllByNameContainingOrSurnameContaining(String name, String surname,
                                                                  Pageable pageable);
 

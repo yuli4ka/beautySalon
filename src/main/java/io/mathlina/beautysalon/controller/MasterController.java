@@ -63,7 +63,7 @@ public class MasterController {
         List<ServiceDto> serviceDTOs = masterService.findMasterServicesLike(masterModel, filter);
 
         model.addAttribute("services", serviceDTOs);
-        model.addAttribute("master", new MasterDto(master));
+        model.addAttribute("master", new MasterDto(masterModel));
         model.addAttribute("filter", filter);
 
         return "master";
@@ -77,7 +77,7 @@ public class MasterController {
 
         Page<CommentModel> comments = commentService.getComments(masterModel, pageable);
         model.addAttribute("comments", comments);
-        model.addAttribute("master", new MasterDto(master));
+        model.addAttribute("master", new MasterDto(masterModel));
 
         //TODO: refactor
         CommentModel userComment;
