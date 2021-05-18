@@ -6,7 +6,7 @@ import io.mathlina.beautysalon.domain.Master;
 import io.mathlina.beautysalon.domain.Service;
 import io.mathlina.beautysalon.dto.MasterDto;
 import io.mathlina.beautysalon.dto.ServiceDto;
-import io.mathlina.beautysalon.repos.MyServiceRepo;
+import io.mathlina.beautysalon.repos.MyServiceRepository;
 import io.mathlina.beautysalon.service.MyServiceService;
 import java.util.List;
 import java.util.Locale;
@@ -31,7 +31,7 @@ class MyServiceServiceImplTest {
   private static final String FILTER = "filter";
 
   @Mock
-  MyServiceRepo myServiceRepo;
+  MyServiceRepository myServiceRepository;
 
   @InjectMocks
   MyServiceServiceImpl myServiceService;
@@ -50,7 +50,7 @@ class MyServiceServiceImplTest {
     Page<ServiceDto> expected = services
         .map(s -> new ServiceDto(s, Locale.getDefault().toString()));
 
-    Mockito.when(myServiceRepo
+    Mockito.when(myServiceRepository
         .findAll(Pageable.unpaged()))
         .thenReturn(services);
 
@@ -58,8 +58,8 @@ class MyServiceServiceImplTest {
 
     assertEquals(expected, actual);
 
-    Mockito.verify(myServiceRepo).findAll(Pageable.unpaged());
-    Mockito.verifyNoMoreInteractions(myServiceRepo);
+    Mockito.verify(myServiceRepository).findAll(Pageable.unpaged());
+    Mockito.verifyNoMoreInteractions(myServiceRepository);
   }
 
   @Test
@@ -74,7 +74,7 @@ class MyServiceServiceImplTest {
     List<MasterDto> actual = myServiceService.findServiceMasters(service);
 
     assertEquals(expected, actual);
-    Mockito.verifyNoMoreInteractions(myServiceRepo);
+    Mockito.verifyNoMoreInteractions(myServiceRepository);
   }
 
   @Test
@@ -91,7 +91,7 @@ class MyServiceServiceImplTest {
     List<MasterDto> actual = myServiceService.findServiceMastersLike(service, FILTER);
 
     assertEquals(expected, actual);
-    Mockito.verifyNoMoreInteractions(myServiceRepo);
+    Mockito.verifyNoMoreInteractions(myServiceRepository);
   }
 
   @Test
@@ -103,12 +103,12 @@ class MyServiceServiceImplTest {
 
     List<ServiceDto> expected = List.of(serviceDto2);
 
-    Mockito.when(myServiceRepo.findAll()).thenReturn(List.of(service1, service2));
+    Mockito.when(myServiceRepository.findAll()).thenReturn(List.of(service1, service2));
 
     List<ServiceDto> actual = myServiceService.findAll(FILTER, pageRequest).getContent();
 
     assertEquals(expected, actual);
-    Mockito.verify(myServiceRepo).findAll();
-    Mockito.verifyNoMoreInteractions(myServiceRepo);
+    Mockito.verify(myServiceRepository).findAll();
+    Mockito.verifyNoMoreInteractions(myServiceRepository);
   }
 }

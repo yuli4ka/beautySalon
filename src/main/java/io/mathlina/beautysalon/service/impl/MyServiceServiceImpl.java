@@ -3,7 +3,7 @@ package io.mathlina.beautysalon.service.impl;
 import io.mathlina.beautysalon.domain.Service;
 import io.mathlina.beautysalon.dto.MasterDto;
 import io.mathlina.beautysalon.dto.ServiceDto;
-import io.mathlina.beautysalon.repos.MyServiceRepo;
+import io.mathlina.beautysalon.repos.MyServiceRepository;
 import io.mathlina.beautysalon.service.MyServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -18,15 +18,15 @@ import java.util.stream.Collectors;
 @org.springframework.stereotype.Service
 public class MyServiceServiceImpl implements MyServiceService {
 
-  private final MyServiceRepo myServiceRepo;
+  private final MyServiceRepository myServiceRepository;
 
   @Autowired
-  public MyServiceServiceImpl(MyServiceRepo myServiceRepo) {
-    this.myServiceRepo = myServiceRepo;
+  public MyServiceServiceImpl(MyServiceRepository myServiceRepository) {
+    this.myServiceRepository = myServiceRepository;
   }
 
   public Page<ServiceDto> findAll(Pageable pageable) {
-    return myServiceRepo.findAll(pageable)
+    return myServiceRepository.findAll(pageable)
         .map(service -> new ServiceDto(service, LocaleContextHolder.getLocale().toString()));
   }
 
@@ -56,7 +56,7 @@ public class MyServiceServiceImpl implements MyServiceService {
     if (Objects.isNull(filter) || filter.equals("")) {
       return findAll(pageable);
     } else {
-      List<ServiceDto> serviceDTOs = myServiceRepo.findAll().stream()
+      List<ServiceDto> serviceDTOs = myServiceRepository.findAll().stream()
           .map(service -> new ServiceDto(service, LocaleContextHolder.getLocale().toString()))
           .filter(serviceDto -> serviceDto.getName().toLowerCase().contains(filter.toLowerCase()))
           .collect(Collectors.toList());

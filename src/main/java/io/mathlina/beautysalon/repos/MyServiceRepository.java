@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.Optional;
 
-public interface MyServiceRepo {
+public interface MyServiceRepository {
 
     Page<Service> findAll(Pageable pageable);
 
