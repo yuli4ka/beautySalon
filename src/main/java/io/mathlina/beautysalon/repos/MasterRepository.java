@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.Optional;
 
-public interface MasterRepo {
+public interface MasterRepository {
 
     Page<Master> findAllByNameContainingOrSurnameContaining(String name, String surname,
                                                             Pageable pageable);

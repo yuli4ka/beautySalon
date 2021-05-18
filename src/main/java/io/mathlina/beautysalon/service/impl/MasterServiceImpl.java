@@ -5,7 +5,7 @@ import io.mathlina.beautysalon.dto.MasterDto;
 import io.mathlina.beautysalon.dto.ServiceDto;
 import io.mathlina.beautysalon.model.CommentModel;
 import io.mathlina.beautysalon.repos.CommentRepository;
-import io.mathlina.beautysalon.repos.MasterRepo;
+import io.mathlina.beautysalon.repos.MasterRepository;
 import io.mathlina.beautysalon.service.MasterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -21,17 +21,17 @@ import java.util.stream.Collectors;
 @org.springframework.stereotype.Service
 public class MasterServiceImpl implements MasterService {
 
-  private final MasterRepo masterRepo;
+  private final MasterRepository masterRepository;
   private final CommentRepository commentRepository;
 
   @Autowired
-  public MasterServiceImpl(MasterRepo masterRepo, CommentRepository commentRepository) {
-    this.masterRepo = masterRepo;
+  public MasterServiceImpl(MasterRepository masterRepository, CommentRepository commentRepository) {
+    this.masterRepository = masterRepository;
     this.commentRepository = commentRepository;
   }
 
   public Page<MasterDto> findAll(Pageable pageable) {
-    return masterRepo.findAll(pageable).map(MasterDto::new);
+    return masterRepository.findAll(pageable).map(MasterDto::new);
   }
 
   public List<ServiceDto> findMasterServices(Master master) {
@@ -53,13 +53,13 @@ public class MasterServiceImpl implements MasterService {
 
     master.setGrade(averageGrade);
 
-    masterRepo.save(master);
+    masterRepository.save(master);
   }
 
   //TODO: update for quartz with additional optimizing conditions
   @Override
   public void updateAverageGrades() {
-    masterRepo.findAll().forEach(this::updateAverageGrade);
+    masterRepository.findAll().forEach(this::updateAverageGrade);
   }
 
   @Override
@@ -84,7 +84,7 @@ public class MasterServiceImpl implements MasterService {
     if (Objects.isNull(filter) || filter.equals("")) {
       return findAll(pageable);
     } else {
-      return masterRepo.findAllByNameContainingOrSurnameContaining(filter, filter, pageable)
+      return masterRepository.findAllByNameContainingOrSurnameContaining(filter, filter, pageable)
           .map(MasterDto::new);
     }
   }

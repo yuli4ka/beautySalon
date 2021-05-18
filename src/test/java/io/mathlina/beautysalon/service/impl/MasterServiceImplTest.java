@@ -6,7 +6,7 @@ import io.mathlina.beautysalon.dto.MasterDto;
 import io.mathlina.beautysalon.dto.ServiceDto;
 import io.mathlina.beautysalon.model.CommentModel;
 import io.mathlina.beautysalon.repos.CommentRepository;
-import io.mathlina.beautysalon.repos.MasterRepo;
+import io.mathlina.beautysalon.repos.MasterRepository;
 import io.mathlina.beautysalon.service.MasterService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -35,7 +35,7 @@ class MasterServiceImplTest {
   CommentRepository commentRepository;
 
   @Mock
-  MasterRepo masterRepo;
+  MasterRepository masterRepository;
 
   @InjectMocks
   MasterServiceImpl masterService;
@@ -53,14 +53,14 @@ class MasterServiceImplTest {
 
     Page<MasterDto> expected = masters.map(MasterDto::new);
 
-    Mockito.when(masterRepo.findAll(Pageable.unpaged())).thenReturn(masters);
+    Mockito.when(masterRepository.findAll(Pageable.unpaged())).thenReturn(masters);
 
     Page<MasterDto> actual = masterService.findAll(Pageable.unpaged());
 
     assertEquals(expected, actual);
 
-    Mockito.verify(masterRepo).findAll(Pageable.unpaged());
-    Mockito.verifyNoMoreInteractions(commentRepository, masterRepo);
+    Mockito.verify(masterRepository).findAll(Pageable.unpaged());
+    Mockito.verifyNoMoreInteractions(commentRepository, masterRepository);
   }
 
   @Test
@@ -77,7 +77,7 @@ class MasterServiceImplTest {
 
     assertEquals(expected, actual);
 
-    Mockito.verifyNoMoreInteractions(commentRepository, masterRepo);
+    Mockito.verifyNoMoreInteractions(commentRepository, masterRepository);
   }
 
   @Test
@@ -94,8 +94,8 @@ class MasterServiceImplTest {
     masterService.updateAverageGrade(oldMaster);
 
     Mockito.verify(commentRepository).findAllByMaster(oldMaster);
-    Mockito.verify(masterRepo).save(newMaster);
-    Mockito.verifyNoMoreInteractions(commentRepository, masterRepo);
+    Mockito.verify(masterRepository).save(newMaster);
+    Mockito.verifyNoMoreInteractions(commentRepository, masterRepository);
   }
 
   @Test
@@ -111,7 +111,7 @@ class MasterServiceImplTest {
 
     assertEquals(expected, actual);
 
-    Mockito.verifyNoMoreInteractions(commentRepository, masterRepo);
+    Mockito.verifyNoMoreInteractions(commentRepository, masterRepository);
   }
 
   @Test
@@ -121,7 +121,7 @@ class MasterServiceImplTest {
 
     Page<MasterDto> expected = masters.map(MasterDto::new);
 
-    Mockito.when(masterRepo
+    Mockito.when(masterRepository
         .findAllByNameContainingOrSurnameContaining(FILTER, FILTER, Pageable.unpaged()))
         .thenReturn(masters);
 
@@ -129,9 +129,9 @@ class MasterServiceImplTest {
 
     assertEquals(expected, actual);
 
-    Mockito.verify(masterRepo)
+    Mockito.verify(masterRepository)
         .findAllByNameContainingOrSurnameContaining(FILTER, FILTER, Pageable.unpaged());
-    Mockito.verifyNoMoreInteractions(commentRepository, masterRepo);
+    Mockito.verifyNoMoreInteractions(commentRepository, masterRepository);
   }
 
 }

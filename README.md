@@ -31,7 +31,7 @@
     spring.datasource.username - логін до бази даних
     spring.datasource.password - пароль до бази даних
     
-Задайте змінні оточення для виибору реалізації репозиторіїв: commentRepository, masterRepo, myServiceRepo, timetableRepo, userRepository значенням `<назва>Jpa` або `<назва>Jdbc` 
+Задайте змінні оточення для виибору реалізації репозиторіїв: commentRepository, masterRepository, myServiceRepo, timetableRepo, userRepository значенням `<назва>Jpa` або `<назва>Jdbc` 
 
 Створіть схему бази даних з заданою у параметрах назвою
 
