@@ -8,6 +8,7 @@ import io.mathlina.beautysalon.dto.MasterDto;
 import io.mathlina.beautysalon.dto.ServiceDto;
 import io.mathlina.beautysalon.model.MasterModel;
 import io.mathlina.beautysalon.model.ServiceModel;
+import io.mathlina.beautysalon.model.TimetableModel;
 import io.mathlina.beautysalon.model.UserModel;
 import io.mathlina.beautysalon.model.mapper.Mapper;
 import io.mathlina.beautysalon.service.AppointmentService;
@@ -70,7 +71,7 @@ public class AppointmentController {
                 .service(service)
                 .dateTime(dateTime)
                 .build();
-        appointmentService.appoint(timetable);
+        appointmentService.appoint(mapper.map(timetable, TimetableModel.class));
 
         //TODO: message
         return "redirect:/appointments";

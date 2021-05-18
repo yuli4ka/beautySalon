@@ -1,8 +1,8 @@
 package io.mathlina.beautysalon.repos;
 
-import io.mathlina.beautysalon.domain.Timetable;
+import io.mathlina.beautysalon.model.TimetableModel;
 
 public interface TimetableRepository {
 
-    Timetable save(Timetable timetable);
+    void save(TimetableModel timetableModel);
 }

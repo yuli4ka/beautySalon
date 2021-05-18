@@ -1,9 +1,9 @@
 package io.mathlina.beautysalon.service;
 
-import io.mathlina.beautysalon.domain.Timetable;
+import io.mathlina.beautysalon.model.TimetableModel;
 
 public interface AppointmentService {
 
-  void appoint(Timetable timetable);
+    void appoint(TimetableModel timetableModel);
 
 }

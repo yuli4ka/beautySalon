@@ -1,6 +1,6 @@
 package io.mathlina.beautysalon.service.impl;
 
-import io.mathlina.beautysalon.domain.Timetable;
+import io.mathlina.beautysalon.model.TimetableModel;
 import io.mathlina.beautysalon.repos.TimetableRepository;
 import io.mathlina.beautysalon.service.AppointmentService;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ public class AppointmentServiceImpl implements AppointmentService {
   }
 
   @Override
-  public void appoint(Timetable timetable) {
-    timetableRepository.save(timetable);
+  public void appoint(TimetableModel timetableModel) {
+    timetableRepository.save(timetableModel);
   }
 }
