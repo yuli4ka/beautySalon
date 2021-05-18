@@ -5,7 +5,7 @@ import io.mathlina.beautysalon.domain.User;
 import io.mathlina.beautysalon.exception.UserNotFound;
 import io.mathlina.beautysalon.model.CommentModel;
 import io.mathlina.beautysalon.repos.CommentRepository;
-import io.mathlina.beautysalon.repos.UserRepo;
+import io.mathlina.beautysalon.repos.UserRepository;
 import io.mathlina.beautysalon.service.CommentService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -17,12 +17,12 @@ import org.springframework.stereotype.Service;
 public class CommentServiceImpl implements CommentService {
 
   private final CommentRepository commentRepository;
-  private final UserRepo userRepo;
+  private final UserRepository userRepository;
 
   public CommentServiceImpl(CommentRepository commentRepository,
-                            @Qualifier("userRepoJdbc") UserRepo userRepo) {
+                            @Qualifier("userRepoJdbc") UserRepository userRepository) {
     this.commentRepository = commentRepository;
-    this.userRepo = userRepo;
+    this.userRepository = userRepository;
   }
 
   @Override
@@ -32,7 +32,7 @@ public class CommentServiceImpl implements CommentService {
 
   @Override
   public CommentModel getComment(Master master, UserDetails userDetails) {
-    User user = userRepo.findByUsername(userDetails.getUsername())
+    User user = userRepository.findByUsername(userDetails.getUsername())
         .orElseThrow(() -> new UserNotFound("User not found"));
 
     return commentRepository.findByMasterAndClient(master, user)
@@ -46,7 +46,7 @@ public class CommentServiceImpl implements CommentService {
   public void updateComment(UserDetails userDetails, Master master,
       Byte grade, String commentText) {
 
-    User user = userRepo.findByUsername(userDetails.getUsername())
+    User user = userRepository.findByUsername(userDetails.getUsername())
         .orElseThrow(() -> new UserNotFound("User not found"));
 
     CommentModel comment = commentRepository.findByMasterAndClient(master, user)

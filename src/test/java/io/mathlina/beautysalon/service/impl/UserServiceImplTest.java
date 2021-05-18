@@ -8,7 +8,7 @@ import io.mathlina.beautysalon.dto.UserRegistrationDto;
 import io.mathlina.beautysalon.exception.EmailIsAlreadyTaken;
 import io.mathlina.beautysalon.exception.UserNotFoundByActivationCode;
 import io.mathlina.beautysalon.exception.UsernameIsAlreadyTaken;
-import io.mathlina.beautysalon.repos.UserRepo;
+import io.mathlina.beautysalon.repos.UserRepository;
 import io.mathlina.beautysalon.service.UserService;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ class UserServiceImplTest {
   private static final String PASSWORD = "password";
 
   @Mock
-  UserRepo userRepo;
+  UserRepository userRepository;
 
   @InjectMocks
   UserServiceImpl userService;
@@ -38,24 +38,24 @@ class UserServiceImplTest {
   void loadUserByUsernameShouldReturnExistingUser() {
     User expected = User.builder().username(USERNAME).build();
 
-    Mockito.when(userRepo.findByUsername(USERNAME)).thenReturn(Optional.of(expected));
+    Mockito.when(userRepository.findByUsername(USERNAME)).thenReturn(Optional.of(expected));
 
     User actual = userService.loadUserByUsername(USERNAME);
 
     assertEquals(expected, actual);
 
-    Mockito.verify(userRepo).findByUsername(USERNAME);
-    Mockito.verifyNoMoreInteractions(userRepo);
+    Mockito.verify(userRepository).findByUsername(USERNAME);
+    Mockito.verifyNoMoreInteractions(userRepository);
   }
 
   @Test
   void loadUserByUsernameShouldThrowExceptionIfUserNotFound() {
-    Mockito.when(userRepo.findByUsername(USERNAME)).thenReturn(Optional.empty());
+    Mockito.when(userRepository.findByUsername(USERNAME)).thenReturn(Optional.empty());
 
     assertThrows(UsernameNotFoundException.class, () -> userService.loadUserByUsername(USERNAME));
 
-    Mockito.verify(userRepo).findByUsername(USERNAME);
-    Mockito.verifyNoMoreInteractions(userRepo);
+    Mockito.verify(userRepository).findByUsername(USERNAME);
+    Mockito.verifyNoMoreInteractions(userRepository);
   }
 
   @Test
@@ -63,12 +63,12 @@ class UserServiceImplTest {
     UserRegistrationDto registrationDto = UserRegistrationDto.builder().username(USERNAME).build();
     User user = User.builder().username(USERNAME).build();
 
-    Mockito.when(userRepo.findByUsername(USERNAME)).thenReturn(Optional.of(user));
+    Mockito.when(userRepository.findByUsername(USERNAME)).thenReturn(Optional.of(user));
 
     assertThrows(UsernameIsAlreadyTaken.class, () -> userService.addUser(registrationDto));
 
-    Mockito.verify(userRepo).findByUsername(USERNAME);
-    Mockito.verifyNoMoreInteractions(userRepo);
+    Mockito.verify(userRepository).findByUsername(USERNAME);
+    Mockito.verifyNoMoreInteractions(userRepository);
   }
 
   @Test
@@ -80,14 +80,14 @@ class UserServiceImplTest {
         .build();
     User user = User.builder().email(EMAIL).build();
 
-    Mockito.when(userRepo.findByUsername(USERNAME)).thenReturn(Optional.empty());
-    Mockito.when(userRepo.findByEmail(EMAIL)).thenReturn(Optional.of(user));
+    Mockito.when(userRepository.findByUsername(USERNAME)).thenReturn(Optional.empty());
+    Mockito.when(userRepository.findByEmail(EMAIL)).thenReturn(Optional.of(user));
 
     assertThrows(EmailIsAlreadyTaken.class, () -> userService.addUser(registrationDto));
 
-    Mockito.verify(userRepo).findByUsername(USERNAME);
-    Mockito.verify(userRepo).findByEmail(EMAIL);
-    Mockito.verifyNoMoreInteractions(userRepo);
+    Mockito.verify(userRepository).findByUsername(USERNAME);
+    Mockito.verify(userRepository).findByEmail(EMAIL);
+    Mockito.verifyNoMoreInteractions(userRepository);
   }
 
   //TODO replace UUID with using interface to test
@@ -98,13 +98,13 @@ class UserServiceImplTest {
     User user = User.builder().username(USERNAME).activationCode(activationCode).build();
     User activeUser = User.builder().username(USERNAME).activationCode(null).active(true).build();
 
-    Mockito.when(userRepo.findByActivationCode(activationCode)).thenReturn(Optional.of(user));
+    Mockito.when(userRepository.findByActivationCode(activationCode)).thenReturn(Optional.of(user));
 
     userService.activateUser(activationCode);
 
-    Mockito.verify(userRepo).findByActivationCode(activationCode);
-    Mockito.verify(userRepo).save(activeUser);
-    Mockito.verifyNoMoreInteractions(userRepo);
+    Mockito.verify(userRepository).findByActivationCode(activationCode);
+    Mockito.verify(userRepository).save(activeUser);
+    Mockito.verifyNoMoreInteractions(userRepository);
   }
 
   @Test
@@ -114,7 +114,7 @@ class UserServiceImplTest {
     assertThrows(UserNotFoundByActivationCode.class,
         () -> userService.activateUser(activationCode));
 
-    Mockito.verify(userRepo).findByActivationCode(activationCode);
-    Mockito.verifyNoMoreInteractions(userRepo);
+    Mockito.verify(userRepository).findByActivationCode(activationCode);
+    Mockito.verifyNoMoreInteractions(userRepository);
   }
 }

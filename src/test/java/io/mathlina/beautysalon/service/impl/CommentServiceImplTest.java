@@ -5,7 +5,7 @@ import io.mathlina.beautysalon.domain.User;
 import io.mathlina.beautysalon.exception.UserNotFound;
 import io.mathlina.beautysalon.model.CommentModel;
 import io.mathlina.beautysalon.repos.CommentRepository;
-import io.mathlina.beautysalon.repos.UserRepo;
+import io.mathlina.beautysalon.repos.UserRepository;
 import io.mathlina.beautysalon.service.CommentService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,7 +32,7 @@ class CommentServiceImplTest {
   CommentRepository commentRepository;
 
   @Mock
-  UserRepo userRepo;
+  UserRepository userRepository;
 
   @InjectMocks
   CommentServiceImpl commentService;
@@ -52,7 +52,7 @@ class CommentServiceImplTest {
     assertEquals(expected, actual);
 
     Mockito.verify(commentRepository).findAllByMaster(master, Pageable.unpaged());
-    Mockito.verifyNoMoreInteractions(commentRepository, userRepo);
+    Mockito.verifyNoMoreInteractions(commentRepository, userRepository);
   }
 
   @Test
@@ -62,7 +62,7 @@ class CommentServiceImplTest {
     Master master = new Master();
     CommentModel expected = CommentModel.builder().clientId(client.getId()).masterId(master.getId()).build();
 
-    Mockito.when(userRepo.findByUsername(username)).thenReturn(Optional.of(client));
+    Mockito.when(userRepository.findByUsername(username)).thenReturn(Optional.of(client));
     Mockito.when(commentRepository.findByMasterAndClient(master, client))
         .thenReturn(Optional.of(expected));
 
@@ -70,9 +70,9 @@ class CommentServiceImplTest {
 
     assertEquals(expected, actual);
 
-    Mockito.verify(userRepo).findByUsername(username);
+    Mockito.verify(userRepository).findByUsername(username);
     Mockito.verify(commentRepository).findByMasterAndClient(master, client);
-    Mockito.verifyNoMoreInteractions(commentRepository, userRepo);
+    Mockito.verifyNoMoreInteractions(commentRepository, userRepository);
   }
 
   @Test
@@ -81,12 +81,12 @@ class CommentServiceImplTest {
     User client = User.builder().username(username).build();
     Master master = new Master();
 
-    Mockito.when(userRepo.findByUsername(username)).thenReturn(Optional.empty());
+    Mockito.when(userRepository.findByUsername(username)).thenReturn(Optional.empty());
 
     assertThrows(UserNotFound.class, () -> commentService.getComment(master, client));
 
-    Mockito.verify(userRepo).findByUsername(username);
-    Mockito.verifyNoMoreInteractions(commentRepository, userRepo);
+    Mockito.verify(userRepository).findByUsername(username);
+    Mockito.verifyNoMoreInteractions(commentRepository, userRepository);
   }
 
   @Test
@@ -97,13 +97,13 @@ class CommentServiceImplTest {
     User client = User.builder().username(username).build();
     Master master = new Master();
 
-    Mockito.when(userRepo.findByUsername(username)).thenReturn(Optional.empty());
+    Mockito.when(userRepository.findByUsername(username)).thenReturn(Optional.empty());
 
     assertThrows(UserNotFound.class,
         () -> commentService.updateComment(client, master, grade, commentText));
 
-    Mockito.verify(userRepo).findByUsername(username);
-    Mockito.verifyNoMoreInteractions(commentRepository, userRepo);
+    Mockito.verify(userRepository).findByUsername(username);
+    Mockito.verifyNoMoreInteractions(commentRepository, userRepository);
   }
 
   @Test
@@ -120,15 +120,15 @@ class CommentServiceImplTest {
         .text(commentText)
         .build();
 
-    Mockito.when(userRepo.findByUsername(username)).thenReturn(Optional.of(client));
+    Mockito.when(userRepository.findByUsername(username)).thenReturn(Optional.of(client));
     Mockito.when(commentRepository.findByMasterAndClient(master, client))
         .thenReturn(Optional.of(comment));
 
     commentService.updateComment(client, master, grade, commentText);
 
-    Mockito.verify(userRepo).findByUsername(username);
+    Mockito.verify(userRepository).findByUsername(username);
     Mockito.verify(commentRepository).findByMasterAndClient(master, client);
-    Mockito.verifyNoMoreInteractions(commentRepository, userRepo);
+    Mockito.verifyNoMoreInteractions(commentRepository, userRepository);
   }
 
   @Test
@@ -146,15 +146,15 @@ class CommentServiceImplTest {
         .text(commentText)
         .build();
 
-    Mockito.when(userRepo.findByUsername(username)).thenReturn(Optional.of(client));
+    Mockito.when(userRepository.findByUsername(username)).thenReturn(Optional.of(client));
     Mockito.when(commentRepository.findByMasterAndClient(master, client))
         .thenReturn(Optional.of(oldComment));
 
     commentService.updateComment(client, master, grade, commentText);
 
-    Mockito.verify(userRepo).findByUsername(username);
+    Mockito.verify(userRepository).findByUsername(username);
     Mockito.verify(commentRepository).findByMasterAndClient(master, client);
     Mockito.verify(commentRepository).save(newComment);
-    Mockito.verifyNoMoreInteractions(commentRepository, userRepo);
+    Mockito.verifyNoMoreInteractions(commentRepository, userRepository);
   }
 }

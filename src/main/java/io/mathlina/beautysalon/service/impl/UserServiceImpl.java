@@ -10,7 +10,7 @@ import io.mathlina.beautysalon.exception.UserNotFound;
 import io.mathlina.beautysalon.exception.UserNotFoundByActivationCode;
 import io.mathlina.beautysalon.exception.UsernameIsAlreadyTaken;
 import io.mathlina.beautysalon.exception.WrongPassword;
-import io.mathlina.beautysalon.repos.UserRepo;
+import io.mathlina.beautysalon.repos.UserRepository;
 import io.mathlina.beautysalon.service.MailService;
 import io.mathlina.beautysalon.service.UserService;
 import java.util.Collections;
@@ -25,28 +25,28 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl implements UserService {
 
-  private final UserRepo userRepo;
+  private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
   private final MailService mailService;
 
   @Autowired
-  public UserServiceImpl(@Qualifier("userRepoJdbc") UserRepo userRepo,
+  public UserServiceImpl(@Qualifier("userRepoJdbc") UserRepository userRepository,
       PasswordEncoder passwordEncoder, MailService mailService) {
-    this.userRepo = userRepo;
+    this.userRepository = userRepository;
     this.passwordEncoder = passwordEncoder;
     this.mailService = mailService;
   }
 
   public User loadUserByUsername(String s) {
-    return userRepo.findByUsername(s)
+    return userRepository.findByUsername(s)
         .orElseThrow(() -> new UsernameNotFoundException("User not exist!"));
   }
 
   public void addUser(UserRegistrationDto userDTO) {
-    userRepo.findByUsername(userDTO.getUsername())
+    userRepository.findByUsername(userDTO.getUsername())
         .ifPresent(s -> {throw new UsernameIsAlreadyTaken("Username is already taken");});
 
-    userRepo.findByEmail(userDTO.getEmail())
+    userRepository.findByEmail(userDTO.getEmail())
         .ifPresent(s -> {throw new EmailIsAlreadyTaken("Email is already taken");});
 
 //    TODO: mapper
@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
         .build();
 
     try {
-      userRepo.save(user);
+      userRepository.save(user);
     } catch (Exception e) {
       throw new CannotSaveUserToDatabase("Cannot save user to database");
     }
@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
   }
 
   public void updateUser(UserProfileDto userDTO, String oldPassword) {
-    User user = userRepo.findByUsername(userDTO.getUsername())
+    User user = userRepository.findByUsername(userDTO.getUsername())
         .orElseThrow(() -> new UserNotFound("User not found"));
 
     //TODO: refactor (or delete ifs except email)
@@ -96,7 +96,7 @@ public class UserServiceImpl implements UserService {
     }
 
     if (!user.getEmail().equals(userDTO.getEmail())) {
-      userRepo.findByEmail(userDTO.getEmail())
+      userRepository.findByEmail(userDTO.getEmail())
           .ifPresent(s -> {throw new EmailIsAlreadyTaken("Email is already taken");});
       user.setEmail(userDTO.getEmail());
       user.setActive(false);
@@ -107,7 +107,7 @@ public class UserServiceImpl implements UserService {
 
     if (changed) {
       try {
-        userRepo.save(user);
+        userRepository.save(user);
       } catch (Exception e) {
         throw new CannotSaveUserToDatabase("Cannot save user to database");
       }
@@ -115,13 +115,13 @@ public class UserServiceImpl implements UserService {
   }
 
   public void activateUser(String code) {
-    User user = userRepo.findByActivationCode(code)
+    User user = userRepository.findByActivationCode(code)
         .orElseThrow(() -> new UserNotFoundByActivationCode("User not found by activation code"));
 
     user.setActivationCode(null);
     user.setActive(true);
 
-    userRepo.save(user);
+    userRepository.save(user);
   }
 
 }

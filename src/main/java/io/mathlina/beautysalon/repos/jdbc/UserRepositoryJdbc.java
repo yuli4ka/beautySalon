@@ -1,7 +1,7 @@
 package io.mathlina.beautysalon.repos.jdbc;
 
 import io.mathlina.beautysalon.domain.User;
-import io.mathlina.beautysalon.repos.UserRepo;
+import io.mathlina.beautysalon.repos.UserRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -15,11 +15,11 @@ import java.util.Optional;
 
 @Repository
 @Qualifier("userRepoJdbc")
-public class UserRepoJdbc implements UserRepo {
+public class UserRepositoryJdbc implements UserRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public UserRepoJdbc(JdbcTemplate jdbcTemplate) {
+    public UserRepositoryJdbc(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
