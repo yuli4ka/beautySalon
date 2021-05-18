@@ -2,14 +2,14 @@ package io.mathlina.beautysalon.model;
 
 import io.mathlina.beautysalon.domain.Role;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.util.Set;
 
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserModel {

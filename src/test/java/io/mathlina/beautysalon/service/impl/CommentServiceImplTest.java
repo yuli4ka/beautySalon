@@ -4,6 +4,7 @@ import io.mathlina.beautysalon.domain.Master;
 import io.mathlina.beautysalon.domain.User;
 import io.mathlina.beautysalon.exception.UserNotFound;
 import io.mathlina.beautysalon.model.CommentModel;
+import io.mathlina.beautysalon.model.MasterModel;
 import io.mathlina.beautysalon.model.UserModel;
 import io.mathlina.beautysalon.repos.CommentRepository;
 import io.mathlina.beautysalon.repos.UserRepository;
@@ -43,7 +44,7 @@ class CommentServiceImplTest {
   @Test
   void getCommentsShouldReturnCommentsPage() {
     User client = new User();
-    Master master = new Master();
+    MasterModel master = new MasterModel();
     CommentModel comment = CommentModel.builder().clientId(client.getId()).masterId(master.getId()).build();
     PageImpl<CommentModel> expected = new PageImpl<>(List.of(comment));
 
@@ -61,7 +62,7 @@ class CommentServiceImplTest {
   void getCommentShouldReturnUserComment() {
     String username = "Username";
     UserModel client = UserModel.builder().username(username).build();
-    Master master = new Master();
+    MasterModel master = new MasterModel();
     CommentModel expected = CommentModel.builder().clientId(client.getId()).masterId(master.getId()).build();
 
     Mockito.when(userRepository.findByUsername(username)).thenReturn(Optional.of(client));
@@ -81,7 +82,7 @@ class CommentServiceImplTest {
   void getCommentShouldThrowExceptionWhenUserNotFound() {
     String username = "Username";
     UserModel client = UserModel.builder().username(username).build();
-    Master master = new Master();
+    MasterModel master = new MasterModel();
 
     Mockito.when(userRepository.findByUsername(username)).thenReturn(Optional.empty());
 
@@ -97,7 +98,7 @@ class CommentServiceImplTest {
     byte grade = 5;
     String commentText = "comment text";
     UserModel client = UserModel.builder().username(username).build();
-    Master master = new Master();
+    MasterModel master = new MasterModel();
 
     Mockito.when(userRepository.findByUsername(username)).thenReturn(Optional.empty());
 
@@ -114,7 +115,7 @@ class CommentServiceImplTest {
     byte grade = 5;
     String commentText = "comment text";
     UserModel client = UserModel.builder().username(username).build();
-    Master master = new Master();
+    MasterModel master = new MasterModel();
     CommentModel comment = CommentModel.builder()
         .clientId(client.getId())
         .masterId(master.getId())
@@ -139,7 +140,7 @@ class CommentServiceImplTest {
     byte grade = 5;
     String commentText = "Comment text";
     UserModel client = UserModel.builder().username(username).build();
-    Master master = new Master();
+    MasterModel master = new MasterModel();
     CommentModel oldComment = CommentModel.builder().clientId(client.getId()).masterId(master.getId()).build();
     CommentModel newComment = CommentModel.builder()
         .clientId(client.getId())

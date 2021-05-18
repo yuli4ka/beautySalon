@@ -3,6 +3,7 @@ package io.mathlina.beautysalon.repos.jpa;
 import io.mathlina.beautysalon.domain.Comment;
 import io.mathlina.beautysalon.domain.Master;
 import io.mathlina.beautysalon.model.CommentModel;
+import io.mathlina.beautysalon.model.MasterModel;
 import io.mathlina.beautysalon.model.UserModel;
 import io.mathlina.beautysalon.model.mapper.Mapper;
 import io.mathlina.beautysalon.repos.CommentRepository;
@@ -28,7 +29,7 @@ public class JpaCommentRepositoryImpl implements CommentRepository {
     private EntityManager entityManager;
 
     @Override
-    public Optional<CommentModel> findByMasterAndClient(Master master, UserModel client) {
+    public Optional<CommentModel> findByMasterAndClient(MasterModel master, UserModel client) {
         Query query = this.entityManager.createQuery(
                 "SELECT comm FROM Comment comm " +
                         "WHERE comm.master.id = :masterId AND comm.client.id = :clientId");
@@ -40,7 +41,7 @@ public class JpaCommentRepositoryImpl implements CommentRepository {
     }
 
     @Override
-    public Page<CommentModel> findAllByMaster(Master master, Pageable pageable) {
+    public Page<CommentModel> findAllByMaster(MasterModel master, Pageable pageable) {
         Query query = this.entityManager.createQuery(
                 "SELECT comm FROM Comment comm " +
                         "WHERE comm.master.id = :masterId");
@@ -57,7 +58,7 @@ public class JpaCommentRepositoryImpl implements CommentRepository {
     }
 
     @Override
-    public List<CommentModel> findAllByMaster(Master master) {
+    public List<CommentModel> findAllByMaster(MasterModel master) {
         Query query = this.entityManager.createQuery(
                 "SELECT comm FROM Comment comm " +
                         "WHERE comm.master.id = :masterId");

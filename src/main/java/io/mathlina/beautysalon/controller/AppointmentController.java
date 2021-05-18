@@ -6,6 +6,7 @@ import io.mathlina.beautysalon.domain.Timetable;
 import io.mathlina.beautysalon.domain.User;
 import io.mathlina.beautysalon.dto.MasterDto;
 import io.mathlina.beautysalon.dto.ServiceDto;
+import io.mathlina.beautysalon.model.MasterModel;
 import io.mathlina.beautysalon.model.UserModel;
 import io.mathlina.beautysalon.model.mapper.Mapper;
 import io.mathlina.beautysalon.service.AppointmentService;
@@ -41,10 +42,10 @@ public class AppointmentController {
 
   @PreAuthorize("hasAuthority('CLIENT')")
   @GetMapping("/appoint")
-  public String appointPage(@RequestParam("master_id") Master master,
+  public String appointPage(@RequestParam("master_id") MasterModel master,
       @RequestParam("service_id") Service service,
       Model model) {
-    Timetable timetable = Timetable.builder().service(service).master(master).build();
+    Timetable timetable = Timetable.builder().service(service).master(mapper.map(master, Master.class)).build();
     model.addAttribute("master", new MasterDto(master));
     model.addAttribute("service",
         new ServiceDto(service, LocaleContextHolder.getLocale().toString()));

@@ -4,6 +4,8 @@ import io.mathlina.beautysalon.domain.Master;
 import io.mathlina.beautysalon.dto.MasterDto;
 import io.mathlina.beautysalon.dto.ServiceDto;
 import io.mathlina.beautysalon.model.CommentModel;
+import io.mathlina.beautysalon.model.MasterModel;
+import io.mathlina.beautysalon.model.mapper.Mapper;
 import io.mathlina.beautysalon.repos.CommentRepository;
 import io.mathlina.beautysalon.repos.MasterRepository;
 import io.mathlina.beautysalon.service.MasterService;
@@ -21,6 +23,9 @@ import java.util.stream.Collectors;
 @org.springframework.stereotype.Service
 public class MasterServiceImpl implements MasterService {
 
+  @Autowired
+  private Mapper mapper;
+
   private final MasterRepository masterRepository;
   private final CommentRepository commentRepository;
 
@@ -34,9 +39,12 @@ public class MasterServiceImpl implements MasterService {
     return masterRepository.findAll(pageable).map(MasterDto::new);
   }
 
-  public List<ServiceDto> findMasterServices(Master master) {
+  public List<ServiceDto> findMasterServices(MasterModel masterModel) {
     Locale currentLocale = LocaleContextHolder.getLocale();
     Collator collator = Collator.getInstance(currentLocale);
+
+    //TODO: remove Master usage
+    Master master = mapper.map(masterModel, Master.class);
 
     return master.getServices().stream()
         .map(service -> new ServiceDto(service, currentLocale.toString()))
@@ -45,7 +53,7 @@ public class MasterServiceImpl implements MasterService {
   }
 
   @Override
-  public void updateAverageGrade(Master master) {
+  public void updateAverageGrade(MasterModel master) {
     double averageGrade = commentRepository.findAllByMaster(master).stream()
         .mapToInt(CommentModel::getGrade)
         .average()
@@ -63,12 +71,15 @@ public class MasterServiceImpl implements MasterService {
   }
 
   @Override
-  public List<ServiceDto> findMasterServicesLike(Master master, String filter) {
+  public List<ServiceDto> findMasterServicesLike(MasterModel masterModel, String filter) {
     if (Objects.isNull(filter) || filter.equals("")) {
-      return findMasterServices(master);
+      return findMasterServices(masterModel);
     } else {
       Locale currentLocale = LocaleContextHolder.getLocale();
       Collator collator = Collator.getInstance(currentLocale);
+
+      //TODO: remove Master usage
+      Master master = mapper.map(masterModel, Master.class);
 
       return master.getServices().stream()
           .map(service -> new ServiceDto(service, currentLocale.toString()))

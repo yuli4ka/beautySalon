@@ -1,23 +1,24 @@
 package io.mathlina.beautysalon.service;
 
-import io.mathlina.beautysalon.domain.Master;
 import io.mathlina.beautysalon.dto.MasterDto;
 import io.mathlina.beautysalon.dto.ServiceDto;
-import java.util.List;
+import io.mathlina.beautysalon.model.MasterModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 public interface MasterService {
 
   Page<MasterDto> findAll(Pageable pageable);
 
-  List<ServiceDto> findMasterServices(Master master);
+  List<ServiceDto> findMasterServices(MasterModel master);
 
-  void updateAverageGrade(Master master);
+  void updateAverageGrade(MasterModel master);
 
   void updateAverageGrades();
 
-  List<ServiceDto> findMasterServicesLike(Master master, String filter);
+  List<ServiceDto> findMasterServicesLike(MasterModel master, String filter);
 
   Page<MasterDto> findAllLike(String filter, Pageable pageable);
 }

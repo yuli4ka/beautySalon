@@ -5,6 +5,7 @@ import io.mathlina.beautysalon.domain.Service;
 import io.mathlina.beautysalon.dto.MasterDto;
 import io.mathlina.beautysalon.dto.ServiceDto;
 import io.mathlina.beautysalon.model.CommentModel;
+import io.mathlina.beautysalon.model.MasterModel;
 import io.mathlina.beautysalon.repos.CommentRepository;
 import io.mathlina.beautysalon.repos.MasterRepository;
 import io.mathlina.beautysalon.service.MasterService;
@@ -48,8 +49,8 @@ class MasterServiceImplTest {
 
   @Test
   void findAllShouldReturnMasterDtoPage() {
-    Master master = new Master();
-    Page<Master> masters = new PageImpl<>(List.of(master));
+    MasterModel master = new MasterModel();
+    Page<MasterModel> masters = new PageImpl<>(List.of(master));
 
     Page<MasterDto> expected = masters.map(MasterDto::new);
 
@@ -67,7 +68,7 @@ class MasterServiceImplTest {
   void findMasterServicesShouldReturnServiceDtoList() {
     Service service1 = Service.builder().nameEn("name1").build();
     Service service2 = Service.builder().nameEn("name2").build();
-    Master master = Master.builder().services(List.of(service1, service2)).build();
+    MasterModel master = MasterModel.builder().serviceIds(List.of(service1.getId(), service2.getId())).build();
     ServiceDto serviceDto1 = new ServiceDto(service1, Locale.getDefault().toString());
     ServiceDto serviceDto2 = new ServiceDto(service2, Locale.getDefault().toString());
 
@@ -86,8 +87,8 @@ class MasterServiceImplTest {
     CommentModel comment1 = CommentModel.builder().grade((byte) 1).build();
     CommentModel comment2 = CommentModel.builder().grade((byte) 3).build();
     List<CommentModel> comments = List.of(comment1, comment2);
-    Master oldMaster = new Master();
-    Master newMaster = Master.builder().grade(averageGrade).build();
+    MasterModel oldMaster = new MasterModel();
+    MasterModel newMaster = MasterModel.builder().grade(averageGrade).build();
 
     Mockito.when(commentRepository.findAllByMaster(oldMaster)).thenReturn(comments);
 
@@ -102,7 +103,7 @@ class MasterServiceImplTest {
   void findMasterServicesLikeShouldReturnServiceDtoList() {
     Service service1 = Service.builder().nameEn("name1").build();
     Service service2 = Service.builder().nameEn("name2" + FILTER).build();
-    Master master = Master.builder().services(List.of(service1, service2)).build();
+    MasterModel master = MasterModel.builder().serviceIds(List.of(service1.getId(), service2.getId())).build();
     ServiceDto serviceDto2 = new ServiceDto(service2, Locale.getDefault().toString());
 
     List<ServiceDto> expected = List.of(serviceDto2);
@@ -116,8 +117,8 @@ class MasterServiceImplTest {
 
   @Test
   void findAllLikeShouldReturnMasterDtoPage() {
-    Master master = new Master();
-    Page<Master> masters = new PageImpl<>(List.of(master));
+    MasterModel master = new MasterModel();
+    Page<MasterModel> masters = new PageImpl<>(List.of(master));
 
     Page<MasterDto> expected = masters.map(MasterDto::new);
 
