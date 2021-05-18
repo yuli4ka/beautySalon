@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.UUID;
 
@@ -60,6 +61,7 @@ public class UserServiceImpl implements UserService {
     try {
       userRepository.save(user);
     } catch (Exception e) {
+      e.printStackTrace();
       throw new CannotSaveUserToDatabase("Cannot save user to database");
     }
 

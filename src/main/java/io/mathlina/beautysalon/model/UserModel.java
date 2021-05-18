@@ -24,7 +24,7 @@ public class UserModel {
 
     private String password;
 
-    private boolean active;
+    private Boolean active;
 
     private String email;
 

@@ -58,7 +58,7 @@ create table user_role
 
 create table usr
 (
-    user_id         bigint not null,
+    user_id         bigint not null AUTO_INCREMENT,
     activation_code varchar(255),
     active          bit    not null,
     email           varchar(255),
