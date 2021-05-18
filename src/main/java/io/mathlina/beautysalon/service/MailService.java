@@ -1,9 +1,9 @@
 package io.mathlina.beautysalon.service;
 
-import io.mathlina.beautysalon.domain.User;
+import io.mathlina.beautysalon.model.UserModel;
 
 public interface MailService {
 
-  void sendActivationCode(User user);
+  void sendActivationCode(UserModel user);
 
 }

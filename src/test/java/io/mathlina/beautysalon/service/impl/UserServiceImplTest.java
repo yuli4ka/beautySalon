@@ -1,16 +1,12 @@
 package io.mathlina.beautysalon.service.impl;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import io.mathlina.beautysalon.domain.User;
 import io.mathlina.beautysalon.dto.UserRegistrationDto;
 import io.mathlina.beautysalon.exception.EmailIsAlreadyTaken;
 import io.mathlina.beautysalon.exception.UserNotFoundByActivationCode;
 import io.mathlina.beautysalon.exception.UsernameIsAlreadyTaken;
+import io.mathlina.beautysalon.model.UserModel;
 import io.mathlina.beautysalon.repos.UserRepository;
 import io.mathlina.beautysalon.service.UserService;
-import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,6 +15,11 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest(classes = UserService.class)
 @ExtendWith({SpringExtension.class})
@@ -36,11 +37,11 @@ class UserServiceImplTest {
 
   @Test
   void loadUserByUsernameShouldReturnExistingUser() {
-    User expected = User.builder().username(USERNAME).build();
+    UserModel expected = UserModel.builder().username(USERNAME).build();
 
     Mockito.when(userRepository.findByUsername(USERNAME)).thenReturn(Optional.of(expected));
 
-    User actual = userService.loadUserByUsername(USERNAME);
+    UserModel actual = userService.loadUserByUsername(USERNAME);
 
     assertEquals(expected, actual);
 
@@ -61,7 +62,7 @@ class UserServiceImplTest {
   @Test
   void addUserShouldThrowExceptionWhenUserFoundByUsername() {
     UserRegistrationDto registrationDto = UserRegistrationDto.builder().username(USERNAME).build();
-    User user = User.builder().username(USERNAME).build();
+    UserModel user = UserModel.builder().username(USERNAME).build();
 
     Mockito.when(userRepository.findByUsername(USERNAME)).thenReturn(Optional.of(user));
 
@@ -78,7 +79,7 @@ class UserServiceImplTest {
         .email(EMAIL)
         .password(PASSWORD)
         .build();
-    User user = User.builder().email(EMAIL).build();
+    UserModel user = UserModel.builder().email(EMAIL).build();
 
     Mockito.when(userRepository.findByUsername(USERNAME)).thenReturn(Optional.empty());
     Mockito.when(userRepository.findByEmail(EMAIL)).thenReturn(Optional.of(user));
@@ -95,8 +96,8 @@ class UserServiceImplTest {
   @Test
   void activateUserShouldUpdateUserActiveStatus() {
     String activationCode = "activationCode";
-    User user = User.builder().username(USERNAME).activationCode(activationCode).build();
-    User activeUser = User.builder().username(USERNAME).activationCode(null).active(true).build();
+    UserModel user = UserModel.builder().username(USERNAME).activationCode(activationCode).build();
+    UserModel activeUser = UserModel.builder().username(USERNAME).activationCode(null).active(true).build();
 
     Mockito.when(userRepository.findByActivationCode(activationCode)).thenReturn(Optional.of(user));
 

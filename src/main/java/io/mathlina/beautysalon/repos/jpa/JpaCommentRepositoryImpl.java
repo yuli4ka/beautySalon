@@ -2,8 +2,8 @@ package io.mathlina.beautysalon.repos.jpa;
 
 import io.mathlina.beautysalon.domain.Comment;
 import io.mathlina.beautysalon.domain.Master;
-import io.mathlina.beautysalon.domain.User;
 import io.mathlina.beautysalon.model.CommentModel;
+import io.mathlina.beautysalon.model.UserModel;
 import io.mathlina.beautysalon.model.mapper.Mapper;
 import io.mathlina.beautysalon.repos.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +27,8 @@ public class JpaCommentRepositoryImpl implements CommentRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
-
-    public Optional<CommentModel> findByMasterAndClient(Master master, User client) {
+    @Override
+    public Optional<CommentModel> findByMasterAndClient(Master master, UserModel client) {
         Query query = this.entityManager.createQuery(
                 "SELECT comm FROM Comment comm " +
                         "WHERE comm.master.id = :masterId AND comm.client.id = :clientId");
@@ -39,6 +39,7 @@ public class JpaCommentRepositoryImpl implements CommentRepository {
         return Optional.ofNullable(mapper.map(com, CommentModel.class));
     }
 
+    @Override
     public Page<CommentModel> findAllByMaster(Master master, Pageable pageable) {
         Query query = this.entityManager.createQuery(
                 "SELECT comm FROM Comment comm " +
@@ -55,6 +56,7 @@ public class JpaCommentRepositoryImpl implements CommentRepository {
         return new PageImpl<>(commentModels.subList(page * pageSize, last), pageable, commentModels.size());
     }
 
+    @Override
     public List<CommentModel> findAllByMaster(Master master) {
         Query query = this.entityManager.createQuery(
                 "SELECT comm FROM Comment comm " +

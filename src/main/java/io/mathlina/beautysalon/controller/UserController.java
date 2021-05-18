@@ -1,14 +1,13 @@
 package io.mathlina.beautysalon.controller;
 
-import io.mathlina.beautysalon.domain.User;
 import io.mathlina.beautysalon.dto.UserProfileDto;
 import io.mathlina.beautysalon.exception.CannotSaveUserToDatabase;
 import io.mathlina.beautysalon.exception.EmailIsAlreadyTaken;
 import io.mathlina.beautysalon.exception.UserNotFound;
 import io.mathlina.beautysalon.exception.WrongPassword;
+import io.mathlina.beautysalon.model.UserModel;
 import io.mathlina.beautysalon.service.UserService;
 import io.mathlina.beautysalon.validation.PasswordEqualityValidatorProfile;
-import javax.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -18,6 +17,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import javax.validation.Valid;
 
 @Controller
 public class UserController {
@@ -30,7 +31,7 @@ public class UserController {
 
   @GetMapping("/profile")
   public String getProfile(@AuthenticationPrincipal UserDetails userDetails, Model model) {
-    User user = userService.loadUserByUsername(userDetails.getUsername());
+    UserModel user = userService.loadUserByUsername(userDetails.getUsername());
     UserProfileDto userProfileDto = new UserProfileDto(user);
     model.addAttribute("userProfileDto", userProfileDto);
 

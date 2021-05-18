@@ -6,9 +6,13 @@ import io.mathlina.beautysalon.domain.Timetable;
 import io.mathlina.beautysalon.domain.User;
 import io.mathlina.beautysalon.dto.MasterDto;
 import io.mathlina.beautysalon.dto.ServiceDto;
+import io.mathlina.beautysalon.model.UserModel;
+import io.mathlina.beautysalon.model.mapper.Mapper;
 import io.mathlina.beautysalon.service.AppointmentService;
 import io.mathlina.beautysalon.service.UserService;
 import java.time.LocalDateTime;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,6 +26,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class AppointmentController {
+
+  //TODO: delete
+  @Autowired
+  private Mapper mapper;
 
   private final UserService userService;
   private final AppointmentService appointmentService;
@@ -51,12 +59,12 @@ public class AppointmentController {
       @RequestParam("master_id") Master master,
       @RequestParam("service_id") Service service,
       @RequestParam("dateTime") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-          LocalDateTime dateTime, Model model) {
+          LocalDateTime dateTime) {
 
-    User user = userService.loadUserByUsername(userDetails.getUsername());
+    UserModel user = userService.loadUserByUsername(userDetails.getUsername());
     Timetable timetable = Timetable.builder()
         .master(master)
-        .client(user)
+        .client(mapper.map(user, User.class))
         .service(service)
         .dateTime(dateTime)
         .build();
@@ -65,7 +73,6 @@ public class AppointmentController {
     //TODO: message
     return "redirect:/appointments";
   }
-
 
   @PreAuthorize("hasAuthority('CLIENT')")
   @GetMapping("/appointments")

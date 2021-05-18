@@ -1,6 +1,6 @@
 package io.mathlina.beautysalon.service.impl;
 
-import io.mathlina.beautysalon.domain.User;
+import io.mathlina.beautysalon.model.UserModel;
 import io.mathlina.beautysalon.service.MailService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -37,7 +37,7 @@ public class MailServiceImpl implements MailService {
   }
 
   //TODO: send thymeleaf template
-  public void sendActivationCode(User user) {
+  public void sendActivationCode(UserModel user) {
     StringBuilder builder = new StringBuilder();
     builder
         .append("Hello, ")

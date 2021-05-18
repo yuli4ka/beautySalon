@@ -10,6 +10,7 @@ import io.mathlina.beautysalon.exception.UserNotFound;
 import io.mathlina.beautysalon.exception.UserNotFoundByActivationCode;
 import io.mathlina.beautysalon.exception.UsernameIsAlreadyTaken;
 import io.mathlina.beautysalon.exception.WrongPassword;
+import io.mathlina.beautysalon.model.UserModel;
 import io.mathlina.beautysalon.repos.UserRepository;
 import io.mathlina.beautysalon.service.MailService;
 import io.mathlina.beautysalon.service.UserService;
@@ -37,7 +38,7 @@ public class UserServiceImpl implements UserService {
     this.mailService = mailService;
   }
 
-  public User loadUserByUsername(String s) {
+  public UserModel loadUserByUsername(String s) {
     return userRepository.findByUsername(s)
         .orElseThrow(() -> new UsernameNotFoundException("User not exist!"));
   }
@@ -50,7 +51,7 @@ public class UserServiceImpl implements UserService {
         .ifPresent(s -> {throw new EmailIsAlreadyTaken("Email is already taken");});
 
 //    TODO: mapper
-    User user = User.builder()
+    UserModel user = UserModel.builder()
         .username(userDTO.getUsername())
         .name(userDTO.getName())
         .surname(userDTO.getSurname())
@@ -71,7 +72,7 @@ public class UserServiceImpl implements UserService {
   }
 
   public void updateUser(UserProfileDto userDTO, String oldPassword) {
-    User user = userRepository.findByUsername(userDTO.getUsername())
+    UserModel user = userRepository.findByUsername(userDTO.getUsername())
         .orElseThrow(() -> new UserNotFound("User not found"));
 
     //TODO: refactor (or delete ifs except email)
@@ -115,7 +116,7 @@ public class UserServiceImpl implements UserService {
   }
 
   public void activateUser(String code) {
-    User user = userRepository.findByActivationCode(code)
+    UserModel user = userRepository.findByActivationCode(code)
         .orElseThrow(() -> new UserNotFoundByActivationCode("User not found by activation code"));
 
     user.setActivationCode(null);

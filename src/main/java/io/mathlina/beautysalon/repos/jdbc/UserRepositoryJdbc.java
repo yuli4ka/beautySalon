@@ -1,6 +1,6 @@
 package io.mathlina.beautysalon.repos.jdbc;
 
-import io.mathlina.beautysalon.domain.User;
+import io.mathlina.beautysalon.model.UserModel;
 import io.mathlina.beautysalon.repos.UserRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -23,10 +23,10 @@ public class UserRepositoryJdbc implements UserRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    static class UseRowMapper implements RowMapper<User> {
+    static class UseRowMapper implements RowMapper<UserModel> {
         @Override
-        public User mapRow(ResultSet rs, int i) throws SQLException {
-            return User.builder()
+        public UserModel mapRow(ResultSet rs, int i) throws SQLException {
+            return UserModel.builder()
                     .id(rs.getLong("id"))
                     .username(rs.getString("username"))
                     .name(rs.getString("name"))
@@ -39,7 +39,7 @@ public class UserRepositoryJdbc implements UserRepository {
     }
 
     @Override
-    public Optional<User> findByUsername(String username) {
+    public Optional<UserModel> findByUsername(String username) {
         return Optional.ofNullable(jdbcTemplate.queryForObject(
                 "select * from usr where username = ?",
                 new UseRowMapper(),
@@ -47,7 +47,7 @@ public class UserRepositoryJdbc implements UserRepository {
     }
 
     @Override
-    public Optional<User> findByEmail(String email) {
+    public Optional<UserModel> findByEmail(String email) {
         return Optional.ofNullable(jdbcTemplate.queryForObject(
                 "select * from usr where email = ?",
                 new UseRowMapper(),
@@ -55,7 +55,7 @@ public class UserRepositoryJdbc implements UserRepository {
     }
 
     @Override
-    public Optional<User> findByActivationCode(String code) {
+    public Optional<UserModel> findByActivationCode(String code) {
         return Optional.ofNullable(jdbcTemplate.queryForObject(
                 "select * from usr where activation_code = ?",
                 new UseRowMapper(),
@@ -63,8 +63,8 @@ public class UserRepositoryJdbc implements UserRepository {
     }
 
     @Override
-    public User save(User user) {
-        int id = jdbcTemplate.update(
+    public void save(UserModel user) {
+        jdbcTemplate.update(
                 "insert into usr (activation_code, email, password, username, name, surname) " +
                         "values (?, ?, ?, ?, ?, ?)",
                 user.getActivationCode(),
@@ -74,8 +74,5 @@ public class UserRepositoryJdbc implements UserRepository {
                 user.getName(),
                 user.getSurname()
         );
-
-        user.setId((long) id);
-        return user;
     }
 }

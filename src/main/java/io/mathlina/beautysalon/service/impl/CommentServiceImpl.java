@@ -4,6 +4,7 @@ import io.mathlina.beautysalon.domain.Master;
 import io.mathlina.beautysalon.domain.User;
 import io.mathlina.beautysalon.exception.UserNotFound;
 import io.mathlina.beautysalon.model.CommentModel;
+import io.mathlina.beautysalon.model.UserModel;
 import io.mathlina.beautysalon.repos.CommentRepository;
 import io.mathlina.beautysalon.repos.UserRepository;
 import io.mathlina.beautysalon.service.CommentService;
@@ -32,7 +33,7 @@ public class CommentServiceImpl implements CommentService {
 
   @Override
   public CommentModel getComment(Master master, UserDetails userDetails) {
-    User user = userRepository.findByUsername(userDetails.getUsername())
+    UserModel user = userRepository.findByUsername(userDetails.getUsername())
         .orElseThrow(() -> new UserNotFound("User not found"));
 
     return commentRepository.findByMasterAndClient(master, user)
@@ -46,7 +47,7 @@ public class CommentServiceImpl implements CommentService {
   public void updateComment(UserDetails userDetails, Master master,
       Byte grade, String commentText) {
 
-    User user = userRepository.findByUsername(userDetails.getUsername())
+    UserModel user = userRepository.findByUsername(userDetails.getUsername())
         .orElseThrow(() -> new UserNotFound("User not found"));
 
     CommentModel comment = commentRepository.findByMasterAndClient(master, user)

@@ -1,14 +1,15 @@
 package io.mathlina.beautysalon.dto;
 
-import io.mathlina.beautysalon.domain.User;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import io.mathlina.beautysalon.model.UserModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 @Data
 @Builder
@@ -16,7 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserProfileDto {
 
-  public UserProfileDto(User user) {
+  public UserProfileDto(UserModel user) {
     this.username = user.getUsername();
     this.email = user.getEmail();
     this.name = user.getName();
