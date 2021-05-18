@@ -153,6 +153,13 @@
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-core</artifactId>
     </dependency>
+
+    <dependency>
+      <groupId>ma.glasnost.orika</groupId>
+      <artifactId>orika-core</artifactId>
+      <version>1.5.4</version>
+    </dependency>
+
   </dependencies>
 
   <build>
