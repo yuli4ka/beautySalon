@@ -6,9 +6,11 @@ import io.mathlina.beautysalon.exception.EmailIsAlreadyTaken;
 import io.mathlina.beautysalon.exception.UserNotFound;
 import io.mathlina.beautysalon.exception.WrongPassword;
 import io.mathlina.beautysalon.model.UserModel;
+import io.mathlina.beautysalon.model.mapper.Mapper;
 import io.mathlina.beautysalon.service.UserService;
 import io.mathlina.beautysalon.validation.PasswordEqualityValidatorProfile;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -25,12 +27,15 @@ import javax.validation.Valid;
 @Controller
 public class UserController {
 
+    @Autowired
+    Mapper mapper;
+
     private final UserService userService;
 
     @GetMapping(value = "/profile")
     public String getProfile(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         UserModel user = userService.loadUserByUsername(userDetails.getUsername());
-        UserProfileDto userProfileDto = new UserProfileDto(user);
+        UserProfileDto userProfileDto = mapper.map(user, UserProfileDto.class);
         model.addAttribute("userProfileDto", userProfileDto);
 
         return "profile";

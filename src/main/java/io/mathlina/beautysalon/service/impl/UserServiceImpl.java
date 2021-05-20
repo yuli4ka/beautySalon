@@ -1,10 +1,10 @@
 package io.mathlina.beautysalon.service.impl;
 
-import io.mathlina.beautysalon.domain.Role;
 import io.mathlina.beautysalon.dto.UserProfileDto;
 import io.mathlina.beautysalon.dto.UserRegistrationDto;
 import io.mathlina.beautysalon.exception.*;
 import io.mathlina.beautysalon.model.UserModel;
+import io.mathlina.beautysalon.model.mapper.Mapper;
 import io.mathlina.beautysalon.repos.UserRepository;
 import io.mathlina.beautysalon.service.MailService;
 import io.mathlina.beautysalon.service.UserService;
@@ -14,13 +14,15 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.UUID;
 
 //TODO: log
 @RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements UserService {
+
+    @Autowired
+    Mapper mapper;
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -42,17 +44,7 @@ public class UserServiceImpl implements UserService {
                     throw new EmailIsAlreadyTaken("Email is already taken");
                 });
 
-//    TODO: mapper
-        UserModel user = UserModel.builder()
-                .username(userDTO.getUsername())
-                .name(userDTO.getName())
-                .surname(userDTO.getSurname())
-                .password(passwordEncoder.encode(userDTO.getPassword()))
-                .email(userDTO.getEmail())
-                .active(false)
-                .role(Collections.singleton(Role.CLIENT))
-                .activationCode(UUID.randomUUID().toString())
-                .build();
+        UserModel user = mapper.map(userDTO, UserModel.class);
 
         try {
             userRepository.save(user);
