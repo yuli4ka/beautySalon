@@ -1,26 +1,25 @@
 package io.mathlina.beautysalon.repos.jpa;
 
 import io.mathlina.beautysalon.domain.Comment;
-import io.mathlina.beautysalon.domain.Master;
 import io.mathlina.beautysalon.model.CommentModel;
 import io.mathlina.beautysalon.model.MasterModel;
 import io.mathlina.beautysalon.model.UserModel;
 import io.mathlina.beautysalon.model.mapper.Mapper;
 import io.mathlina.beautysalon.repos.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-@Primary
-public class JpaCommentRepositoryImpl implements CommentRepository {
+public class JpaCommentRepository implements CommentRepository {
 
     @Autowired
     private Mapper mapper;

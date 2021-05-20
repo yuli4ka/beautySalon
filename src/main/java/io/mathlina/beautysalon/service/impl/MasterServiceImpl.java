@@ -23,79 +23,81 @@ import java.util.stream.Collectors;
 @org.springframework.stereotype.Service
 public class MasterServiceImpl implements MasterService {
 
-  @Autowired
-  private Mapper mapper;
+    @Autowired
+    private Mapper mapper;
 
-  private final MasterRepository masterRepository;
-  private final CommentRepository commentRepository;
-  private final MyServiceRepository serviceRepository;
+    private final MasterRepository masterRepository;
+    private final CommentRepository commentRepository;
+    private final MyServiceRepository serviceRepository;
 
-  @Autowired
-  public MasterServiceImpl(MasterRepository masterRepository, CommentRepository commentRepository, MyServiceRepository serviceRepository) {
-    this.masterRepository = masterRepository;
-    this.commentRepository = commentRepository;
-    this.serviceRepository = serviceRepository;
-  }
-
-  public Page<MasterDto> findAll(Pageable pageable) {
-    return masterRepository.findAll(pageable).map(MasterDto::new);
-  }
-
-  public List<ServiceDto> findMasterServices(MasterModel masterModel) {
-    Locale currentLocale = LocaleContextHolder.getLocale();
-    Collator collator = Collator.getInstance(currentLocale);
-
-    return masterModel.getServiceIds().stream()
-            .map(serviceId ->
-                    new ServiceDto(serviceRepository.findById(serviceId), currentLocale.toString()))
-        .sorted((s1, s2) -> collator.compare(s1.getName(), s2.getName()))
-        .collect(Collectors.toList());
-  }
-
-  @Override
-  public void updateAverageGrade(MasterModel master) {
-    double averageGrade = commentRepository.findAllByMaster(master).stream()
-        .mapToInt(CommentModel::getGrade)
-        .average()
-        .orElse(0);
-
-    master.setGrade(averageGrade);
-
-    masterRepository.save(master);
-  }
-
-  //TODO: update for quartz with additional optimizing conditions
-  @Override
-  public void updateAverageGrades() {
-    masterRepository.findAll().forEach(this::updateAverageGrade);
-  }
-
-  @Override
-  public List<ServiceDto> findMasterServicesLike(MasterModel masterModel, String filter) {
-    if (Objects.isNull(filter) || filter.equals("")) {
-      return findMasterServices(masterModel);
-    } else {
-      Locale currentLocale = LocaleContextHolder.getLocale();
-      Collator collator = Collator.getInstance(currentLocale);
-
-      return masterModel.getServiceIds().stream()
-          .map(serviceId ->
-                  new ServiceDto(serviceRepository.findById(serviceId), currentLocale.toString()))
-          .filter(serviceDto -> serviceDto.getName()
-              .toLowerCase(currentLocale).contains(filter.toLowerCase(currentLocale)))
-          .sorted((s1, s2) -> collator.compare(s1.getName(), s2.getName()))
-          .collect(Collectors.toList());
+    @Autowired
+    public MasterServiceImpl(MasterRepository masterRepository,
+                             CommentRepository commentRepository,
+                             MyServiceRepository serviceRepository) {
+        this.masterRepository = masterRepository;
+        this.commentRepository = commentRepository;
+        this.serviceRepository = serviceRepository;
     }
-  }
 
-  @Override
-  public Page<MasterDto> findAllLike(String filter, Pageable pageable) {
-    if (Objects.isNull(filter) || filter.equals("")) {
-      return findAll(pageable);
-    } else {
-      return masterRepository.findAllByNameContainingOrSurnameContaining(filter, filter, pageable)
-          .map(MasterDto::new);
+    public Page<MasterDto> findAll(Pageable pageable) {
+        return masterRepository.findAll(pageable).map(MasterDto::new);
     }
-  }
+
+    public List<ServiceDto> findMasterServices(MasterModel masterModel) {
+        Locale currentLocale = LocaleContextHolder.getLocale();
+        Collator collator = Collator.getInstance(currentLocale);
+
+        return masterModel.getServiceIds().stream()
+                .map(serviceId ->
+                        new ServiceDto(serviceRepository.findById(serviceId), currentLocale.toString()))
+                .sorted((s1, s2) -> collator.compare(s1.getName(), s2.getName()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void updateAverageGrade(MasterModel master) {
+        double averageGrade = commentRepository.findAllByMaster(master).stream()
+                .mapToInt(CommentModel::getGrade)
+                .average()
+                .orElse(0);
+
+        master.setGrade(averageGrade);
+
+        masterRepository.save(master);
+    }
+
+    //TODO: update for quartz with additional optimizing conditions
+    @Override
+    public void updateAverageGrades() {
+        masterRepository.findAll().forEach(this::updateAverageGrade);
+    }
+
+    @Override
+    public List<ServiceDto> findMasterServicesLike(MasterModel masterModel, String filter) {
+        if (Objects.isNull(filter) || filter.equals("")) {
+            return findMasterServices(masterModel);
+        } else {
+            Locale currentLocale = LocaleContextHolder.getLocale();
+            Collator collator = Collator.getInstance(currentLocale);
+
+            return masterModel.getServiceIds().stream()
+                    .map(serviceId ->
+                            new ServiceDto(serviceRepository.findById(serviceId), currentLocale.toString()))
+                    .filter(serviceDto -> serviceDto.getName()
+                            .toLowerCase(currentLocale).contains(filter.toLowerCase(currentLocale)))
+                    .sorted((s1, s2) -> collator.compare(s1.getName(), s2.getName()))
+                    .collect(Collectors.toList());
+        }
+    }
+
+    @Override
+    public Page<MasterDto> findAllLike(String filter, Pageable pageable) {
+        if (Objects.isNull(filter) || filter.equals("")) {
+            return findAll(pageable);
+        } else {
+            return masterRepository.findAllByNameContainingOrSurnameContaining(filter, filter, pageable)
+                    .map(MasterDto::new);
+        }
+    }
 
 }

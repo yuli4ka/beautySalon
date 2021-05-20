@@ -8,6 +8,7 @@ import io.mathlina.beautysalon.exception.WrongPassword;
 import io.mathlina.beautysalon.model.UserModel;
 import io.mathlina.beautysalon.service.UserService;
 import io.mathlina.beautysalon.validation.PasswordEqualityValidatorProfile;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -20,54 +21,51 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
 
+@RequiredArgsConstructor
 @Controller
 public class UserController {
 
-  private final UserService userService;
+    private final UserService userService;
 
-  public UserController(UserService userService) {
-    this.userService = userService;
-  }
+    @GetMapping(value = "/profile")
+    public String getProfile(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        UserModel user = userService.loadUserByUsername(userDetails.getUsername());
+        UserProfileDto userProfileDto = new UserProfileDto(user);
+        model.addAttribute("userProfileDto", userProfileDto);
 
-  @GetMapping("/profile")
-  public String getProfile(@AuthenticationPrincipal UserDetails userDetails, Model model) {
-    UserModel user = userService.loadUserByUsername(userDetails.getUsername());
-    UserProfileDto userProfileDto = new UserProfileDto(user);
-    model.addAttribute("userProfileDto", userProfileDto);
-
-    return "profile";
-  }
-
-  //TODO: add message for code activation, user not activated
-  //TODO: add 'send activation code again' button
-  //TODO: add message for successful changes
-  @PostMapping("/profile")
-  public String updateProfile(@RequestParam("oldPassword") String oldPassword,
-      @ModelAttribute("userProfileDto")
-      @Valid UserProfileDto userProfileDto,
-      BindingResult bindingResult) {
-
-    PasswordEqualityValidatorProfile validator = new PasswordEqualityValidatorProfile();
-    validator.validate(userProfileDto, bindingResult);
-
-    if (oldPassword.isEmpty() && !userProfileDto.getPassword().isEmpty()) {
-      bindingResult.rejectValue("password", "fill.the.field.if.password.change");
+        return "profile";
     }
 
-    if (!bindingResult.hasErrors()) {
-      try {
-        userService.updateUser(userProfileDto, oldPassword);
-      } catch (UserNotFound e) {
-        return "error/error";
-      } catch (EmailIsAlreadyTaken e) {
-        bindingResult.rejectValue("email", "email.is.already.taken");
-      } catch (WrongPassword e) {
-        bindingResult.rejectValue("password", "wrong.password");
-      } catch (CannotSaveUserToDatabase e) {
-        bindingResult.rejectValue("username", "failed.to.update.user.data");
-      }
-    }
+    //TODO: add message for code activation, user not activated
+    //TODO: add 'send activation code again' button
+    //TODO: add message for successful changes
+    @PostMapping("/profile")
+    public String updateProfile(@RequestParam("oldPassword") String oldPassword,
+                                @ModelAttribute("userProfileDto")
+                                @Valid UserProfileDto userProfileDto,
+                                BindingResult bindingResult) {
 
-    return "profile";
-  }
+        PasswordEqualityValidatorProfile validator = new PasswordEqualityValidatorProfile();
+        validator.validate(userProfileDto, bindingResult);
+
+        if (oldPassword.isEmpty() && !userProfileDto.getPassword().isEmpty()) {
+            bindingResult.rejectValue("password", "fill.the.field.if.password.change");
+        }
+
+        if (!bindingResult.hasErrors()) {
+            try {
+                userService.updateUser(userProfileDto, oldPassword);
+            } catch (UserNotFound e) {
+                return "error/error";
+            } catch (EmailIsAlreadyTaken e) {
+                bindingResult.rejectValue("email", "email.is.already.taken");
+            } catch (WrongPassword e) {
+                bindingResult.rejectValue("password", "wrong.password");
+            } catch (CannotSaveUserToDatabase e) {
+                bindingResult.rejectValue("username", "failed.to.update.user.data");
+            }
+        }
+
+        return "profile";
+    }
 }

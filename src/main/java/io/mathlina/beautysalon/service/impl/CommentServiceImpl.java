@@ -7,7 +7,6 @@ import io.mathlina.beautysalon.model.UserModel;
 import io.mathlina.beautysalon.repos.CommentRepository;
 import io.mathlina.beautysalon.repos.UserRepository;
 import io.mathlina.beautysalon.service.CommentService;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,7 +19,7 @@ public class CommentServiceImpl implements CommentService {
     private final UserRepository userRepository;
 
     public CommentServiceImpl(CommentRepository commentRepository,
-                              @Qualifier("userRepoJdbc") UserRepository userRepository) {
+                              UserRepository userRepository) {
         this.commentRepository = commentRepository;
         this.userRepository = userRepository;
     }

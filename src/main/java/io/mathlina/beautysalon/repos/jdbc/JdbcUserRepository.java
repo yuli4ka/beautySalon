@@ -19,8 +19,7 @@ import java.util.Optional;
 // TODO: deal with role on finds
 
 @Repository
-@Qualifier("userRepoJdbc")
-public class JdbcUserRepositoryImpl implements UserRepository {
+public class JdbcUserRepository implements UserRepository {
 
     private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedJdbcTemplate;
@@ -49,6 +48,7 @@ public class JdbcUserRepositoryImpl implements UserRepository {
 
     @Override
     public Optional<UserModel> findByUsername(String username) {
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!jdbc");
         List<UserModel> userModels = jdbcTemplate.query(
                 "select * from usr where username = ?",
                 new UseRowMapper(),
@@ -63,6 +63,7 @@ public class JdbcUserRepositoryImpl implements UserRepository {
 
     @Override
     public Optional<UserModel> findByEmail(String email) {
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!jdbc");
         List<UserModel> userModels = jdbcTemplate.query(
                 "select * from usr where email = ?",
                 new UseRowMapper(),
@@ -77,6 +78,7 @@ public class JdbcUserRepositoryImpl implements UserRepository {
 
     @Override
     public Optional<UserModel> findByActivationCode(String code) {
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!jdbc");
         List<UserModel> userModels = jdbcTemplate.query(
                 "select * from usr where activation_code = ?",
                 new UseRowMapper(),
@@ -91,6 +93,7 @@ public class JdbcUserRepositoryImpl implements UserRepository {
 
     @Override
     public void save(UserModel user) {
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!jdbc");
         jdbcTemplate.update(
                 "insert into usr (activation_code, email, password, username, name, surname, active) " +
                         "values (?, ?, ?, ?, ?, ?, ?)",

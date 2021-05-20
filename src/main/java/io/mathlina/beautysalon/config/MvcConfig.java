@@ -1,6 +1,10 @@
 package io.mathlina.beautysalon.config;
 
 import java.util.Locale;
+
+import io.mathlina.beautysalon.config.interceptor.JdbcHeaderInterceptor;
+import io.mathlina.beautysalon.domain.RequestContext;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,8 +18,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
+@RequiredArgsConstructor
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
+
+  private final RequestContext requestContext;
 
   @Bean
   public MessageSource messageSource() {
@@ -49,6 +56,7 @@ public class MvcConfig implements WebMvcConfigurer {
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
     registry.addInterceptor(localeChangeInterceptor());
+    registry.addInterceptor(new JdbcHeaderInterceptor(requestContext));
   }
 
   @Bean

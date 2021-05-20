@@ -5,7 +5,6 @@ import io.mathlina.beautysalon.model.ServiceModel;
 import io.mathlina.beautysalon.model.mapper.Mapper;
 import io.mathlina.beautysalon.repos.MyServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +16,6 @@ import javax.persistence.Query;
 import java.util.List;
 
 @Repository
-@Primary
 public class MyServiceRepositoryJpa implements MyServiceRepository {
 
     @Autowired
@@ -30,7 +28,7 @@ public class MyServiceRepositoryJpa implements MyServiceRepository {
     public ServiceModel findById(Long id) {
         Query query = this.entityManager.createQuery(
                 "SELECT service FROM Service service " +
-                "WHERE service.id = :id");
+                        "WHERE service.id = :id");
         query.setParameter("id", id);
         Service service = (Service) query.getSingleResult();
 

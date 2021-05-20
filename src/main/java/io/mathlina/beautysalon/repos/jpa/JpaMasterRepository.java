@@ -5,7 +5,6 @@ import io.mathlina.beautysalon.model.MasterModel;
 import io.mathlina.beautysalon.model.mapper.Mapper;
 import io.mathlina.beautysalon.repos.MasterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -17,8 +16,7 @@ import javax.persistence.Query;
 import java.util.List;
 
 @Repository
-@Primary
-public class JpaMasterRepositoryImpl implements MasterRepository {
+public class JpaMasterRepository implements MasterRepository {
 
     @Autowired
     private Mapper mapper;
