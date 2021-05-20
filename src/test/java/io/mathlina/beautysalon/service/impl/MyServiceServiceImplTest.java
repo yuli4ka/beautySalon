@@ -4,6 +4,7 @@ import io.mathlina.beautysalon.dto.MasterDto;
 import io.mathlina.beautysalon.dto.ServiceDto;
 import io.mathlina.beautysalon.model.MasterModel;
 import io.mathlina.beautysalon.model.ServiceModel;
+import io.mathlina.beautysalon.model.mapper.Mapper;
 import io.mathlina.beautysalon.repos.MyServiceRepository;
 import io.mathlina.beautysalon.service.MyServiceService;
 import org.junit.jupiter.api.BeforeAll;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -30,6 +32,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class MyServiceServiceImplTest {
 
     private static final String FILTER = "filter";
+
+    @Autowired
+    Mapper mapper;
 
     @Mock
     MyServiceRepository myServiceRepository;
@@ -68,7 +73,7 @@ class MyServiceServiceImplTest {
         MasterModel master = new MasterModel();
         List<MasterModel> masters = List.of(master);
         List<MasterDto> expected = masters.stream()
-                .map(MasterDto::new)
+                .map(m -> mapper.map(m, MasterDto.class))
                 .collect(Collectors.toList());
         List<Long> masterIds = masters.stream()
                 .map(MasterModel::getId)
@@ -86,8 +91,8 @@ class MyServiceServiceImplTest {
         MasterModel master1 = MasterModel.builder().id(1L).name("name1").surname("surname1").build();
         MasterModel master2 = MasterModel.builder().id(2L).name("name2" + FILTER).surname("surname2").build();
         MasterModel master3 = MasterModel.builder().id(3L).name("name3").surname("surname3" + FILTER).build();
-        MasterDto masterDto2 = new MasterDto(master2);
-        MasterDto masterDto3 = new MasterDto(master3);
+        MasterDto masterDto2 = mapper.map(master2, MasterDto.class);
+        MasterDto masterDto3 = mapper.map(master3, MasterDto.class);
         List<Long> masterIds = List.of(master1, master2, master3)
                 .stream()
                 .map(MasterModel::getId)

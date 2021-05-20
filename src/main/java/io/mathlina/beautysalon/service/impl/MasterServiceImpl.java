@@ -33,7 +33,7 @@ public class MasterServiceImpl implements MasterService {
     private final MyServiceRepository serviceRepository;
 
     public Page<MasterDto> findAll(Pageable pageable) {
-        return masterRepository.findAll(pageable).map(MasterDto::new);
+        return masterRepository.findAll(pageable).map(m -> mapper.map(m, MasterDto.class));
     }
 
     public List<ServiceDto> findMasterServices(MasterModel masterModel) {
@@ -89,7 +89,7 @@ public class MasterServiceImpl implements MasterService {
             return findAll(pageable);
         } else {
             return masterRepository.findAllByNameContainingOrSurnameContaining(filter, filter, pageable)
-                    .map(MasterDto::new);
+                    .map(m -> mapper.map(m, MasterDto.class));
         }
     }
 

@@ -4,9 +4,11 @@ import io.mathlina.beautysalon.dto.MasterDto;
 import io.mathlina.beautysalon.dto.ServiceDto;
 import io.mathlina.beautysalon.model.CommentModel;
 import io.mathlina.beautysalon.model.MasterModel;
+import io.mathlina.beautysalon.model.mapper.Mapper;
 import io.mathlina.beautysalon.service.CommentService;
 import io.mathlina.beautysalon.service.MasterService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -26,6 +28,9 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Controller
 public class MasterController {
+
+    @Autowired
+    private Mapper mapper;
 
     private final MasterService masterService;
     private final CommentService commentService;
@@ -52,7 +57,7 @@ public class MasterController {
         List<ServiceDto> serviceDTOs = masterService.findMasterServicesLike(masterModel, filter);
 
         model.addAttribute("services", serviceDTOs);
-        model.addAttribute("master", new MasterDto(masterModel));
+        model.addAttribute("master", mapper.map(masterModel, MasterDto.class));
         model.addAttribute("filter", filter);
 
         return "master";
@@ -66,7 +71,7 @@ public class MasterController {
 
         Page<CommentModel> comments = commentService.getComments(masterModel, pageable);
         model.addAttribute("comments", comments);
-        model.addAttribute("master", new MasterDto(masterModel));
+        model.addAttribute("master", mapper.map(masterModel, MasterDto.class));
 
         //TODO: refactor
         CommentModel userComment;

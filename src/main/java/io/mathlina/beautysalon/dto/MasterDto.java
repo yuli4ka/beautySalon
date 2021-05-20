@@ -1,18 +1,9 @@
 package io.mathlina.beautysalon.dto;
 
-import io.mathlina.beautysalon.model.MasterModel;
 import lombok.Value;
 
 @Value
 public class MasterDto {
-
-    //TODO: use mapping
-    public MasterDto(MasterModel master) {
-        this.id = master.getId();
-        this.name = master.getName();
-        this.surname = master.getSurname();
-        this.grade = master.getGrade();
-    }
 
     Long id;
 

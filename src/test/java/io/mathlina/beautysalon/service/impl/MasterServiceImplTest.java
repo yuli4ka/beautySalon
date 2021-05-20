@@ -1,12 +1,11 @@
 package io.mathlina.beautysalon.service.impl;
 
-import io.mathlina.beautysalon.domain.Master;
-import io.mathlina.beautysalon.domain.Service;
 import io.mathlina.beautysalon.dto.MasterDto;
 import io.mathlina.beautysalon.dto.ServiceDto;
 import io.mathlina.beautysalon.model.CommentModel;
 import io.mathlina.beautysalon.model.MasterModel;
 import io.mathlina.beautysalon.model.ServiceModel;
+import io.mathlina.beautysalon.model.mapper.Mapper;
 import io.mathlina.beautysalon.repos.CommentRepository;
 import io.mathlina.beautysalon.repos.MasterRepository;
 import io.mathlina.beautysalon.service.MasterService;
@@ -16,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -31,109 +31,112 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ExtendWith({SpringExtension.class})
 class MasterServiceImplTest {
 
-  private static final String FILTER = "filter";
+    private static final String FILTER = "filter";
 
-  @Mock
-  CommentRepository commentRepository;
+    @Autowired
+    Mapper mapper;
 
-  @Mock
-  MasterRepository masterRepository;
+    @Mock
+    CommentRepository commentRepository;
 
-  @InjectMocks
-  MasterServiceImpl masterService;
+    @Mock
+    MasterRepository masterRepository;
 
-  @BeforeAll
-  static void setUp() {
-    Locale locale = new Locale("en");
-    Locale.setDefault(locale);
-  }
+    @InjectMocks
+    MasterServiceImpl masterService;
 
-  @Test
-  void findAllShouldReturnMasterDtoPage() {
-    MasterModel master = new MasterModel();
-    Page<MasterModel> masters = new PageImpl<>(List.of(master));
+    @BeforeAll
+    static void setUp() {
+        Locale locale = new Locale("en");
+        Locale.setDefault(locale);
+    }
 
-    Page<MasterDto> expected = masters.map(MasterDto::new);
+    @Test
+    void findAllShouldReturnMasterDtoPage() {
+        MasterModel master = new MasterModel();
+        Page<MasterModel> masters = new PageImpl<>(List.of(master));
 
-    Mockito.when(masterRepository.findAll(Pageable.unpaged())).thenReturn(masters);
+        Page<MasterDto> expected = masters.map(m -> mapper.map(m, MasterDto.class));
 
-    Page<MasterDto> actual = masterService.findAll(Pageable.unpaged());
+        Mockito.when(masterRepository.findAll(Pageable.unpaged())).thenReturn(masters);
 
-    assertEquals(expected, actual);
+        Page<MasterDto> actual = masterService.findAll(Pageable.unpaged());
 
-    Mockito.verify(masterRepository).findAll(Pageable.unpaged());
-    Mockito.verifyNoMoreInteractions(commentRepository, masterRepository);
-  }
+        assertEquals(expected, actual);
 
-  @Test
-  void findMasterServicesShouldReturnServiceDtoList() {
-    ServiceModel service1 = ServiceModel.builder().nameEn("name1").build();
-    ServiceModel service2 = ServiceModel.builder().nameEn("name2").build();
-    MasterModel master = MasterModel.builder().serviceIds(List.of(service1.getId(), service2.getId())).build();
-    ServiceDto serviceDto1 = new ServiceDto(service1, Locale.getDefault().toString());
-    ServiceDto serviceDto2 = new ServiceDto(service2, Locale.getDefault().toString());
+        Mockito.verify(masterRepository).findAll(Pageable.unpaged());
+        Mockito.verifyNoMoreInteractions(commentRepository, masterRepository);
+    }
 
-    List<ServiceDto> expected = List.of(serviceDto1, serviceDto2);
+    @Test
+    void findMasterServicesShouldReturnServiceDtoList() {
+        ServiceModel service1 = ServiceModel.builder().nameEn("name1").build();
+        ServiceModel service2 = ServiceModel.builder().nameEn("name2").build();
+        MasterModel master = MasterModel.builder().serviceIds(List.of(service1.getId(), service2.getId())).build();
+        ServiceDto serviceDto1 = new ServiceDto(service1, Locale.getDefault().toString());
+        ServiceDto serviceDto2 = new ServiceDto(service2, Locale.getDefault().toString());
 
-    List<ServiceDto> actual = masterService.findMasterServices(master);
+        List<ServiceDto> expected = List.of(serviceDto1, serviceDto2);
 
-    assertEquals(expected, actual);
+        List<ServiceDto> actual = masterService.findMasterServices(master);
 
-    Mockito.verifyNoMoreInteractions(commentRepository, masterRepository);
-  }
+        assertEquals(expected, actual);
 
-  @Test
-  void updateAverageGradeShouldUpdateGrade() {
-    double averageGrade = 2;
-    CommentModel comment1 = CommentModel.builder().grade((byte) 1).build();
-    CommentModel comment2 = CommentModel.builder().grade((byte) 3).build();
-    List<CommentModel> comments = List.of(comment1, comment2);
-    MasterModel oldMaster = new MasterModel();
-    MasterModel newMaster = MasterModel.builder().grade(averageGrade).build();
+        Mockito.verifyNoMoreInteractions(commentRepository, masterRepository);
+    }
 
-    Mockito.when(commentRepository.findAllByMaster(oldMaster)).thenReturn(comments);
+    @Test
+    void updateAverageGradeShouldUpdateGrade() {
+        double averageGrade = 2;
+        CommentModel comment1 = CommentModel.builder().grade((byte) 1).build();
+        CommentModel comment2 = CommentModel.builder().grade((byte) 3).build();
+        List<CommentModel> comments = List.of(comment1, comment2);
+        MasterModel oldMaster = new MasterModel();
+        MasterModel newMaster = MasterModel.builder().grade(averageGrade).build();
 
-    masterService.updateAverageGrade(oldMaster);
+        Mockito.when(commentRepository.findAllByMaster(oldMaster)).thenReturn(comments);
 
-    Mockito.verify(commentRepository).findAllByMaster(oldMaster);
-    Mockito.verify(masterRepository).save(newMaster);
-    Mockito.verifyNoMoreInteractions(commentRepository, masterRepository);
-  }
+        masterService.updateAverageGrade(oldMaster);
 
-  @Test
-  void findMasterServicesLikeShouldReturnServiceDtoList() {
-    ServiceModel service1 = ServiceModel.builder().nameEn("name1").build();
-    ServiceModel service2 = ServiceModel.builder().nameEn("name2" + FILTER).build();
-    MasterModel master = MasterModel.builder().serviceIds(List.of(service1.getId(), service2.getId())).build();
-    ServiceDto serviceDto2 = new ServiceDto(service2, Locale.getDefault().toString());
+        Mockito.verify(commentRepository).findAllByMaster(oldMaster);
+        Mockito.verify(masterRepository).save(newMaster);
+        Mockito.verifyNoMoreInteractions(commentRepository, masterRepository);
+    }
 
-    List<ServiceDto> expected = List.of(serviceDto2);
+    @Test
+    void findMasterServicesLikeShouldReturnServiceDtoList() {
+        ServiceModel service1 = ServiceModel.builder().nameEn("name1").build();
+        ServiceModel service2 = ServiceModel.builder().nameEn("name2" + FILTER).build();
+        MasterModel master = MasterModel.builder().serviceIds(List.of(service1.getId(), service2.getId())).build();
+        ServiceDto serviceDto2 = new ServiceDto(service2, Locale.getDefault().toString());
 
-    List<ServiceDto> actual = masterService.findMasterServicesLike(master, FILTER);
+        List<ServiceDto> expected = List.of(serviceDto2);
 
-    assertEquals(expected, actual);
+        List<ServiceDto> actual = masterService.findMasterServicesLike(master, FILTER);
 
-    Mockito.verifyNoMoreInteractions(commentRepository, masterRepository);
-  }
+        assertEquals(expected, actual);
 
-  @Test
-  void findAllLikeShouldReturnMasterDtoPage() {
-    MasterModel master = new MasterModel();
-    Page<MasterModel> masters = new PageImpl<>(List.of(master));
+        Mockito.verifyNoMoreInteractions(commentRepository, masterRepository);
+    }
 
-    Page<MasterDto> expected = masters.map(MasterDto::new);
+    @Test
+    void findAllLikeShouldReturnMasterDtoPage() {
+        MasterModel master = new MasterModel();
+        Page<MasterModel> masters = new PageImpl<>(List.of(master));
 
-    Mockito.when(masterRepository
-        .findAllByNameContainingOrSurnameContaining(FILTER, FILTER, Pageable.unpaged()))
-        .thenReturn(masters);
+        Page<MasterDto> expected = masters.map(m -> mapper.map(m, MasterDto.class));
 
-    Page<MasterDto> actual = masterService.findAllLike(FILTER, Pageable.unpaged());
+        Mockito.when(masterRepository
+                .findAllByNameContainingOrSurnameContaining(FILTER, FILTER, Pageable.unpaged()))
+                .thenReturn(masters);
 
-    assertEquals(expected, actual);
+        Page<MasterDto> actual = masterService.findAllLike(FILTER, Pageable.unpaged());
 
-    Mockito.verify(masterRepository)
-        .findAllByNameContainingOrSurnameContaining(FILTER, FILTER, Pageable.unpaged());
-    Mockito.verifyNoMoreInteractions(commentRepository, masterRepository);
-  }
+        assertEquals(expected, actual);
+
+        Mockito.verify(masterRepository)
+                .findAllByNameContainingOrSurnameContaining(FILTER, FILTER, Pageable.unpaged());
+        Mockito.verifyNoMoreInteractions(commentRepository, masterRepository);
+    }
 
 }

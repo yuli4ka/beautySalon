@@ -3,10 +3,12 @@ package io.mathlina.beautysalon.service.impl;
 import io.mathlina.beautysalon.dto.MasterDto;
 import io.mathlina.beautysalon.dto.ServiceDto;
 import io.mathlina.beautysalon.model.ServiceModel;
+import io.mathlina.beautysalon.model.mapper.Mapper;
 import io.mathlina.beautysalon.repos.MasterRepository;
 import io.mathlina.beautysalon.repos.MyServiceRepository;
 import io.mathlina.beautysalon.service.MyServiceService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -20,6 +22,9 @@ import java.util.stream.Collectors;
 @org.springframework.stereotype.Service
 public class MyServiceServiceImpl implements MyServiceService {
 
+    @Autowired
+    Mapper mapper;
+
     private final MyServiceRepository myServiceRepository;
     private final MasterRepository masterRepository;
 
@@ -32,7 +37,7 @@ public class MyServiceServiceImpl implements MyServiceService {
     public List<MasterDto> findServiceMasters(ServiceModel serviceModel) {
         return serviceModel.getMasterIds().stream()
                 .map(masterRepository::findById)
-                .map(MasterDto::new)
+                .map(m -> mapper.map(m, MasterDto.class))
                 .collect(Collectors.toList());
     }
 
@@ -43,7 +48,7 @@ public class MyServiceServiceImpl implements MyServiceService {
         } else {
             return serviceModel.getMasterIds().stream()
                     .map(masterRepository::findById)
-                    .map(MasterDto::new)
+                    .map(m -> mapper.map(m, MasterDto.class))
                     .filter(masterDto ->
                             masterDto.getName().toLowerCase().contains(filter.toLowerCase())
                                     || masterDto.getSurname().toLowerCase().contains(filter.toLowerCase()))
