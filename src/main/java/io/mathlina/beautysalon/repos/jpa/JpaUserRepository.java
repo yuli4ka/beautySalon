@@ -24,7 +24,6 @@ public class JpaUserRepository implements UserRepository {
     //TODO: check if there is result
     @Override
     public Optional<UserModel> findByUsername(String username) {
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!jpa");
         Query query = this.entityManager.createQuery(
                 "SELECT user FROM User user " +
                         "WHERE user.username = :username");
@@ -37,7 +36,6 @@ public class JpaUserRepository implements UserRepository {
     //TODO: check if there is result
     @Override
     public Optional<UserModel> findByEmail(String email) {
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!jpa");
         Query query = this.entityManager.createQuery(
                 "SELECT user FROM User user " +
                         "WHERE user.email = :email");
@@ -50,7 +48,6 @@ public class JpaUserRepository implements UserRepository {
     //TODO: check if there is result
     @Override
     public Optional<UserModel> findByActivationCode(String code) {
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!jpa");
         Query query = this.entityManager.createQuery(
                 "SELECT user FROM User user " +
                         "WHERE user.activationCode = :code");
@@ -62,7 +59,6 @@ public class JpaUserRepository implements UserRepository {
 
     @Override
     public void save(UserModel userModel) {
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!jpa");
         User user = mapper.map(userModel, User.class);
         if (user.getId() == null) {
             this.entityManager.persist(user);
