@@ -25,9 +25,7 @@ import java.util.stream.Collectors;
 @org.springframework.stereotype.Service
 public class MasterServiceImpl implements MasterService {
 
-    @Autowired
-    private Mapper mapper;
-
+    private final Mapper mapper;
     private final MasterRepository masterRepository;
     private final CommentRepository commentRepository;
     private final MyServiceRepository serviceRepository;

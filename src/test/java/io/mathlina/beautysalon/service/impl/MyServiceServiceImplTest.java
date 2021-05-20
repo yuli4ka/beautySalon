@@ -7,6 +7,7 @@ import io.mathlina.beautysalon.model.ServiceModel;
 import io.mathlina.beautysalon.model.mapper.Mapper;
 import io.mathlina.beautysalon.repos.MyServiceRepository;
 import io.mathlina.beautysalon.service.MyServiceService;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,14 +28,14 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@RequiredArgsConstructor
 @SpringBootTest(classes = MyServiceService.class)
 @ExtendWith({SpringExtension.class})
 class MyServiceServiceImplTest {
 
     private static final String FILTER = "filter";
 
-    @Autowired
-    Mapper mapper;
+    private final Mapper mapper;
 
     @Mock
     MyServiceRepository myServiceRepository;

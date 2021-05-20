@@ -23,9 +23,7 @@ import java.util.List;
 @Controller
 public class MyServiceController {
 
-    @Autowired
-    Mapper mapper;
-
+    private final Mapper mapper;
     private final MyServiceService myServiceService;
 
     @GetMapping("/services")

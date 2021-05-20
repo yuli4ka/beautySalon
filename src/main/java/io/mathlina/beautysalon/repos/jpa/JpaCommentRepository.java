@@ -6,6 +6,7 @@ import io.mathlina.beautysalon.model.MasterModel;
 import io.mathlina.beautysalon.model.UserModel;
 import io.mathlina.beautysalon.model.mapper.Mapper;
 import io.mathlina.beautysalon.repos.CommentRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -18,11 +19,11 @@ import javax.persistence.Query;
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Repository
 public class JpaCommentRepository implements CommentRepository {
 
-    @Autowired
-    private Mapper mapper;
+    private final Mapper mapper;
 
     @PersistenceContext
     private EntityManager entityManager;

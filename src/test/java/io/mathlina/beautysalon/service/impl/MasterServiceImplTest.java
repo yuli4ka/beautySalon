@@ -9,6 +9,7 @@ import io.mathlina.beautysalon.model.mapper.Mapper;
 import io.mathlina.beautysalon.repos.CommentRepository;
 import io.mathlina.beautysalon.repos.MasterRepository;
 import io.mathlina.beautysalon.service.MasterService;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,14 +28,14 @@ import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@RequiredArgsConstructor
 @SpringBootTest(classes = MasterService.class)
 @ExtendWith({SpringExtension.class})
 class MasterServiceImplTest {
 
     private static final String FILTER = "filter";
 
-    @Autowired
-    Mapper mapper;
+    private final Mapper mapper;
 
     @Mock
     CommentRepository commentRepository;

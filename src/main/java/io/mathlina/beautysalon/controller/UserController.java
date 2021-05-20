@@ -27,9 +27,7 @@ import javax.validation.Valid;
 @Controller
 public class UserController {
 
-    @Autowired
-    Mapper mapper;
-
+    private final Mapper mapper;
     private final UserService userService;
 
     @GetMapping(value = "/profile")

@@ -29,9 +29,7 @@ import java.util.Objects;
 @Controller
 public class MasterController {
 
-    @Autowired
-    private Mapper mapper;
-
+    private final Mapper mapper;
     private final MasterService masterService;
     private final CommentService commentService;
 

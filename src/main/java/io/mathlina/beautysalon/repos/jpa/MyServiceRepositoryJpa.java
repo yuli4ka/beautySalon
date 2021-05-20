@@ -4,6 +4,7 @@ import io.mathlina.beautysalon.domain.Service;
 import io.mathlina.beautysalon.model.ServiceModel;
 import io.mathlina.beautysalon.model.mapper.Mapper;
 import io.mathlina.beautysalon.repos.MyServiceRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -15,11 +16,11 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Repository
 public class MyServiceRepositoryJpa implements MyServiceRepository {
 
-    @Autowired
-    private Mapper mapper;
+    private final Mapper mapper;
 
     @PersistenceContext
     private EntityManager entityManager;

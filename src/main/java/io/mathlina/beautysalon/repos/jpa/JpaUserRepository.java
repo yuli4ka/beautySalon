@@ -4,6 +4,7 @@ import io.mathlina.beautysalon.domain.User;
 import io.mathlina.beautysalon.model.UserModel;
 import io.mathlina.beautysalon.model.mapper.Mapper;
 import io.mathlina.beautysalon.repos.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -12,11 +13,11 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Repository
 public class JpaUserRepository implements UserRepository {
 
-    @Autowired
-    private Mapper mapper;
+    private final Mapper mapper;
 
     @PersistenceContext
     private EntityManager entityManager;

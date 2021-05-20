@@ -32,10 +32,7 @@ import java.time.LocalDateTime;
 @Controller
 public class AppointmentController {
 
-    //TODO: delete
-    @Autowired
-    private Mapper mapper;
-
+    private final Mapper mapper;
     private final UserService userService;
     private final AppointmentService appointmentService;
 
