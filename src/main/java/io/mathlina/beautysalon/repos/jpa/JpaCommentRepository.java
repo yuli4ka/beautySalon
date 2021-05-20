@@ -12,13 +12,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+@Transactional
 @RequiredArgsConstructor
 @Repository
 public class JpaCommentRepository implements CommentRepository {
@@ -35,8 +38,11 @@ public class JpaCommentRepository implements CommentRepository {
                         "WHERE comm.master.id = :masterId AND comm.client.id = :clientId");
         query.setParameter("masterId", master.getId());
         query.setParameter("clientId", client.getId());
-        Comment com = (Comment) query.getSingleResult();
 
+        if (query.getResultList().isEmpty()) {
+            return Optional.empty();
+        }
+        Comment com = (Comment) query.getSingleResult();
         return Optional.ofNullable(mapper.map(com, CommentModel.class));
     }
 
@@ -48,6 +54,11 @@ public class JpaCommentRepository implements CommentRepository {
         query.setParameter("masterId", master.getId());
 
         List<Comment> com = query.getResultList();
+
+        if (com.isEmpty()) {
+            return new PageImpl<>(Collections.emptyList());
+        }
+
         List<CommentModel> commentModels = mapper.mapAsList(com, CommentModel.class);
 
         int pageSize = pageable.getPageSize();
@@ -63,7 +74,12 @@ public class JpaCommentRepository implements CommentRepository {
                 "SELECT comm FROM Comment comm " +
                         "WHERE comm.master.id = :masterId");
         query.setParameter("masterId", master.getId());
+
         List<Comment> com = query.getResultList();
+
+        if (com.isEmpty()) {
+            return Collections.emptyList();
+        }
 
         return mapper.mapAsList(com, CommentModel.class);
     }

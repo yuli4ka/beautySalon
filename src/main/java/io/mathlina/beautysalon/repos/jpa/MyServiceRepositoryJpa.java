@@ -10,12 +10,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.util.Collections;
 import java.util.List;
 
+@Transactional
 @RequiredArgsConstructor
 @Repository
 public class MyServiceRepositoryJpa implements MyServiceRepository {
@@ -31,8 +34,8 @@ public class MyServiceRepositoryJpa implements MyServiceRepository {
                 "SELECT service FROM Service service " +
                         "WHERE service.id = :id");
         query.setParameter("id", id);
-        Service service = (Service) query.getSingleResult();
 
+        Service service = (Service) query.getSingleResult();
         return mapper.map(service, ServiceModel.class);
     }
 
@@ -42,6 +45,11 @@ public class MyServiceRepositoryJpa implements MyServiceRepository {
                 "SELECT service FROM Service service");
 
         List<Service> services = query.getResultList();
+
+        if (services.isEmpty()) {
+            return new PageImpl<>(Collections.emptyList());
+        }
+
         List<ServiceModel> serviceModel = mapper.mapAsList(services, ServiceModel.class);
 
         int pageSize = pageable.getPageSize();
@@ -57,6 +65,9 @@ public class MyServiceRepositoryJpa implements MyServiceRepository {
                 "SELECT service FROM Service service");
         List<Service> services = query.getResultList();
 
+        if (services.isEmpty()) {
+            return Collections.emptyList();
+        }
         return mapper.mapAsList(services, ServiceModel.class);
     }
 }

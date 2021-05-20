@@ -9,12 +9,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
+@Transactional
 @Repository
 public class JpaMasterRepository implements MasterRepository {
 
@@ -30,8 +34,8 @@ public class JpaMasterRepository implements MasterRepository {
                 "SELECT master FROM Master master " +
                         "WHERE master.id = :id");
         query.setParameter("id", id);
-        Master master = (Master) query.getSingleResult();
 
+        Master master = (Master) query.getSingleResult();
         return mapper.map(master, MasterModel.class);
     }
 
@@ -44,6 +48,11 @@ public class JpaMasterRepository implements MasterRepository {
         query.setParameter("surname", "%" + surname + "%");
 
         List<Master> masters = query.getResultList();
+
+        if (masters.isEmpty()) {
+            return new PageImpl<>(Collections.emptyList());
+        }
+
         List<MasterModel> masterModels = mapper.mapAsList(masters, MasterModel.class);
 
         int pageSize = pageable.getPageSize();
@@ -58,6 +67,11 @@ public class JpaMasterRepository implements MasterRepository {
         Query query = this.entityManager.createQuery(
                 "SELECT master FROM Master master");
         List<Master> masters = query.getResultList();
+
+        if (masters.isEmpty()) {
+            return new PageImpl<>(Collections.emptyList());
+        }
+
         List<MasterModel> masterModels = mapper.mapAsList(masters, MasterModel.class);
 
         int pageSize = pageable.getPageSize();
@@ -73,6 +87,9 @@ public class JpaMasterRepository implements MasterRepository {
                 "SELECT master FROM Master master");
         List<Master> masters = query.getResultList();
 
+        if (masters.isEmpty()) {
+            return Collections.emptyList();
+        }
         return mapper.mapAsList(masters, MasterModel.class);
     }
 
