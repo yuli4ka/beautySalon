@@ -54,7 +54,7 @@ class MyServiceServiceImplTest {
         Page<ServiceModel> services = new PageImpl<>(List.of(service));
 
         Page<ServiceDto> expected = services
-                .map(s -> new ServiceDto(s, Locale.getDefault().toString()));
+                .map(s -> mapper.map(s, ServiceDto.class));
 
         Mockito.when(myServiceRepository
                 .findAll(Pageable.unpaged()))
@@ -112,7 +112,7 @@ class MyServiceServiceImplTest {
     void findAllWithFilterShouldReturnPageOfServiceDTOs() {
         ServiceModel service1 = ServiceModel.builder().nameEn("name1").nameUa("назва1").build();
         ServiceModel service2 = ServiceModel.builder().nameEn("name2" + FILTER).nameUa("назва2").build();
-        ServiceDto serviceDto2 = new ServiceDto(service2, Locale.getDefault().toString());
+        ServiceDto serviceDto2 = mapper.map(service2, ServiceDto.class);
         PageRequest pageRequest = PageRequest.of(0, 10);
 
         List<ServiceDto> expected = List.of(serviceDto2);

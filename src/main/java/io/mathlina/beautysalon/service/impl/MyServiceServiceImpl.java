@@ -9,7 +9,6 @@ import io.mathlina.beautysalon.repos.MyServiceRepository;
 import io.mathlina.beautysalon.service.MyServiceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -30,7 +29,7 @@ public class MyServiceServiceImpl implements MyServiceService {
 
     public Page<ServiceDto> findAll(Pageable pageable) {
         return myServiceRepository.findAll(pageable)
-                .map(service -> new ServiceDto(service, LocaleContextHolder.getLocale().toString()));
+                .map(service -> mapper.map(service, ServiceDto.class));
     }
 
     @Override
@@ -62,7 +61,7 @@ public class MyServiceServiceImpl implements MyServiceService {
             return findAll(pageable);
         } else {
             List<ServiceDto> serviceDTOs = myServiceRepository.findAll().stream()
-                    .map(service -> new ServiceDto(service, LocaleContextHolder.getLocale().toString()))
+                    .map(service -> mapper.map(service, ServiceDto.class))
                     .filter(serviceDto -> serviceDto.getName().toLowerCase().contains(filter.toLowerCase()))
                     .collect(Collectors.toList());
 

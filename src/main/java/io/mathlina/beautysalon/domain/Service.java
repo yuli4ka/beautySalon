@@ -1,19 +1,13 @@
 package io.mathlina.beautysalon.domain;
 
-import io.mathlina.beautysalon.exception.UnsupportedLocale;
-import java.util.List;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString.Exclude;
+
+import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Entity
@@ -22,31 +16,22 @@ import lombok.ToString.Exclude;
 @AllArgsConstructor
 public class Service {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(name = "service_id")
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "service_id")
+    private Long id;
 
-  private String nameEn;
+    private String nameEn;
 
-  private String nameUa;
+    private String nameUa;
 
-//  duration in minutes
-  private Integer duration;
+    //  duration in minutes
+    private Integer duration;
 
-  private Integer price;
+    private Integer price;
 
-  @Exclude
-  @ManyToMany(fetch = FetchType.LAZY, mappedBy = "services")
-  private List<Master> masters;
-
-  //TODO: delete ASAP
-  public String getNameByLocale(String localeCode) {
-    switch (localeCode){
-      case "uk_UA": return nameUa;
-      case "en": return nameEn;
-      default: throw new UnsupportedLocale("Unsupported Locale");
-    }
-  }
+    @Exclude
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "services")
+    private List<Master> masters;
 
 }

@@ -1,6 +1,5 @@
 package io.mathlina.beautysalon.model;
 
-import io.mathlina.beautysalon.exception.UnsupportedLocale;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,16 +25,5 @@ public class ServiceModel {
     private Integer price;
 
     private List<Long> masterIds;
-
-    public String getNameByLocale(String localeCode) {
-        switch (localeCode) {
-            case "uk_UA":
-                return nameUa;
-            case "en":
-                return nameEn;
-            default:
-                throw new UnsupportedLocale("Unsupported Locale");
-        }
-    }
 
 }

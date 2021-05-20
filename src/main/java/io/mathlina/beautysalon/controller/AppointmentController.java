@@ -46,8 +46,7 @@ public class AppointmentController {
                               Model model) {
         Timetable timetable = Timetable.builder().service(service).master(mapper.map(master, Master.class)).build();
         model.addAttribute("master", mapper.map(master, MasterDto.class));
-        model.addAttribute("service",
-                new ServiceDto(mapper.map(service, ServiceModel.class), LocaleContextHolder.getLocale().toString()));
+        model.addAttribute("service", mapper.map(service, ServiceModel.class));
         model.addAttribute("timetable", timetable);
         return "appoint";
     }

@@ -1,13 +1,16 @@
 package io.mathlina.beautysalon.model.mapper;
 
 import io.mathlina.beautysalon.domain.*;
+import io.mathlina.beautysalon.dto.ServiceDto;
 import io.mathlina.beautysalon.dto.UserRegistrationDto;
+import io.mathlina.beautysalon.exception.UnsupportedLocale;
 import io.mathlina.beautysalon.model.*;
 import lombok.RequiredArgsConstructor;
 import ma.glasnost.orika.CustomMapper;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.MappingContext;
 import ma.glasnost.orika.impl.ConfigurableMapper;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -26,7 +29,7 @@ public class Mapper extends ConfigurableMapper {
                 .field("client.id", "clientId")
                 .byDefault()
                 .register();
-        
+
         factory.classMap(Master.class, MasterModel.class)
                 .field("services{id}", "serviceIds{}")
                 .byDefault()
@@ -46,6 +49,44 @@ public class Mapper extends ConfigurableMapper {
                         userModel.setActive(false);
                         userModel.setRole(Collections.singleton(Role.CLIENT));
                         userModel.setActivationCode(UUID.randomUUID().toString());
+                    }
+                })
+                .register();
+
+        factory.classMap(ServiceModel.class, ServiceDto.class)
+                .byDefault()
+                .customize(new CustomMapper<ServiceModel, ServiceDto>() {
+                    @Override
+                    public void mapAtoB(ServiceModel serviceModel, ServiceDto serviceDto, MappingContext context) {
+                        switch (LocaleContextHolder.getLocale().toString()) {
+                            case "uk_UA":
+                                serviceDto.setName(serviceModel.getNameUa());
+                                break;
+                            case "en":
+                                serviceDto.setName(serviceModel.getNameEn());
+                                break;
+                            default:
+                                throw new UnsupportedLocale("Unsupported Locale");
+                        }
+                    }
+                })
+                .register();
+
+        factory.classMap(Service.class, ServiceDto.class)
+                .byDefault()
+                .customize(new CustomMapper<Service, ServiceDto>() {
+                    @Override
+                    public void mapAtoB(Service service, ServiceDto serviceDto, MappingContext context) {
+                        switch (LocaleContextHolder.getLocale().toString()) {
+                            case "uk_UA":
+                                serviceDto.setName(service.getNameUa());
+                                break;
+                            case "en":
+                                serviceDto.setName(service.getNameEn());
+                                break;
+                            default:
+                                throw new UnsupportedLocale("Unsupported Locale");
+                        }
                     }
                 })
                 .register();

@@ -41,8 +41,7 @@ public class MasterServiceImpl implements MasterService {
         Collator collator = Collator.getInstance(currentLocale);
 
         return masterModel.getServiceIds().stream()
-                .map(serviceId ->
-                        new ServiceDto(serviceRepository.findById(serviceId), currentLocale.toString()))
+                .map(serviceId -> mapper.map(serviceRepository.findById(serviceId), ServiceDto.class))
                 .sorted((s1, s2) -> collator.compare(s1.getName(), s2.getName()))
                 .collect(Collectors.toList());
     }
@@ -74,8 +73,7 @@ public class MasterServiceImpl implements MasterService {
             Collator collator = Collator.getInstance(currentLocale);
 
             return masterModel.getServiceIds().stream()
-                    .map(serviceId ->
-                            new ServiceDto(serviceRepository.findById(serviceId), currentLocale.toString()))
+                    .map(serviceId -> mapper.map(serviceRepository.findById(serviceId), ServiceDto.class))
                     .filter(serviceDto -> serviceDto.getName()
                             .toLowerCase(currentLocale).contains(filter.toLowerCase(currentLocale)))
                     .sorted((s1, s2) -> collator.compare(s1.getName(), s2.getName()))

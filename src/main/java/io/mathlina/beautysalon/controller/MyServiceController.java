@@ -3,8 +3,10 @@ package io.mathlina.beautysalon.controller;
 import io.mathlina.beautysalon.dto.MasterDto;
 import io.mathlina.beautysalon.dto.ServiceDto;
 import io.mathlina.beautysalon.model.ServiceModel;
+import io.mathlina.beautysalon.model.mapper.Mapper;
 import io.mathlina.beautysalon.service.MyServiceService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +22,9 @@ import java.util.List;
 @RequiredArgsConstructor
 @Controller
 public class MyServiceController {
+
+    @Autowired
+    Mapper mapper;
 
     private final MyServiceService myServiceService;
 
@@ -45,8 +50,7 @@ public class MyServiceController {
                 .findServiceMastersLike(serviceModel, filter);
 
         model.addAttribute("masters", masterDTOs);
-        model.addAttribute("service",
-                new ServiceDto(serviceModel, LocaleContextHolder.getLocale().toString()));
+        model.addAttribute("service", mapper.map(serviceModel, ServiceDto.class));
         model.addAttribute("filter", filter);
 
         return "service";

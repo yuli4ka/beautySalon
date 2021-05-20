@@ -73,8 +73,8 @@ class MasterServiceImplTest {
         ServiceModel service1 = ServiceModel.builder().nameEn("name1").build();
         ServiceModel service2 = ServiceModel.builder().nameEn("name2").build();
         MasterModel master = MasterModel.builder().serviceIds(List.of(service1.getId(), service2.getId())).build();
-        ServiceDto serviceDto1 = new ServiceDto(service1, Locale.getDefault().toString());
-        ServiceDto serviceDto2 = new ServiceDto(service2, Locale.getDefault().toString());
+        ServiceDto serviceDto1 = mapper.map(service1, ServiceDto.class);
+        ServiceDto serviceDto2 = mapper.map(service2, ServiceDto.class);
 
         List<ServiceDto> expected = List.of(serviceDto1, serviceDto2);
 
@@ -108,7 +108,7 @@ class MasterServiceImplTest {
         ServiceModel service1 = ServiceModel.builder().nameEn("name1").build();
         ServiceModel service2 = ServiceModel.builder().nameEn("name2" + FILTER).build();
         MasterModel master = MasterModel.builder().serviceIds(List.of(service1.getId(), service2.getId())).build();
-        ServiceDto serviceDto2 = new ServiceDto(service2, Locale.getDefault().toString());
+        ServiceDto serviceDto2 = mapper.map(service2, ServiceDto.class);
 
         List<ServiceDto> expected = List.of(serviceDto2);
 
