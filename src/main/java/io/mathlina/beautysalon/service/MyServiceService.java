@@ -10,11 +10,13 @@ import java.util.List;
 
 public interface MyServiceService {
 
-  Page<ServiceDto> findAll(Pageable pageable);
+    Page<ServiceDto> findAll(Pageable pageable);
 
-  List<MasterDto> findServiceMasters(ServiceModel service);
+    List<MasterDto> findServiceMasters(ServiceModel service);
 
-  List<MasterDto> findServiceMastersLike(ServiceModel service, String filter);
+    List<MasterDto> findServiceMastersLike(ServiceModel service, String filter);
 
-  Page<ServiceDto> findAll(String filter, Pageable pageable);
+    Page<ServiceDto> findAll(String filter, Pageable pageable);
+
+    ServiceModel findById(Long serviceId);
 }

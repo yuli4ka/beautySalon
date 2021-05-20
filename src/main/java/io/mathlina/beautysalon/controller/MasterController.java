@@ -1,15 +1,12 @@
 package io.mathlina.beautysalon.controller;
 
-import io.mathlina.beautysalon.domain.Master;
 import io.mathlina.beautysalon.dto.MasterDto;
 import io.mathlina.beautysalon.dto.ServiceDto;
 import io.mathlina.beautysalon.model.CommentModel;
 import io.mathlina.beautysalon.model.MasterModel;
-import io.mathlina.beautysalon.model.mapper.Mapper;
 import io.mathlina.beautysalon.service.CommentService;
 import io.mathlina.beautysalon.service.MasterService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -30,9 +27,6 @@ import java.util.Objects;
 @Controller
 public class MasterController {
 
-    @Autowired
-    private Mapper mapper;
-
     private final MasterService masterService;
     private final CommentService commentService;
 
@@ -48,13 +42,12 @@ public class MasterController {
         return "mastersList";
     }
 
-    //TODO: make work
     //TODO: uuid
-    @GetMapping("/master/{master}")
-    public String getMaster(Model model, @PathVariable Master master,
+    @GetMapping("/master/{masterId}")
+    public String getMaster(Model model, @PathVariable Long masterId,
                             @RequestParam(required = false) String filter) {
 
-        MasterModel masterModel = mapper.map(master, MasterModel.class);
+        MasterModel masterModel = masterService.findById(masterId);
 
         List<ServiceDto> serviceDTOs = masterService.findMasterServicesLike(masterModel, filter);
 
@@ -65,11 +58,11 @@ public class MasterController {
         return "master";
     }
 
-    @GetMapping("/master/{master}/comments")
+    @GetMapping("/master/{masterId}/comments")
     public String getMasterComments(@AuthenticationPrincipal UserDetails userDetails,
-                                    @PathVariable Master master, Model model, Pageable pageable) {
+                                    @PathVariable Long masterId, Model model, Pageable pageable) {
 
-        MasterModel masterModel = mapper.map(master, MasterModel.class);
+        MasterModel masterModel = masterService.findById(masterId);
 
         Page<CommentModel> comments = commentService.getComments(masterModel, pageable);
         model.addAttribute("comments", comments);
@@ -88,12 +81,12 @@ public class MasterController {
     }
 
     @PreAuthorize("hasAuthority('CLIENT')")
-    @PostMapping("/master/{master}/comments")
+    @PostMapping("/master/{masterId}/comments")
     public String doComment(@AuthenticationPrincipal UserDetails userDetails,
                             @RequestParam("grade") Byte grade, @RequestParam("commentText") String commentText,
-                            @PathVariable Master master) {
+                            @PathVariable Long masterId) {
 
-        MasterModel masterModel = mapper.map(master, MasterModel.class);
+        MasterModel masterModel = masterService.findById(masterId);
 
         commentService.updateComment(userDetails, masterModel, grade, commentText);
         masterService.updateAverageGrade(masterModel); //TODO: move to quartz with additional conditions

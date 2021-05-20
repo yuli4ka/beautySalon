@@ -93,4 +93,9 @@ public class MasterServiceImpl implements MasterService {
         }
     }
 
+    @Override
+    public MasterModel findById(Long masterId) {
+        return masterRepository.findById(masterId);
+    }
+
 }

@@ -7,7 +7,6 @@ import io.mathlina.beautysalon.repos.MasterRepository;
 import io.mathlina.beautysalon.repos.MyServiceRepository;
 import io.mathlina.beautysalon.service.MyServiceService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -68,6 +67,11 @@ public class MyServiceServiceImpl implements MyServiceService {
 
             return new PageImpl<>(serviceDTOs.subList(page * pageSize, last), pageable, serviceDTOs.size());
         }
+    }
+
+    @Override
+    public ServiceModel findById(Long serviceId) {
+        return myServiceRepository.findById(serviceId);
     }
 
 }

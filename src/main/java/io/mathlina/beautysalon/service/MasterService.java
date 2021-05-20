@@ -21,4 +21,6 @@ public interface MasterService {
   List<ServiceDto> findMasterServicesLike(MasterModel master, String filter);
 
   Page<MasterDto> findAllLike(String filter, Pageable pageable);
+
+  MasterModel findById(Long masterId);
 }

@@ -1,13 +1,10 @@
 package io.mathlina.beautysalon.controller;
 
-import io.mathlina.beautysalon.domain.Service;
 import io.mathlina.beautysalon.dto.MasterDto;
 import io.mathlina.beautysalon.dto.ServiceDto;
 import io.mathlina.beautysalon.model.ServiceModel;
-import io.mathlina.beautysalon.model.mapper.Mapper;
 import io.mathlina.beautysalon.service.MyServiceService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,9 +21,6 @@ import java.util.List;
 @Controller
 public class MyServiceController {
 
-    @Autowired
-    private Mapper mapper;
-
     private final MyServiceService myServiceService;
 
     @GetMapping("/services")
@@ -41,12 +35,11 @@ public class MyServiceController {
         return "serviceList";
     }
 
-    //TODO: fix, make work
-    @GetMapping("/service/{service}")
-    public String serviceList(Model model, @PathVariable Service service,
+    @GetMapping("/service/{serviceId}")
+    public String serviceList(Model model, @PathVariable Long serviceId,
                               @RequestParam(required = false) String filter) {
 
-        ServiceModel serviceModel = mapper.map(service, ServiceModel.class);
+        ServiceModel serviceModel = myServiceService.findById(serviceId);
 
         List<MasterDto> masterDTOs = myServiceService
                 .findServiceMastersLike(serviceModel, filter);
