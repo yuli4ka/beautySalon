@@ -6,6 +6,7 @@ import io.mathlina.beautysalon.model.ServiceModel;
 import io.mathlina.beautysalon.repos.MasterRepository;
 import io.mathlina.beautysalon.repos.MyServiceRepository;
 import io.mathlina.beautysalon.service.MyServiceService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
@@ -16,17 +17,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 @org.springframework.stereotype.Service
 public class MyServiceServiceImpl implements MyServiceService {
 
     private final MyServiceRepository myServiceRepository;
     private final MasterRepository masterRepository;
-
-    @Autowired
-    public MyServiceServiceImpl(MyServiceRepository myServiceRepository, MasterRepository masterRepository) {
-        this.myServiceRepository = myServiceRepository;
-        this.masterRepository = masterRepository;
-    }
 
     public Page<ServiceDto> findAll(Pageable pageable) {
         return myServiceRepository.findAll(pageable)

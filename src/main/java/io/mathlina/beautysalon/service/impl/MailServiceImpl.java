@@ -2,11 +2,13 @@ package io.mathlina.beautysalon.service.impl;
 
 import io.mathlina.beautysalon.model.UserModel;
 import io.mathlina.beautysalon.service.MailService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+@RequiredArgsConstructor
 @Service
 public class MailServiceImpl implements MailService {
 
@@ -20,10 +22,6 @@ public class MailServiceImpl implements MailService {
   //TODO: get @Value salon name from application.properties
 
   private final JavaMailSender mailSender;
-
-  public MailServiceImpl(JavaMailSender mailSender) {
-    this.mailSender = mailSender;
-  }
 
   private void send(String emailTo, String subject, String message) {
     SimpleMailMessage mailMessage = new SimpleMailMessage();

@@ -13,6 +13,7 @@ import io.mathlina.beautysalon.model.UserModel;
 import io.mathlina.beautysalon.model.mapper.Mapper;
 import io.mathlina.beautysalon.service.AppointmentService;
 import io.mathlina.beautysalon.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
 
+@RequiredArgsConstructor
 @Controller
 public class AppointmentController {
 
@@ -36,11 +38,6 @@ public class AppointmentController {
 
     private final UserService userService;
     private final AppointmentService appointmentService;
-
-    public AppointmentController(UserService userService, AppointmentService appointmentService) {
-        this.userService = userService;
-        this.appointmentService = appointmentService;
-    }
 
     @PreAuthorize("hasAuthority('CLIENT')")
     @GetMapping("/appoint")

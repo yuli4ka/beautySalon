@@ -9,6 +9,7 @@ import io.mathlina.beautysalon.repos.CommentRepository;
 import io.mathlina.beautysalon.repos.MasterRepository;
 import io.mathlina.beautysalon.repos.MyServiceRepository;
 import io.mathlina.beautysalon.service.MasterService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
@@ -20,6 +21,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 @org.springframework.stereotype.Service
 public class MasterServiceImpl implements MasterService {
 
@@ -29,15 +31,6 @@ public class MasterServiceImpl implements MasterService {
     private final MasterRepository masterRepository;
     private final CommentRepository commentRepository;
     private final MyServiceRepository serviceRepository;
-
-    @Autowired
-    public MasterServiceImpl(MasterRepository masterRepository,
-                             CommentRepository commentRepository,
-                             MyServiceRepository serviceRepository) {
-        this.masterRepository = masterRepository;
-        this.commentRepository = commentRepository;
-        this.serviceRepository = serviceRepository;
-    }
 
     public Page<MasterDto> findAll(Pageable pageable) {
         return masterRepository.findAll(pageable).map(MasterDto::new);

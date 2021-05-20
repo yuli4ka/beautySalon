@@ -7,22 +7,18 @@ import io.mathlina.beautysalon.model.UserModel;
 import io.mathlina.beautysalon.repos.CommentRepository;
 import io.mathlina.beautysalon.repos.UserRepository;
 import io.mathlina.beautysalon.service.CommentService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+@RequiredArgsConstructor
 @Service
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
-
-    public CommentServiceImpl(CommentRepository commentRepository,
-                              UserRepository userRepository) {
-        this.commentRepository = commentRepository;
-        this.userRepository = userRepository;
-    }
 
     @Override
     public Page<CommentModel> getComments(MasterModel master, Pageable pageable) {

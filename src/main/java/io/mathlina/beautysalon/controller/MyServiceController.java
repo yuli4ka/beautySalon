@@ -6,6 +6,7 @@ import io.mathlina.beautysalon.dto.ServiceDto;
 import io.mathlina.beautysalon.model.ServiceModel;
 import io.mathlina.beautysalon.model.mapper.Mapper;
 import io.mathlina.beautysalon.service.MyServiceService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Controller
 public class MyServiceController {
 
@@ -26,10 +28,6 @@ public class MyServiceController {
     private Mapper mapper;
 
     private final MyServiceService myServiceService;
-
-    public MyServiceController(MyServiceService myServiceService) {
-        this.myServiceService = myServiceService;
-    }
 
     @GetMapping("/services")
     public String serviceList(Model model, @PageableDefault(size = 6) Pageable pageable,

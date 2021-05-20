@@ -8,6 +8,7 @@ import io.mathlina.beautysalon.model.UserModel;
 import io.mathlina.beautysalon.repos.UserRepository;
 import io.mathlina.beautysalon.service.MailService;
 import io.mathlina.beautysalon.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,20 +18,13 @@ import java.util.Collections;
 import java.util.UUID;
 
 //TODO: log
+@RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final MailService mailService;
-
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository,
-                           PasswordEncoder passwordEncoder, MailService mailService) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.mailService = mailService;
-    }
 
     public UserModel loadUserByUsername(String s) {
         return userRepository.findByUsername(s)

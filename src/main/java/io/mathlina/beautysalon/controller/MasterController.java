@@ -8,6 +8,7 @@ import io.mathlina.beautysalon.model.MasterModel;
 import io.mathlina.beautysalon.model.mapper.Mapper;
 import io.mathlina.beautysalon.service.CommentService;
 import io.mathlina.beautysalon.service.MasterService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 import java.util.Objects;
 
+@RequiredArgsConstructor
 @Controller
 public class MasterController {
 
@@ -33,12 +35,6 @@ public class MasterController {
 
     private final MasterService masterService;
     private final CommentService commentService;
-
-    public MasterController(MasterService masterService,
-                            CommentService commentService) {
-        this.masterService = masterService;
-        this.commentService = commentService;
-    }
 
     @GetMapping("/masters")
     public String mastersList(Model model, @PageableDefault(size = 6) Pageable pageable,
