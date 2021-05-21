@@ -8,13 +8,13 @@ import io.mathlina.beautysalon.repos.MasterRepository;
 import io.mathlina.beautysalon.repos.MyServiceRepository;
 import io.mathlina.beautysalon.service.MyServiceService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -72,8 +72,13 @@ public class MyServiceServiceImpl implements MyServiceService {
     }
 
     @Override
-    public ServiceModel findById(Long serviceId) {
+    public Optional<ServiceModel> findById(Long serviceId) {
         return myServiceRepository.findById(serviceId);
+    }
+
+    @Override
+    public void save(ServiceModel serviceModel) {
+        myServiceRepository.save(serviceModel);
     }
 
 }

@@ -1,9 +1,6 @@
 package io.mathlina.beautysalon.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -11,6 +8,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(exclude = "masterIds")
 public class ServiceModel {
 
     private Long id;
@@ -25,5 +23,4 @@ public class ServiceModel {
     private Integer price;
 
     private List<Long> masterIds;
-
 }

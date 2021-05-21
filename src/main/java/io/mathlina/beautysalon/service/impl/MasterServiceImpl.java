@@ -10,7 +10,6 @@ import io.mathlina.beautysalon.repos.MasterRepository;
 import io.mathlina.beautysalon.repos.MyServiceRepository;
 import io.mathlina.beautysalon.service.MasterService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +18,7 @@ import java.text.Collator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -90,7 +90,7 @@ public class MasterServiceImpl implements MasterService {
     }
 
     @Override
-    public MasterModel findById(Long masterId) {
+    public Optional<MasterModel> findById(Long masterId) {
         return masterRepository.findById(masterId);
     }
 

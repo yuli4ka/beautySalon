@@ -42,7 +42,8 @@ public class MyServiceController {
     public String serviceList(Model model, @PathVariable Long serviceId,
                               @RequestParam(required = false) String filter) {
 
-        ServiceModel serviceModel = myServiceService.findById(serviceId);
+        //TODO: check exception
+        ServiceModel serviceModel = myServiceService.findById(serviceId).get();
 
         List<MasterDto> masterDTOs = myServiceService
                 .findServiceMastersLike(serviceModel, filter);

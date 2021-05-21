@@ -10,6 +10,7 @@ public interface CommentService {
 
     Page<CommentModel> getComments(MasterModel master, Pageable pageable);
 
+    //TODO: Optional
     CommentModel getComment(MasterModel master, UserDetails userDetails);
 
     void updateComment(UserDetails userDetails, MasterModel master, Byte grade, String commentText);

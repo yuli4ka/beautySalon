@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Controller
@@ -50,7 +51,8 @@ public class MasterController {
     public String getMaster(Model model, @PathVariable Long masterId,
                             @RequestParam(required = false) String filter) {
 
-        MasterModel masterModel = masterService.findById(masterId);
+        //TODO: check exception
+        MasterModel masterModel = masterService.findById(masterId).get();
 
         List<ServiceDto> serviceDTOs = masterService.findMasterServicesLike(masterModel, filter);
 
@@ -65,7 +67,8 @@ public class MasterController {
     public String getMasterComments(@AuthenticationPrincipal UserDetails userDetails,
                                     @PathVariable Long masterId, Model model, Pageable pageable) {
 
-        MasterModel masterModel = masterService.findById(masterId);
+        //TODO: check exception
+        MasterModel masterModel = masterService.findById(masterId).get();
 
         Page<CommentModel> comments = commentService.getComments(masterModel, pageable);
         model.addAttribute("comments", comments);
@@ -89,7 +92,8 @@ public class MasterController {
                             @RequestParam("grade") Byte grade, @RequestParam("commentText") String commentText,
                             @PathVariable Long masterId) {
 
-        MasterModel masterModel = masterService.findById(masterId);
+        //TODO: check exception
+        MasterModel masterModel = masterService.findById(masterId).get();
 
         commentService.updateComment(userDetails, masterModel, grade, commentText);
         masterService.updateAverageGrade(masterModel); //TODO: move to quartz with additional conditions

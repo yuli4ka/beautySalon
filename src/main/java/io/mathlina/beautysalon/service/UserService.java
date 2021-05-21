@@ -6,6 +6,7 @@ import io.mathlina.beautysalon.model.UserModel;
 
 public interface UserService {
 
+  //TODO: Optional
   UserModel loadUserByUsername(String s);
 
   void addUser(UserRegistrationDto userDTO);

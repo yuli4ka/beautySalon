@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface MyServiceService {
 
@@ -18,5 +19,8 @@ public interface MyServiceService {
 
     Page<ServiceDto> findAll(String filter, Pageable pageable);
 
-    ServiceModel findById(Long serviceId);
+    //TODO: Optional
+    Optional<ServiceModel> findById(Long serviceId);
+
+    void save(ServiceModel serviceModel);
 }

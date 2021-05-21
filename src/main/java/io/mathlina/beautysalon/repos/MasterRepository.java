@@ -5,11 +5,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface MasterRepository {
 
-    //TODO: Make return Optional
-    MasterModel findById(Long id);
+    Optional<MasterModel> findById(Long id);
 
     Page<MasterModel> findAllByNameContainingOrSurnameContaining(String name, String surname,
                                                                  Pageable pageable);

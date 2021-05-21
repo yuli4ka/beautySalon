@@ -5,7 +5,6 @@ import io.mathlina.beautysalon.model.ServiceModel;
 import io.mathlina.beautysalon.model.mapper.Mapper;
 import io.mathlina.beautysalon.repos.MyServiceRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +16,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Transactional
 @RequiredArgsConstructor
@@ -29,14 +29,17 @@ public class MyServiceRepositoryJpa implements MyServiceRepository {
     private EntityManager entityManager;
 
     @Override
-    public ServiceModel findById(Long id) {
+    public Optional<ServiceModel> findById(Long id) {
         Query query = this.entityManager.createQuery(
                 "SELECT service FROM Service service " +
                         "WHERE service.id = :id");
         query.setParameter("id", id);
 
+        if (query.getResultList().isEmpty()) {
+            return Optional.empty();
+        }
         Service service = (Service) query.getSingleResult();
-        return mapper.map(service, ServiceModel.class);
+        return Optional.of(mapper.map(service, ServiceModel.class));
     }
 
     @Override
@@ -69,5 +72,15 @@ public class MyServiceRepositoryJpa implements MyServiceRepository {
             return Collections.emptyList();
         }
         return mapper.mapAsList(services, ServiceModel.class);
+    }
+
+    @Override
+    public void save(ServiceModel serviceModel) {
+        Service service = mapper.map(serviceModel, Service.class);
+        if (service.getId() == null) {
+            this.entityManager.persist(service);
+        } else {
+            this.entityManager.merge(service);
+        }
     }
 }
